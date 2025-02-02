@@ -44,11 +44,12 @@ const Navbar = ({ withSidebar = false }) => {
       )}
     >
       <div className="flex items-center gap-[12px]">
-        {withSidebar && (
-          <Link to="/admin">
-            <img src={LogoIcon} alt="logo-icon" />
-          </Link>
-        )}
+        <Link
+          to="/admin"
+          className={!withSidebar ? "block" : "lg:hidden block"}
+        >
+          <img src={LogoIcon} alt="logo-icon" />
+        </Link>
         <p className="font-bold xs:text-[24px] text-[20px] text-darkBlue">
           {pageTitle}
         </p>
