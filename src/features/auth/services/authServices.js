@@ -1,13 +1,16 @@
-import { checkUserAuthentication, loginUser } from "../../../api/auth";
+import axiosInstance from "../../../utils/axiosInstance";
+import AUTH_ENDPOINTS from "../../../constants/api/auth";
 
 export const authServices = {
   login: async ({ email, password }) => {
     try {
-      const data = await loginUser({
+      const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGIN_AUTH_URL, {
         email: email,
         password: password,
+        deviceType: "web",
       });
-      return data;
+
+      return response.data;
     } catch (error) {
       console.error("Login failed:", error);
       throw new Error(error.response?.data?.message || "Login failed");
@@ -15,8 +18,8 @@ export const authServices = {
   },
   checkAuthStatus: async () => {
     try {
-      const data = await checkUserAuthentication();
-      return data;
+      const response = await axiosInstance.get(AUTH_ENDPOINTS.CHECK_AUTH_URL);
+      return response.data;
     } catch (error) {
       console.error("Login failed:", error);
       throw new Error(error.response?.data?.message || "Login failed");
