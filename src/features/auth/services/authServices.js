@@ -1,4 +1,4 @@
-import { checkUserAuthentication, loginUser } from "./api/auth";
+import { checkUserAuthentication, loginUser } from "../../../api/auth";
 
 export const authServices = {
   login: async ({ email, password }) => {

@@ -2,7 +2,7 @@ import { PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Button from "../../../components/ui/Button";
 import { useMutation } from "@tanstack/react-query";
-import { authServices } from "./../../../services/authServices";
+import { authServices } from "../services/authServices";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
