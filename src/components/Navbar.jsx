@@ -5,6 +5,7 @@ import notificationIcon from "../assets/icons/notification-icon.svg";
 import { Divider, Indicator } from "@mantine/core";
 import UserNavMenu from "./ui/UserNavMenu";
 import debounce from "lodash.debounce";
+import { cn } from "../utils/cn";
 
 const Navbar = ({ withSidebar = false }) => {
   const pageTitle = "Dashboard";
@@ -33,11 +34,14 @@ const Navbar = ({ withSidebar = false }) => {
 
   return (
     <nav
-      className={`md:h-[96px] h-[72px] ${
-        !withSidebar
-          ? "w-[calc(100vw-var(--scrollbar-width))]"
-          : "min-[1630px]:w-[calc(100vw-305px-var(--scrollbar-width))] lg:w-[calc(100vw-220px-var(--scrollbar-width))] w-[calc(100vw-var(--scrollbar-width))]"
-      } md:px-[32px] px-[20px] flex items-center justify-between bg-white border-b-[1.5px] border-b-[#E4F0FF]`}
+      className={cn(
+        "md:h-[96px] h-[72px] md:px-[32px] px-[20px] flex items-center justify-between bg-white border-b-[1.5px] border-b-[#ECECEC]",
+        {
+          "w-[calc(100vw-var(--scrollbar-width))]": !withSidebar,
+          "min-[1630px]:w-[calc(100vw-305px-var(--scrollbar-width))] lg:w-[calc(100vw-220px-var(--scrollbar-width))] w-[calc(100vw-var(--scrollbar-width))]":
+            withSidebar,
+        }
+      )}
     >
       <div className="flex items-center gap-[12px]">
         {withSidebar && (
