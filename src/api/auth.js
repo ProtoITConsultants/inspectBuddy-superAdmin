@@ -1,4 +1,4 @@
-import AUTH_ENDPOINTS from "../../constants/api/auth";
+import AUTH_ENDPOINTS from "../constants/api/auth";
 import axiosInstance from "./axiosInstance";
 
 // login user

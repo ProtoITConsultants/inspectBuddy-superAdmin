@@ -5,10 +5,12 @@ import { useMutation } from "@tanstack/react-query";
 import { authServices } from "../services/authServices";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { useAuthStore } from "../../../store/authStore";
 
 export const LoginForm = () => {
   // navigate hook from React Router
   const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser);
 
   // useForm Hook from Mantine Dev
   const form = useForm({
@@ -30,13 +32,14 @@ export const LoginForm = () => {
         email: form.values.email,
         password: form.values.password,
       }),
-    onSuccess: () => {
-      navigate("/", {
-        replace: true,
-      });
+    onSuccess: (data) => {
+      setUser(data?.userData);
       toast.success("Authentication Sucessfull!", {
         description: "Welcome Back!",
         duration: 3000,
+      });
+      navigate("/", {
+        replace: true,
       });
     },
     onError: (error) => {
