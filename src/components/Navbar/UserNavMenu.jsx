@@ -7,20 +7,23 @@ const UserNavMenu = () => {
   const user = useAuthStore((state) => state.user);
 
   return (
-    <Menu shadow="md" id="userProfileDropDownNavbar" position="top-end">
+    <Menu id="userProfileDropDownNavbar" shadow="md" position="top-end">
       <Menu.Target>
-        <button className="sm:px-[12px] px-[8px] sm:h-[48px] h-[40px] rounded-[8px] border-[1.5px] border-[#CCE2FF] flex items-center justify-center gap-[8px]">
+        <button className="md:px-[12px] md:h-[48px] h-[40px] rounded-[8px] md:border-[1.5px] border-[#CCE2FF] flex items-center justify-center gap-[8px]">
           <div className="w-[32px] h-[32px] bg-primary rounded-full flex items-center justify-center">
             <p className="text-white text-[16px] font-bold uppercase">
               {user?.fullname?.split(" ")[0]?.slice(0, 2)}
             </p>
           </div>
 
-          <span className="font-medium text-[16px] text-darkBlue sm:block hidden">
-            {/* Show first name of user name */}
+          <span className="font-medium text-[16px] text-darkBlue md:block hidden">
             {user?.fullname?.split(" ")[0]}
           </span>
-          <img src={arrowDownIcon} alt="arrowDown-icon" />
+          <img
+            src={arrowDownIcon}
+            alt="arrowDown-icon"
+            className="md:block hidden"
+          />
         </button>
       </Menu.Target>
       <Menu.Dropdown>

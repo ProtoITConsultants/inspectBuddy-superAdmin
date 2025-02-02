@@ -34,7 +34,7 @@ export const LoginForm = () => {
       }),
     onSuccess: (data) => {
       setUser(data?.userData);
-      toast.success("Authentication Sucessfull!", {
+      toast.success("Authentication Sucessful!", {
         description: "Welcome Back!",
         duration: 3000,
       });

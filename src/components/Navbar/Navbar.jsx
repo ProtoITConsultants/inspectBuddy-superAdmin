@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { Link } from "react-router";
-import LogoIcon from "../assets/logo-icon.svg";
-import notificationIcon from "../assets/icons/notification-icon.svg";
+import LogoIcon from "../../assets/logo-icon.svg";
+import notificationIcon from "../../assets/icons/notification-icon.svg";
 import { Divider, Indicator } from "@mantine/core";
-import UserNavMenu from "./ui/UserNavMenu";
+import UserNavMenu from "./UserNavMenu";
 import debounce from "lodash.debounce";
-import { cn } from "../utils/cn";
+import { cn } from "../../utils/cn";
+import SidebarMobileVersion from "../Sidebar/SidebarMobileVersion";
 
 const Navbar = ({ withSidebar = false }) => {
   const pageTitle = "Dashboard";
@@ -50,11 +51,11 @@ const Navbar = ({ withSidebar = false }) => {
         >
           <img src={LogoIcon} alt="logo-icon" />
         </Link>
-        <p className="font-bold xs:text-[24px] text-[20px] text-darkBlue">
+        <p className="font-bold sm:text-[24px] text-[20px] text-darkBlue leading-none">
           {pageTitle}
         </p>
       </div>
-      <div className="flex items-center sm:space-x-[24px] space-x-[16px]">
+      <div className="flex items-center md:space-x-[24px] space-x-[16px]">
         <button className="bg-[#F3F8FF] rounded-[8px] w-[40px] h-[40px] flex justify-center items-center">
           <Indicator
             inline
@@ -71,9 +72,10 @@ const Navbar = ({ withSidebar = false }) => {
           orientation="vertical"
           size="sm"
           color="#000929"
-          className="opacity-10 !h-[40px] sm:block hidden !self-auto"
+          className="opacity-10 !h-[40px] md:block hidden !self-auto"
         />
         <UserNavMenu />
+        <SidebarMobileVersion />
       </div>
     </nav>
   );

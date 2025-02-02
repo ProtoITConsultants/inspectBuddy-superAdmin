@@ -1,5 +1,5 @@
-import SidebarItem from "./ui/SidebarItem";
-import { SIDEBAR_LINKS } from "./../constants/sidebarItems";
+import SidebarItem from "./SidebarItem";
+import { SIDEBAR_LINKS } from "../../constants/sidebarItems";
 
 const Sidebar = () => {
   return (
