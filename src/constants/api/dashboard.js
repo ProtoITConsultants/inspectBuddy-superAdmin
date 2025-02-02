@@ -1,0 +1,10 @@
+// API Endpoints
+const INSPECTION_AND_PROPERTIES_ANALYTICS = "/getSuperAdminAnalytics";
+const GRAPHICAL_ANALYTICS = "/getGraphicalAnalytics";
+
+const DASHBOARD_ENDPOINTS = {
+  INSPECTION_AND_PROPERTIES_ANALYTICS,
+  GRAPHICAL_ANALYTICS,
+};
+
+export default DASHBOARD_ENDPOINTS;

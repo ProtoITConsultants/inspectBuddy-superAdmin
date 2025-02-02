@@ -13,7 +13,7 @@ const SidebarLayout = ({ children }) => {
       </section>
       <section className="md:flex md:mt-[96px] mt-[72px] relative">
         <Sidebar />
-        <div className="md:p-[24px] p-[20px]">{children}</div>
+        <div className="md:p-[24px] p-[20px] flex-1">{children}</div>
       </section>
     </main>
   );

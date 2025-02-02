@@ -1,26 +1,92 @@
-import { useState } from "react";
+import { useQueries } from "@tanstack/react-query";
+import { toast } from "sonner";
+import DashboardGraphs from "./features/dashboard/components/StatsGraphs";
+import { dashboardServices } from "./features/dashboard/api";
+import Analytics from "./features/dashboard/components/Analytics";
+import DashboardSkeleton from "./features/dashboard/components/DashboardSkeleton";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ["inspectionAndPropertiesAnalytics"],
+        queryFn: () => dashboardServices.getInspectionAndPropertiesAnalytics(),
+      },
+      {
+        queryKey: ["graphicalAnalytics"],
+        queryFn: () => dashboardServices.getGraphicalAnalytics(),
+      },
+    ],
+  });
+
+  const [inspectionAndPropertiesAnalytics, graphicalAnalytics] = queries;
+
+  queries.forEach((query) => {
+    if (query.isError) {
+      return toast.error("Error fetching stats", {
+        description: query.error.message || "An error occurred.",
+        duration: 3000,
+      });
+    }
+  });
+
+  if (
+    inspectionAndPropertiesAnalytics.isPending ||
+    graphicalAnalytics.isPending
+  ) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank"></a>
-        <a href="https://react.dev" target="_blank"></a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <DashboardGraphs.Root>
+        {graphicalAnalytics?.data?.map((stat) => (
+          <DashboardGraphs.GraphCard key={stat._id}>
+            <DashboardGraphs.GraphCardTitle
+              cardData={{
+                label: stat.label,
+                statCount: stat.statCount,
+                icon: stat.icon,
+              }}
+            />
+            <DashboardGraphs.Graph
+              graphData={{
+                chartData: stat.chartData,
+                chartColor: stat.chartColor,
+                chartLabel: stat.label,
+                statPercentage: stat.statPercentage,
+              }}
+            />
+          </DashboardGraphs.GraphCard>
+        ))}
+      </DashboardGraphs.Root>
+
+      <Analytics.Root>
+        <Analytics.InspectionsSection>
+          <Analytics.InspectionsOverview
+            inspectionsDone={
+              inspectionAndPropertiesAnalytics?.data?.totalInspectionCount
+            }
+          />
+          <Analytics.ReportsGeneratedOverview
+            reportsGenerated={
+              inspectionAndPropertiesAnalytics?.data?.totalReportsGeneratedCount
+            }
+          />
+        </Analytics.InspectionsSection>
+        <Analytics.PropertiesSection
+          propertiesData={{
+            totalProperties:
+              inspectionAndPropertiesAnalytics?.data?.totalPropertiesCount,
+            inspectedProperties:
+              inspectionAndPropertiesAnalytics?.data
+                ?.propertiesWithInspectionsCount,
+            nonInspectedProperties:
+              inspectionAndPropertiesAnalytics?.data
+                ?.propertiesWithNoInspectionsCount,
+          }}
+        />
+      </Analytics.Root>
     </>
   );
 }
