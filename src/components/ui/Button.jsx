@@ -1,3 +1,4 @@
+import { Loader } from "@mantine/core";
 import { cn } from "./../../utils/cn";
 
 const Button = ({
@@ -10,6 +11,7 @@ const Button = ({
   buttonType = "contained",
   buttonColor = "#2A85FF",
   borderColor = "#2A85FF",
+  isLoading = false,
 }) => {
   const isContained = buttonType === "contained";
   const isOutlined = buttonType === "outlined";
@@ -20,14 +22,15 @@ const Button = ({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "px-6 py-3 h-12 rounded-lg flex items-center justify-center",
-        "text-sm sm:text-base",
+        "px-6 py-3 h-12 rounded-lg flex items-center justify-center hover:cursor-pointer disabled:hover:cursor-not-allowed",
         className,
         {
-          "bg-gray-400 text-white": disabled && isContained,
-          "bg-blue-500 text-white hover:bg-blue-600": !disabled && isContained,
-          "border-2 border-gray-400 text-gray-400": disabled && isOutlined,
-          "border-2 hover:border-blue-700 text-blue-500":
+          "bg-light-gray text-white": disabled && isContained,
+          "bg-primary text-white hover:!bg-dark-primary":
+            !disabled && isContained,
+          "border-2 !border-light-gray !text-light-gray":
+            disabled && isOutlined,
+          "border-2 hover:!border-primary text-primary hover:!text-white hover:bg-primary":
             !disabled && isOutlined,
         }
       )}
@@ -37,7 +40,14 @@ const Button = ({
         borderColor: isOutlined && !disabled ? borderColor : undefined,
       }}
     >
-      {label}
+      {isLoading ? (
+        <Loader
+          color={!disabled && isContained ? "white" : "#2a85ff"}
+          size="sm"
+        />
+      ) : (
+        label
+      )}
     </button>
   );
 };

@@ -1,8 +1,15 @@
 import { PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Button from "../../../components/ui/Button";
+import { useMutation } from "@tanstack/react-query";
+import { authServices } from "./../../../services/authServices";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 export const LoginForm = () => {
+  // navigate hook from React Router
+  const navigate = useNavigate();
+
   // useForm Hook from Mantine Dev
   const form = useForm({
     initialValues: {
@@ -17,11 +24,32 @@ export const LoginForm = () => {
     },
   });
 
-  const handleFormSubmit = () => {};
+  const loginMutation = useMutation({
+    mutationFn: () =>
+      authServices.login({
+        email: form.values.email,
+        password: form.values.password,
+      }),
+    onSuccess: () => {
+      navigate("/", {
+        replace: true,
+      });
+      toast.success("Authentication Sucessfull!", {
+        description: "Welcome Back!",
+        duration: 3000,
+      });
+    },
+    onError: (error) => {
+      toast.error("Authentication Failed!", {
+        description: error.message || "User Authentication failed!",
+        duration: 3000,
+      });
+    },
+  });
 
   return (
     <form
-      onSubmit={form.onSubmit(handleFormSubmit)}
+      onSubmit={form.onSubmit(loginMutation.mutate)}
       className="mt-[32px] flex flex-col gap-[16px]"
     >
       <TextInput
@@ -43,8 +71,9 @@ export const LoginForm = () => {
         disabled={
           form.getValues().email === "" || form.getValues().password === ""
         }
-        className="w-full text-[16px] font-bold mt-[16px]"
+        className="w-full text-[16px] !font-bold mt-[16px]"
         buttonType="contained"
+        isLoading={loginMutation.isPending}
       />
     </form>
   );
