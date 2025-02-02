@@ -1,37 +1,19 @@
-import { useEffect } from "react";
 import { Link } from "react-router";
 import LogoIcon from "../../assets/logo-icon.svg";
 import notificationIcon from "../../assets/icons/notification-icon.svg";
 import { Divider, Indicator } from "@mantine/core";
 import UserNavMenu from "./UserNavMenu";
-import debounce from "lodash.debounce";
 import { cn } from "../../utils/cn";
 import SidebarMobileVersion from "../Sidebar/SidebarMobileVersion";
+import { useScrollbarWidth } from "../../hooks/useScrollbarWidth";
+import useNavbarTitle from "../../hooks/useNavbarTitle";
 
 const Navbar = ({ withSidebar = false }) => {
-  const pageTitle = "Dashboard";
+  const { pageTitle } = useNavbarTitle();
 
-  useEffect(() => {
-    function setScrollbarWidth() {
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-      document.documentElement.style.setProperty(
-        "--scrollbar-width",
-        `${scrollbarWidth}px`
-      );
-    }
+  const showLogo = !withSidebar || window.innerWidth < 1024;
 
-    const debouncedSetScrollbarWidth = debounce(setScrollbarWidth, 100); // Debounce to reduce frequent calls
-
-    window.addEventListener("resize", debouncedSetScrollbarWidth);
-
-    // Initial call to set the scrollbar width
-    setScrollbarWidth();
-
-    return () => {
-      window.removeEventListener("resize", debouncedSetScrollbarWidth);
-    };
-  }, []);
+  useScrollbarWidth();
 
   return (
     <nav
@@ -45,12 +27,11 @@ const Navbar = ({ withSidebar = false }) => {
       )}
     >
       <div className="flex items-center gap-[12px]">
-        <Link
-          to="/admin"
-          className={!withSidebar ? "block" : "lg:hidden block"}
-        >
-          <img src={LogoIcon} alt="logo-icon" />
-        </Link>
+        {showLogo && (
+          <Link to="/">
+            <img src={LogoIcon} alt="logo-icon" />
+          </Link>
+        )}
         <p className="font-bold sm:text-[24px] text-[20px] text-darkBlue leading-none">
           {pageTitle}
         </p>
@@ -75,7 +56,7 @@ const Navbar = ({ withSidebar = false }) => {
           className="opacity-10 !h-[40px] md:block hidden !self-auto"
         />
         <UserNavMenu />
-        <SidebarMobileVersion />
+        {window.innerWidth < 768 && <SidebarMobileVersion />}
       </div>
     </nav>
   );
