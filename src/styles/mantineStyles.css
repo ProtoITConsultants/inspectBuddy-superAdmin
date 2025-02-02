@@ -1,0 +1,101 @@
+/* Customizing input fields style */
+.mantine-InputWrapper-label {
+  color: #000929 !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+}
+
+.mantine-TextInput-input {
+  border-color: #cce2ff !important;
+  background-color: #f3f8ff !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  height: 48px !important;
+  font-family: "Plus Jakarta Sans" !important;
+}
+
+.mantine-TextInput-input:focus {
+  background-color: white !important;
+}
+
+.mantine-TextInput-input:disabled {
+  background-color: #eeeeee !important;
+  border-color: #dedede !important;
+}
+
+.mantine-TextInput-input::placeholder {
+  color: #000929 !important;
+  opacity: 50% !important;
+}
+
+.mantine-NumberInput-input {
+  border-color: #cce2ff !important;
+  background-color: #f3f8ff !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  height: 48px !important;
+  font-family: "Plus Jakarta Sans" !important;
+}
+
+.mantine-NumberInput-input:focus {
+  background-color: white !important;
+}
+
+.mantine-NumberInput-input:disabled {
+  background-color: #eeeeee !important;
+  border-color: #dedede !important;
+}
+
+.mantine-NumberInput-input::placeholder {
+  color: #000929 !important;
+  opacity: 50% !important;
+}
+
+.mantine-Select-input:disabled {
+  background-color: #eeeeee !important;
+  border-color: #dedede !important;
+}
+
+.mantine-Textarea-input {
+  border-color: #cce2ff !important;
+  background-color: #f3f8ff !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  font-family: "Plus Jakarta Sans" !important;
+}
+
+.mantine-Textarea-input:focus {
+  background-color: white !important;
+}
+
+.mantine-Textarea-input:disabled {
+  background-color: #eeeeee !important;
+  border-color: #dedede !important;
+}
+
+.mantine-Textarea-input::placeholder {
+  color: #000929 !important;
+  opacity: 50% !important;
+}
+
+.mantine-PasswordInput-input {
+  border-color: #cce2ff !important;
+  background-color: #f3f8ff !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  height: 48px !important;
+  font-family: "Plus Jakarta Sans" !important;
+}
+
+.mantine-PasswordInput-input input:focus {
+  background-color: white !important;
+}
+
+.mantine-PasswordInput-input::placeholder {
+  color: #000929 !important;
+  opacity: 50% !important;
+}

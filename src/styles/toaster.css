@@ -1,0 +1,13 @@
+/* Customizing Toast */
+:where([data-sonner-toast]) :where([data-title]) {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: #000929 !important;
+  text-align: start !important;
+}
+
+:where([data-sonner-toast]) :where([data-description]) {
+  font-size: 12px !important;
+  color: #808494 !important;
+  text-align: start !important;
+}
