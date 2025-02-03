@@ -4,10 +4,12 @@ import App from "./App";
 import Login from "./pages/auth/Login";
 import AuthLayout from "./layouts/AuthLayout";
 import SidebarLayout from "./layouts/SidebarLayout";
+import Dashboard from "./pages/dashboard/Dashboard";
+import ReportSettings from "./pages/report-settings/ReportSettings";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "",
     element: (
       <AuthMiddleware>
         <SidebarLayout>
@@ -15,6 +17,16 @@ export const router = createBrowserRouter([
         </SidebarLayout>
       </AuthMiddleware>
     ),
+    children: [
+      {
+        path: "/",
+        element: <Dashboard />,
+      },
+      {
+        path: "report-settings",
+        element: <ReportSettings />,
+      },
+    ],
   },
 
   {

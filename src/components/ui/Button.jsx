@@ -41,10 +41,7 @@ const Button = ({
       }}
     >
       {isLoading ? (
-        <Loader
-          color={!disabled && isContained ? "white" : "#2a85ff"}
-          size="sm"
-        />
+        <Loader color={!disabled && isContained ? "white" : "gray"} size="sm" />
       ) : (
         label
       )}
