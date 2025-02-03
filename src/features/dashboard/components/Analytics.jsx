@@ -12,7 +12,7 @@ const Root = ({ children }) => {
 
 const InspectionsSection = ({ children }) => {
   return (
-    <div className="sm:border-[1.5px] border-[#ececec] rounded-[8px] sm:p-[24px] flex flex-col gap-[24px]">
+    <div className="sm:border-[1.5px] border-[#CCE2FF] rounded-[8px] sm:p-[24px] flex flex-col gap-[24px]">
       <InspectionSectionHeader />
       <div className="grid grid-cols-2 sm:gap-[24px] gap-[16px]">
         {children}
@@ -38,7 +38,7 @@ const InspectionSectionHeader = () => {
 
 const InspectionsOverview = ({ inspectionsDone }) => {
   return (
-    <div className="border-[1.5px] border-[#ececec] rounded-[8px] sm:p-[24px] p-[12px] flex flex-col gap-[16px]">
+    <div className="border-[1.5px] border-[#CCE2FF] rounded-[8px] sm:p-[24px] p-[12px] flex flex-col gap-[16px]">
       <img
         src={InspectionsDoneIcon}
         alt="inspections-icon"
@@ -58,7 +58,7 @@ const InspectionsOverview = ({ inspectionsDone }) => {
 
 const ReportsGeneratedOverview = ({ reportsGenerated }) => {
   return (
-    <div className="border-[1.5px] border-[#ececec] rounded-[8px] sm:p-[24px] p-[12px] flex flex-col gap-[16px]">
+    <div className="border-[1.5px] border-[#CCE2FF] rounded-[8px] sm:p-[24px] p-[12px] flex flex-col gap-[16px]">
       <img
         src={ReportsGeneratedIcon}
         alt="reports-icon"
@@ -79,7 +79,7 @@ const ReportsGeneratedOverview = ({ reportsGenerated }) => {
 // Properties Section - Components
 const PropertiesSection = ({ propertiesData }) => {
   return (
-    <div className="border-[1.5px] border-[#ececec] rounded-[8px] sm:p-[24px] p-[16px_12px] flex flex-col gap-[24px] h-fit">
+    <div className="border-[1.5px] border-[#CCE2FF] rounded-[8px] sm:p-[24px] p-[16px_12px] flex flex-col gap-[24px] h-fit">
       <div className="flex md:flex-row flex-col md:gap-[24px] gap-[12px] md:justify-between md:items-end">
         <div className="flex gap-[16px]">
           <img src={PropertiesIcon} alt="properties-icon" />
