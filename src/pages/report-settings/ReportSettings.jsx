@@ -20,12 +20,17 @@ const ReportSettings = () => {
     },
   });
 
+  const formRef = useRef(reportForm);
+  const isMounted = useRef(true);
+
+  // Fetch report settings - Query
   const fetchReportSettingsQuery = useQuery({
     queryKey: ["reportSettings"],
     queryFn: () =>
       reportSettingsAPIs.getReportSettings({ planType: "FREETIER" }),
   });
 
+  // Update report settings - Mutation
   const updatePlanSettingsMutation = useMutation({
     mutationFn: () => {
       return reportSettingsAPIs.updateReportSettings({
@@ -45,20 +50,27 @@ const ReportSettings = () => {
     },
   });
 
-  const formRef = useRef(reportForm);
+  // Set form values on mount when data is available
   useEffect(() => {
-    formRef.current.setValues({
-      reportDisclaimer: fetchReportSettingsQuery?.data?.reportWatermark,
-    });
+    isMounted.current = true; // Component is mounted
+
+    if (fetchReportSettingsQuery.data && isMounted.current) {
+      formRef.current.setValues({
+        reportDisclaimer: fetchReportSettingsQuery.data.reportWatermark || "",
+      });
+    }
+
+    return () => {
+      isMounted.current = false; // Component is unmounted
+    };
   }, [fetchReportSettingsQuery.data]);
 
-  if (
-    fetchReportSettingsQuery.isPending ||
-    updatePlanSettingsMutation.isPending
-  ) {
+  // Loading state - Skeleton
+  if (fetchReportSettingsQuery.isPending) {
     return <ReportSkeleton />;
   }
 
+  // Error state - Toast
   if (fetchReportSettingsQuery.isError) {
     return toast.error(fetchReportSettingsQuery.error.message, {
       description: "Error fetching report settings",
@@ -75,6 +87,7 @@ const ReportSettings = () => {
         {...reportForm.getInputProps("reportDisclaimer")}
         autosize
         minRows={8}
+        disabled={updatePlanSettingsMutation.isPending}
       />
       <Button
         id="save-report-disclaimer"
@@ -88,6 +101,8 @@ const ReportSettings = () => {
           }
         }}
         className="min-w-[216px] mt-[32px]"
+        isLoading={updatePlanSettingsMutation.isPending}
+        disabled={updatePlanSettingsMutation.isPending}
       />
     </>
   );
