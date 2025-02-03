@@ -4,7 +4,7 @@ import InspectionsDoneIcon from "../../../assets/icons/inspections-done.svg";
 
 const Root = ({ children }) => {
   return (
-    <div className="grid grid-cols-2 gap-[20px] mt-[20px] max-w-[1395px] w-full">
+    <div className="grid md:grid-cols-2 grid-cols-1 gap-[20px] mt-[20px] max-w-[1395px] w-full">
       {children}
     </div>
   );

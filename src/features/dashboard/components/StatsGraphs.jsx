@@ -3,12 +3,14 @@ import negativeIcon from "../../../assets/icons/negativeArrow.svg";
 import { LineChart } from "@mantine/charts";
 
 const Root = ({ children }) => (
-  <div className="flex items-center gap-[25px]">{children}</div>
+  <div className="flex flex-wrap items-center gap-[25px] sm:justify-start justify-center">
+    {children}
+  </div>
 );
 
 const GraphCard = ({ children }) => {
   return (
-    <div className="border border-[#CCE2FF] rounded-[12px] p-[20px] h-[210px] flex flex-col justify-center items-center gap-[10px] w-full max-w-[330px] min-w-[250px] flex-1">
+    <div className="border border-[#CCE2FF] rounded-[12px] p-[20px] h-[210px] flex flex-col justify-center items-center gap-[10px] w-full sm:max-w-[330px] min-w-[250px] flex-1">
       {children}
     </div>
   );
