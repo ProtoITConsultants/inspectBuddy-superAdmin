@@ -95,8 +95,9 @@ const ReportSettings = () => {
         label="Save"
         buttonType="contained"
         onClick={() => {
-          reportForm.validate();
-          if (reportForm.isValid()) {
+          const validation = reportForm.validate();
+          console.log(validation);
+          if (!validation.hasErrors) {
             updatePlanSettingsMutation.mutate();
           }
         }}
