@@ -1,0 +1,28 @@
+::-webkit-scrollbar {
+  width: 5px; /* Width of the scrollbar */
+  height: 5px; /* Height for horizontal scrollbar */
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0) !important;
+  border-radius: 10px; /* Rounded corners */
+}
+::-webkit-scrollbar-track:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-radius: 10px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0) !important;
+  border-radius: 10px; /* Rounded corners */
+  transition: background-color 0.3s ease !important;
+}
+
+#sidebar-pages-content-container:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #f4f4f4;
+}

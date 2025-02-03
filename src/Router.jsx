@@ -6,6 +6,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import SidebarLayout from "./layouts/SidebarLayout";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ReportSettings from "./pages/report-settings/ReportSettings";
+import PlanSettings from "./pages/plan-settings/PlanSettings";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "report-settings",
         element: <ReportSettings />,
+      },
+      {
+        path: "plan-settings",
+        element: <PlanSettings />,
       },
     ],
   },

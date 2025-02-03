@@ -30,7 +30,7 @@ const Button = ({
             !disabled && isContained,
           "border-2 !border-light-gray !text-light-gray":
             disabled && isOutlined,
-          "border-2 hover:!border-primary text-primary hover:!text-white hover:bg-primary":
+          "border-2 hover:border-primary text-primary hover:!text-white hover:bg-primary":
             !disabled && isOutlined,
         }
       )}

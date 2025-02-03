@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import "./styles/mantineStyles.css";
 import "./styles/toaster.css";
+import "./styles/scrollbarStyles.css";
 
 // Importing the router
 import { router } from "./Router.jsx";
