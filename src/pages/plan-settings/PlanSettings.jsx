@@ -176,6 +176,7 @@ const PlanSettings = () => {
           formRef.current.setValues(initialValuesRef.current);
         }}
         className="w-full max-w-[570px]"
+        keepMounted={false}
       >
         <Tabs.List className="mb-[24px]">
           <Tabs.Tab value="FREETIER">Free Plan</Tabs.Tab>
