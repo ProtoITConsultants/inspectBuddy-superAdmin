@@ -19,7 +19,7 @@
   transition: background-color 0.3s ease !important;
 }
 
-#sidebar-pages-content-container:hover::-webkit-scrollbar-thumb {
+*:hover::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.4) !important;
 }
 

@@ -116,17 +116,19 @@ const UsersList = () => {
             rows
           )}
         </Table.Body>
-        <Table.Pagination
-          filtersData={filtersData}
-          setFiltersData={(value) =>
-            setFiltersData({ ...filtersData, page: value.page })
-          }
-          paginationData={{
-            totalPages: data?.totalPages,
-            currentPage: data?.currentPage,
-            totalItems: data?.totalUsers,
-          }}
-        />
+        {data && data?.totalPages && (
+          <Table.Pagination
+            filtersData={filtersData}
+            setFiltersData={(value) =>
+              setFiltersData({ ...filtersData, page: value.page })
+            }
+            paginationData={{
+              totalPages: data?.totalPages,
+              currentPage: data?.currentPage,
+              totalItems: data?.totalUsers,
+            }}
+          />
+        )}
       </Table.Root>
     </React.Fragment>
   );
