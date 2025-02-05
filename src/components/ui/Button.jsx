@@ -49,8 +49,7 @@ const Button = ({
         {
           "p-[0] bg-white": isIconButton,
           "bg-light-gray text-white": disabled && isContained,
-          "bg-primary text-white hover:!bg-dark-primary":
-            !disabled && isContained,
+          "bg-primary text-white": !disabled && isContained,
           "border-2 !border-light-gray !text-light-gray":
             disabled && isOutlined,
           "border-2 hover:border-primary text-primary hover:!text-white hover:bg-primary":

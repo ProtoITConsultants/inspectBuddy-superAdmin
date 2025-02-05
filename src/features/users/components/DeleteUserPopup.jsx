@@ -45,7 +45,7 @@ const DeleteUserPopup = () => {
           onClick={() => {}}
           label="Confirm Delete"
           buttonColor="#FF613E"
-          className="!font-bold"
+          className="!font-bold hover:!bg-warning-red-dark"
         />
         <Button
           id="cancel-delete-user"
