@@ -17,6 +17,7 @@
 
   /* Custom Breakpoints */
   --breakpoint-xs: 330px;
+  --breakpoint-w1150: 1150px;
 
   /* Custom Shadows */
   --shadow-custom: 0px 5px 20px rgba(14, 8, 84, 0.08);

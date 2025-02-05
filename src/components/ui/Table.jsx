@@ -2,6 +2,7 @@ import { cn } from "../../utils/cn";
 import filledArrowDown from "../../assets/icons/filledArrowDown.svg";
 import filledArrowUp from "../../assets/icons/filledArrowUp.svg";
 import { Link } from "react-router";
+import { NEXT_ICON, PREVIOUS_ICON } from "./../../assets/icons/DynamicIcons";
 
 const Root = ({ children, className }) => {
   return (
@@ -79,12 +80,114 @@ const DoubleColumn = ({ children }) => {
   );
 };
 
+const Body = ({ children, className = "" }) => {
+  return (
+    <div
+      className={cn(
+        "flex flex-col md:gap-[24px] gap-[20px] overflow-auto xl:px-[24px] lg:px-[12px] lg:pt-[24px]",
+        className
+      )}
+      id="table-list"
+    >
+      {children}
+    </div>
+  );
+};
+
+const ItemRoot = ({ children }) => {
+  return (
+    <div
+      className={`border-b-[1.5px] border-[#E4F0FF] pb-[24px] grid grid-cols-7 gap-x-[20px] gap-[10px]`}
+    >
+      {children}
+    </div>
+  );
+};
+
+const ItemActions = ({ children }) => {
+  return (
+    <div className="w-full flex items-center justify-end gap-[8px]">
+      {children}
+    </div>
+  );
+};
+
+const PaginationButton = ({ onClick, icon, className, disabled }) => {
+  return (
+    <button
+      className={`w-[32px] h-[32px] rounded-full border-[1.5px] flex justify-center items-center ${
+        disabled
+          ? "hover:cursor-not-allowed border-[#E5E6EB]"
+          : "hover:bg-[#cce2ff] border-[#cce2ff]"
+      } ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {icon}
+    </button>
+  );
+};
+
+const Pagination = ({ filtersData, setFiltersData, paginationData }) => {
+  return (
+    <div
+      id="pagination-div"
+      className={`flex justify-between items-center pt-[10px]`}
+    >
+      <p
+        className={`text-darkBlue font-medium text-[14px] ${
+          paginationData?.totalItems < 1 ? "hidden" : "block"
+        }`}
+      >
+        {(paginationData?.currentPage - 1) * 10 + 1}-
+        {paginationData?.currentPage * 10 > paginationData?.totalItems
+          ? paginationData?.totalItems
+          : paginationData?.currentPage * 10}
+        of {paginationData?.totalItems}
+      </p>
+      <div
+        className={`flex items-center space-x-[24px] ${
+          paginationData?.totalPages < 2 ? "hidden" : "block"
+        }`}
+      >
+        <p className={`text-darkBlue font-medium text-[14px]`}>
+          {paginationData?.currentPage} of {paginationData?.totalPages}
+        </p>
+        <div className={`flex gap-[16px] items-center`}>
+          <PaginationButton
+            onClick={() => {
+              setFiltersData({ ...filtersData, page: filtersData.page - 1 });
+            }}
+            icon={<PREVIOUS_ICON />}
+            className={``}
+            disabled={paginationData?.currentPage === 1}
+          />
+          <PaginationButton
+            onClick={() => {
+              setFiltersData({ ...filtersData, page: filtersData.page + 1 });
+            }}
+            icon={<NEXT_ICON />}
+            className={``}
+            disabled={
+              paginationData?.currentPage === paginationData?.totalPages
+            }
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Table = {
   Root,
   Header,
   HeaderItem,
   SingleColumn,
   DoubleColumn,
+  Body,
+  ItemRoot,
+  ItemActions,
+  Pagination,
 };
 
 export default Table;
