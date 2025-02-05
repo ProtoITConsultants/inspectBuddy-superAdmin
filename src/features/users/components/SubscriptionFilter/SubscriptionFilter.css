@@ -1,0 +1,10 @@
+.mantine-Select-input {
+  padding: 0 !important;
+  border: 0 !important;
+  font-weight: 600;
+}
+
+/* Customizing Right Section Icon Width */
+.mantine-Select-section {
+  width: fit-content;
+}

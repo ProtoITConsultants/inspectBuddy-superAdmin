@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { usersListAPIs } from "../../features/users/api";
 import { toast } from "sonner";
+import FiltersTopbar from "../../components/ui/FiltersTopbar";
+import Searchbar from "../../components/ui/Searchbar";
+import SubscriptionFilter from "../../features/users/components/SubscriptionFilter/SubscriptionFilter";
 
 const UsersList = () => {
   const [filtersData, setFiltersData] = useState({
@@ -21,7 +24,22 @@ const UsersList = () => {
       duration: 3000,
     });
   }
-  return <div>UsersList</div>;
+
+  return (
+    <FiltersTopbar>
+      <SubscriptionFilter
+        handleFilterChange={(value) =>
+          setFiltersData((prev) => ({ ...prev, subscriptionPlan: value }))
+        }
+      />
+      <Searchbar
+        placeholder="Search users by name..."
+        onSearch={(value) =>
+          setFiltersData((prev) => ({ ...prev, search: value }))
+        }
+      />
+    </FiltersTopbar>
+  );
 };
 
 export default UsersList;
