@@ -11,8 +11,16 @@ import TableSkeleton from "./../../components/ui/TableSkeleton";
 import { DELETE_ICON, VIEW_DETAIL_ICON } from "../../assets/icons/DynamicIcons";
 import IconLink from "../../components/ui/IconLink";
 import UserSubscriptionCard from "../../features/users/components/UserSubscriptionCard";
+import { useModalStore } from "../../store/modalsStore";
+import DeleteUserPopup from "../../features/users/components/DeleteUserPopup";
+import Button from "./../../components/ui/Button";
 
 const UsersList = () => {
+  // Global States
+  const setOpenDeleteUserModal = useModalStore(
+    (state) => state.setOpenDeleteUserModal
+  );
+
   // Filters State
   const [filtersData, setFiltersData] = useState({
     subscriptionPlan: "All Users",
@@ -50,7 +58,13 @@ const UsersList = () => {
             icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
             label="View Details"
           />
-          <DELETE_ICON className="text-[#FF613E]" />
+          <Button
+            id="delete-user-btn"
+            buttonType="iconButton"
+            icon={<DELETE_ICON className="text-[#FF613E]" />}
+            type="button"
+            onClick={() => setOpenDeleteUserModal(true)}
+          />
         </Table.ItemActions>
       </Table.DoubleColumn>
     </Table.ItemRoot>
@@ -66,6 +80,9 @@ const UsersList = () => {
 
   return (
     <React.Fragment>
+      {/* Delete User Warning Modal */}
+      <DeleteUserPopup />
+
       {/* Filters Topbar */}
       <FiltersTopbar>
         <SubscriptionFilter

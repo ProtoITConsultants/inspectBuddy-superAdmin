@@ -1,5 +1,5 @@
 import Button from "../../../components/ui/Button";
-import ModalRoot from "./../../../components/ui/ModalRoot";
+import { ModalRoot } from "./../../../components/ui/Modal";
 
 const WarningModal = ({
   id,
