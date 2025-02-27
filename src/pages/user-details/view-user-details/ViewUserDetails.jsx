@@ -6,6 +6,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "@mantine/form";
 import EditUserProfileSkeleton from "../../../features/user-details/components/EditUserProfileSkeleton";
+import EditUserDetailsForm from "../../../features/user-details/components/FormComponents";
+import PictureInput from "../../../components/PictureInput/PictureInput";
+import { Select, Textarea, TextInput } from "@mantine/core";
+import BusinessLogoInput from "../../../components/BusinessLogoInput/BusinessLogoInput";
+import PhoneInput from "../../../components/PhoneInput/PhoneInput";
+import Button from "./../../../components/ui/Button";
 
 const ViewUserDetails = () => {
   // Access the client
@@ -15,12 +21,12 @@ const ViewUserDetails = () => {
   const { userId } = useParams();
 
   // Global States
-  // const editingUserDetails = useUserDetailsStore(
-  //   (state) => state.editingUserDetails
-  // );
-  // const setEditingUserDetails = useUserDetailsStore(
-  //   (state) => state.setEditingUserDetails
-  // );
+  const editingUserDetails = useUserDetailsStore(
+    (state) => state.editingUserDetails
+  );
+  const setEditingUserDetails = useUserDetailsStore(
+    (state) => state.setEditingUserDetails
+  );
   const setShowSubUserOption = useUserDetailsStore(
     (state) => state.setShowSubUserOption
   );
@@ -28,8 +34,8 @@ const ViewUserDetails = () => {
   // Local States
   const [personalPhoneCountryCode, setPersonalPhoneCountryCode] = useState("");
   const [businessPhoneCountryCode, setBusinessPhoneCountryCode] = useState("");
-  // const [personalNumberValid, setPersonalNumberValid] = useState(true);
-  // const [businessNumberValid, setBusinessNumberValid] = useState(true);
+  const [personalNumberValid, setPersonalNumberValid] = useState(true);
+  const [businessNumberValid, setBusinessNumberValid] = useState(true);
 
   // Mantine Form
   const form = useForm({
@@ -86,7 +92,7 @@ const ViewUserDetails = () => {
     [userId]
   );
 
-  const { data, error, isError, isPending, isFetching } = useQuery({
+  const { data, error, isError, isPending } = useQuery({
     queryKey: ["userProfileDetails", userId],
     queryFn: fetchUserDetails,
     enabled: !!userId, // Ensures query only runs when userId exists
@@ -188,11 +194,158 @@ const ViewUserDetails = () => {
     return <EditUserProfileSkeleton />;
   }
 
-  if (isFetching) {
-    return <EditUserProfileSkeleton />;
-  }
+  const handleChangeUserInfo = () => {};
 
-  return <div>viewUserDetails</div>;
+  return (
+    <EditUserDetailsForm.UserDetailsFormRoot
+      onFormSubmit={form.onSubmit(handleChangeUserInfo)}
+    >
+      <EditUserDetailsForm.UserDetailFormSection heading="User Details">
+        <PictureInput
+          section="personalInfo"
+          title="Avatar"
+          pictureURL={form.values.personalImage}
+          showUploadBtn={editingUserDetails}
+          onUploadPersonalAvatar={(picture) =>
+            form.setValues((currentValues) => ({
+              ...currentValues,
+              personalImage: picture,
+            }))
+          }
+        />
+        <EditUserDetailsForm.UserDetailsFormRow>
+          <TextInput
+            label="Name"
+            placeholder="Enter Fullname"
+            {...form.getInputProps("fullname")}
+            className="w-full font-medium"
+            value={form.values.fullname}
+            disabled={!editingUserDetails}
+          />
+          <TextInput
+            label="Email"
+            placeholder="Enter Email"
+            {...form.getInputProps("email")}
+            className="w-full font-medium"
+            value={form.values.email}
+            disabled={true}
+          />
+
+          <PhoneInput
+            id="personalNumber-input"
+            label="Phone Number"
+            formValueRef={form.getInputProps("phoneNumber")}
+            value={form.values.phoneNumber}
+            disabled={!editingUserDetails}
+            showError={!personalNumberValid}
+            errorText="Phone Number is Invalid!"
+            countryCode={personalPhoneCountryCode}
+            setCountryCode={setPersonalPhoneCountryCode}
+          />
+          <Select
+            id="editUserPlanDetails"
+            label="Current Plan"
+            placeholder="Select User's Plan"
+            data={["Free Tier", "Standard Tier", "Top Tier"]}
+            {...form.getInputProps("currentPlan")}
+            disabled={!editingUserDetails}
+            allowDeselect={false}
+          />
+        </EditUserDetailsForm.UserDetailsFormRow>
+      </EditUserDetailsForm.UserDetailFormSection>
+      <EditUserDetailsForm.UserDetailFormSection heading="Business Info">
+        <BusinessLogoInput
+          title="Logo"
+          pictureURL={form.values.businessLogoImage}
+          showUploadBtn={editingUserDetails}
+          onUploadBusinessLogo={(picture) =>
+            form.setValues((currentValues) => ({
+              ...currentValues,
+              businessLogoImage: picture,
+            }))
+          }
+        />
+        <EditUserDetailsForm.UserDetailsFormRow>
+          <TextInput
+            label="Company Name"
+            placeholder="Enter Business Name"
+            {...form.getInputProps("businessName")}
+            className="w-full font-medium"
+            value={form.values.businessName}
+            disabled={!editingUserDetails}
+          />
+          <TextInput
+            label="Adress"
+            placeholder="Enter Business Address"
+            {...form.getInputProps("businessAddress")}
+            value={form.values.businessAddress}
+            className="w-full font-medium"
+            disabled={!editingUserDetails}
+          />
+
+          <PhoneInput
+            id="businessNumber-input"
+            label="Phone Number"
+            formValueRef={form.getInputProps("businessPhoneNumber")}
+            value={form.values.businessPhoneNumber}
+            disabled={!editingUserDetails}
+            showError={!businessNumberValid}
+            errorText="Phone Number is Invalid!"
+            countryCode={businessPhoneCountryCode}
+            setCountryCode={setBusinessPhoneCountryCode}
+          />
+          <TextInput
+            label="Website"
+            placeholder="Enter Website Link"
+            {...form.getInputProps("businessWebsite")}
+            className="w-full font-medium"
+            value={form.values.businessWebsite}
+            disabled={!editingUserDetails}
+          />
+        </EditUserDetailsForm.UserDetailsFormRow>
+      </EditUserDetailsForm.UserDetailFormSection>
+      <EditUserDetailsForm.UserDetailFormSection heading="Brand Settings">
+        <Textarea
+          label="Top Report Paragraph"
+          placeholder="Details..."
+          {...form.getInputProps("headerParagraph")}
+          disabled={!editingUserDetails}
+          autosize
+          minRows={8}
+        />
+        <Textarea
+          label="Footer Report Paragraph"
+          placeholder="Details..."
+          {...form.getInputProps("footerParagraph")}
+          disabled={!editingUserDetails}
+          autosize
+          minRows={8}
+        />
+      </EditUserDetailsForm.UserDetailFormSection>
+      <EditUserDetailsForm.UserDetailsFormAction
+        showButtons={editingUserDetails}
+      >
+        <Button
+          id="save-user-info"
+          label="Save Changes"
+          type="submit"
+          buttonType="contained"
+        />
+
+        <Button
+          id="cancel-brand-settings"
+          label="Cancel"
+          className="!text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
+          type="button"
+          onClick={() => {
+            setEditingUserDetails(false);
+          }}
+          buttonType="outlined"
+          borderColor="#FF613E"
+        />
+      </EditUserDetailsForm.UserDetailsFormAction>
+    </EditUserDetailsForm.UserDetailsFormRoot>
+  );
 };
 
 export default ViewUserDetails;

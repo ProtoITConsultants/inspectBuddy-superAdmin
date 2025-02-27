@@ -14,6 +14,7 @@ const SubscriptionFilter = ({ handleFilterChange }) => {
 
   return (
     <Select
+      id="subscription-filter"
       value={value?.value}
       onChange={(_value, option) => handleChange(option)}
       data={USERS_SUBSCRIPTIONS_TYPE}

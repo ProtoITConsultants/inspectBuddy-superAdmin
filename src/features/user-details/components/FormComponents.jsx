@@ -1,5 +1,5 @@
 const UserDetailsFormRoot = ({ children, onFormSubmit }) => (
-  <section className="flex-grow border-[1.5px] border-[#CCE2FF] rounded-[8px] bg-white lg:px-[30px] md:px-[24px] px-[16px] lg:py-[40px] py-[24px] md:py-[32] h-fit space-y-[32px] !w-[calc(100vw-278px)]">
+  <section className="flex-1 border-[1.5px] border-[#CCE2FF] rounded-[8px] bg-white lg:px-[30px] md:px-[24px] px-[16px] lg:py-[40px] py-[24px] md:py-[32] h-fit">
     <form onSubmit={onFormSubmit} className="flex flex-col gap-[32px]">
       {children}
     </form>

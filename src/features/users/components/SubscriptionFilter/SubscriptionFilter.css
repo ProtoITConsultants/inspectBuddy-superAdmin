@@ -1,7 +1,9 @@
-.mantine-Select-input {
+#subscription-filter {
   padding: 0 !important;
-  border: 0 !important;
+  border: none !important;
   font-weight: 600;
+  background-color: transparent !important;
+  height: 36px !important;
 }
 
 /* Customizing Right Section Icon Width */
