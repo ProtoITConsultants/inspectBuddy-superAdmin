@@ -8,6 +8,8 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import ReportSettings from "./pages/report-settings/ReportSettings";
 import PlanSettings from "./pages/plan-settings/PlanSettings";
 import UsersList from "./pages/users-list/UsersList";
+import UserDetailsLayout from "./layouts/UserDetailsLayout";
+import UserDetails from "./pages/user-details/UserDetails";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +39,19 @@ export const router = createBrowserRouter([
         element: <UsersList />,
       },
     ],
+  },
+
+  // User Detail Screens
+  {
+    path: "/user-details/:userId",
+    element: (
+      <AuthMiddleware>
+        <UserDetailsLayout>
+          <UserDetails />
+        </UserDetailsLayout>
+        ,
+      </AuthMiddleware>
+    ),
   },
 
   {

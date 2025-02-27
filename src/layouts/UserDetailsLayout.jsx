@@ -1,12 +1,33 @@
+import React from "react";
 import Navbar from "./../components/Navbar/Navbar";
+import useNavbarTitle from "../hooks/useNavbarTitle";
+import BackButton from "../components/ui/BackButton";
+import UserDetailsSidebar from "../features/user-details/components/UserDetailsSidebar";
 
 const UserDetailsLayout = ({ children }) => {
+  const { pageTitle, pagePath } = useNavbarTitle();
+
   return (
     <main className="App overflow-x-hidden">
       <section className="fixed top-0 z-[10] flex">
         <Navbar withSidebar={false} />
       </section>
-      <section className="md:p-[24px] p-[20px]">{children}</section>
+      <React.Fragment>
+        {pageTitle === "User's Details" && (
+          <BackButton
+            isUserDetailsScreen={pagePath === "/user-details/:userId"}
+          />
+        )}
+        <div className="w-[calc(100vw-var(--scrollbar-width))] h-full md:p-[32px] p-[20px] flex min-[992px]:space-x-[16px] relative md:mt-[164px] mt-[140px] md:min-h-[calc(100dvh-164px)] min-h-[calc(100dvh-140px)]">
+          {pageTitle === "User's Details" && (
+            <React.Fragment>
+              <UserDetailsSidebar />
+              <div className="w-[278px] box-border min-[992px]:block hidden"></div>
+            </React.Fragment>
+          )}
+          {children}
+        </div>
+      </React.Fragment>
     </main>
   );
 };

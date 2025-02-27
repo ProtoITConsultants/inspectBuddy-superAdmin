@@ -34,6 +34,14 @@ const UsersList = () => {
     queryFn: () => usersListAPIs.getAllUsers(filtersData),
   });
 
+  // Error Toast
+  if (isError) {
+    return toast.error("Error!", {
+      description: error.message || `Couldn't fetch Users.`,
+      duration: 3000,
+    });
+  }
+
   // Create Rows of the Table
   const rows = data?.users?.map((user, index) => (
     <Table.ItemRoot key={user._id}>
@@ -54,7 +62,7 @@ const UsersList = () => {
       <Table.DoubleColumn>
         <Table.ItemActions>
           <IconLink
-            href={`/users/${user._id}`}
+            href={`/user-details/${user._id}`}
             icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
             label="View Details"
           />
@@ -69,14 +77,6 @@ const UsersList = () => {
       </Table.DoubleColumn>
     </Table.ItemRoot>
   ));
-
-  // Error Toast
-  if (isError) {
-    return toast.error("Error!", {
-      description: error.message || `Couldn't fetch Users.`,
-      duration: 3000,
-    });
-  }
 
   return (
     <React.Fragment>

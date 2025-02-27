@@ -27,3 +27,26 @@ export const SIDEBAR_LINKS = [
     link: "/report-settings",
   },
 ];
+
+export const USER_DETAILS_SIDEBAR = [
+  {
+    pageTitle: "User Details",
+    pagePath: "",
+  },
+  {
+    pageTitle: "Sub Users",
+    pagePath: "sub-users",
+  },
+  {
+    pageTitle: "Properties",
+    pagePath: "properties",
+  },
+  {
+    pageTitle: "Inspections",
+    pagePath: "inspections",
+  },
+  {
+    pageTitle: "Templates",
+    pagePath: "templates",
+  },
+];
