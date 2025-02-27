@@ -8,4 +8,8 @@ export const useUserDetailsStore = create((set) => ({
   // State to check if we should show the subUser Option or not
   showSubUserOption: false,
   setShowSubUserOption: (value) => set({ showSubUserOption: value }),
+
+  // Editing User Details
+  editingUserDetails: false,
+  setEditingUserDetails: (value) => set({ editingUserDetails: value }),
 }));

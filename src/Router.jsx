@@ -10,6 +10,7 @@ import PlanSettings from "./pages/plan-settings/PlanSettings";
 import UsersList from "./pages/users-list/UsersList";
 import UserDetailsLayout from "./layouts/UserDetailsLayout";
 import UserDetails from "./pages/user-details/UserDetails";
+import ViewUserDetails from "./pages/user-details/view-user-details/ViewUserDetails";
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
 
   // User Detail Screens
   {
-    path: "/user-details/:userId",
+    path: "/user-details",
     element: (
       <AuthMiddleware>
         <UserDetailsLayout>
@@ -52,6 +53,13 @@ export const router = createBrowserRouter([
         ,
       </AuthMiddleware>
     ),
+
+    children: [
+      {
+        path: ":userId",
+        element: <ViewUserDetails />,
+      },
+    ],
   },
 
   {
