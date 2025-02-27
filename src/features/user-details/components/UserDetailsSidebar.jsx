@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router";
 import { useUserDetailsStore } from "../../../store/userDetailsStore";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { USER_DETAILS_SIDEBAR } from "../../../constants/sidebarItems";
 import { Tooltip } from "@mantine/core";
 
@@ -15,22 +15,27 @@ const UserDetailsSidebar = () => {
     (state) => state.showSubUserOption
   );
 
-  // Use Effect to set the Active Tab
+  // Define a mapping of paths to active tab names
+  const tabMapping = useMemo(
+    () => ({
+      "sub-users": "Sub Users",
+      properties: "Properties",
+      inspections: "Inspections",
+      templates: "Templates",
+    }),
+    []
+  );
+
+  // Use Effect to set the Active Tab efficiently
   useEffect(() => {
     const pathname = location.pathname.split("/").pop();
+    const newTab = tabMapping[pathname] || "User Details";
 
-    if (pathname === "sub-users") {
-      setActiveTab("Sub Users");
-    } else if (pathname === "properties") {
-      setActiveTab("Properties");
-    } else if (pathname === "inspections") {
-      setActiveTab("Inspections");
-    } else if (pathname === "templates") {
-      setActiveTab("Templates");
-    } else {
-      setActiveTab("User Details");
+    // Only update state if it's different from the current state
+    if (activeTab !== newTab) {
+      setActiveTab(newTab);
     }
-  }, [location, setActiveTab]);
+  }, [location.pathname, activeTab, setActiveTab, tabMapping]);
 
   return (
     <div className="border-[1.5px] border-[#CCE2FF] rounded-[8px] bg-white px-[26.5px] py-[16px] h-fit w-[278px] fixed top-[196px] min-[992px]:flex flex-col gap-[8px] hidden">
@@ -56,10 +61,11 @@ const UserDetailsSidebar = () => {
                 : "text-[#5A5A5A] hover:text-gray-dark hover:bg-gray-100"
             }`}
             onClick={() => {
-              if (!isSubUsersDisabled) setActiveTab(page.pageTitle);
+              if (!isSubUsersDisabled && activeTab !== page.pageTitle) {
+                setActiveTab(page.pageTitle);
+              }
             }}
             aria-disabled={isSubUsersDisabled}
-            // title={isSubUsersDisabled ? "User is not a TOPTIER user." : ""}
           >
             {isSubUsersDisabled ? (
               <Tooltip label="User is not a 'TOPTIER' user.">
