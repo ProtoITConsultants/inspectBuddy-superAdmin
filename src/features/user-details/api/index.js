@@ -22,7 +22,7 @@ export const userDetailsAPIs = {
   updateUserProfileDetails: async (profileData) => {
     try {
       const response = await axiosInstance.put(
-        USER_DETAILS_ENDPOINTS.GET_USER_PROILE_URL,
+        USER_DETAILS_ENDPOINTS.UPDATE_USER_PROILE_URL,
         profileData
       );
       return response.data;

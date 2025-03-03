@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import { useUserDetailsStore } from "../../../store/userDetailsStore";
 import { userDetailsAPIs } from "./../../../features/user-details/api/index";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useForm } from "@mantine/form";
 import EditUserProfileSkeleton from "../../../features/user-details/components/EditUserProfileSkeleton";
@@ -31,12 +31,6 @@ const ViewUserDetails = () => {
     (state) => state.setShowSubUserOption
   );
 
-  // Local States
-  const [personalPhoneCountryCode, setPersonalPhoneCountryCode] = useState("");
-  const [businessPhoneCountryCode, setBusinessPhoneCountryCode] = useState("");
-  const [personalNumberValid, setPersonalNumberValid] = useState(true);
-  const [businessNumberValid, setBusinessNumberValid] = useState(true);
-
   // Mantine Form
   const form = useForm({
     initialValues: {
@@ -44,10 +38,12 @@ const ViewUserDetails = () => {
       fullname: "",
       email: "",
       currentPlan: "",
+      phoneCountryCode: "",
       phoneNumber: "",
       businessLogoImage: "",
       businessName: "",
       businessAddress: "",
+      businessCountryCode: "",
       businessPhoneNumber: "",
       businessWebsite: "",
       headerParagraph: "",
@@ -62,9 +58,31 @@ const ViewUserDetails = () => {
       // current plan should have a value
       currentPlan: !values.currentPlan ? "Please select a plan" : null,
 
+      phoneCountryCode: !values.phoneCountryCode
+        .replace(/^\+/, "")
+        .split(" ")[0]
+        ? "Please select a country code"
+        : null,
+
+      phoneNumber:
+        values.phoneNumber.replace(/[\s()-]/g, "").length < 10
+          ? "Please enter a valid phone number"
+          : null,
+
       businessName:
         values.businessName.length > 0 && values.businessName.length < 4
           ? "Business Name should be atleast 4 characters"
+          : null,
+
+      businessCountryCode: !values.businessCountryCode
+        .replace(/^\+/, "")
+        .split(" ")[0]
+        ? "Please select a country code"
+        : null,
+
+      businessPhoneNumber:
+        values.businessPhoneNumber.replace(/[\s()-]/g, "").length < 10
+          ? "Please enter a valid phone number"
           : null,
 
       businessAddress:
@@ -110,6 +128,9 @@ const ViewUserDetails = () => {
 
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["userProfileDetails"] });
+
+      // Reset the Editing State
+      setEditingUserDetails(false);
     },
   });
 
@@ -129,10 +150,12 @@ const ViewUserDetails = () => {
           : data?.role === "TOPTIER"
           ? "Top Tier"
           : "",
+      phoneCountryCode: data?.personalPhoneNumber?.slice(0, -10) || "",
       phoneNumber: data?.personalPhoneNumber?.slice(-10) || "",
       businessLogoImage: data?.businessLogo?.url,
       businessName: data?.businessName,
       businessAddress: data?.businessAddress,
+      businessCountryCode: data?.businessPhoneNumber?.slice(0, -10) || "",
       businessPhoneNumber: data?.businessPhoneNumber?.slice(-10) || "",
       businessWebsite: data?.businessWebsite,
       headerParagraph: data?.pdfIntro,
@@ -142,37 +165,7 @@ const ViewUserDetails = () => {
     // Update form values only if they have changed
     if (JSON.stringify(formRef.current.values) !== JSON.stringify(newValues)) {
       formRef.current.setValues(newValues);
-      setPersonalPhoneCountryCode(
-        data?.personalPhoneNumber?.slice(0, -10) || ""
-      );
-      setBusinessPhoneCountryCode(
-        data?.businessPhoneNumber?.slice(0, -10) || ""
-      );
     }
-
-    // formRef.current.setValues({
-    //   personalImage: data?.profilePicture?.url,
-    //   fullname: data?.fullname,
-    //   email: data?.email,
-    //   currentPlan:
-    //     data?.role === "FREETIER"
-    //       ? "Free Tier"
-    //       : data?.role === "STANDARDTIER"
-    //       ? "Standard Tier"
-    //       : data?.role === "TOPTIER"
-    //       ? "Top Tier"
-    //       : "",
-    //   phoneNumber: data?.personalPhoneNumber?.slice(-10) || "",
-    //   businessLogoImage: data?.businessLogo?.url,
-    //   businessName: data?.businessName,
-    //   businessAddress: data?.businessAddress,
-    //   businessPhoneNumber: data?.businessPhoneNumber?.slice(-10) || "",
-    //   businessWebsite: data?.businessWebsite,
-    //   headerParagraph: data?.pdfIntro,
-    //   footerParagraph: data?.pdfOutro,
-    // });
-    // setPersonalPhoneCountryCode(data?.personalPhoneNumber?.slice(0, -10) || "");
-    // setBusinessPhoneCountryCode(data?.businessPhoneNumber?.slice(0, -10) || "");
 
     imagesInitialValueRef.current = {
       personalImage: data?.profilePicture?.url,
@@ -190,15 +183,76 @@ const ViewUserDetails = () => {
     });
   }
 
-  if (isPending) {
+  if (isPending || updateProfileMutation.isPending) {
     return <EditUserProfileSkeleton />;
   }
 
-  const handleChangeUserInfo = () => {};
+  const handleUpdateUserInfo = () => {
+    const formData = form.getValues();
+
+    const correctPhoneNumber = formData.phoneNumber.replace(/[\s()-]/g, "");
+
+    const correctBusinessPhoneNumber = formData.businessPhoneNumber.replace(
+      /[\s()-]/g,
+      ""
+    );
+
+    const API_DATA = new FormData();
+    API_DATA.append("userId", userId);
+    API_DATA.append("fullname", formData.fullname);
+    if (correctPhoneNumber !== "") {
+      const completePhoneNumber =
+        formData.phoneCountryCode + correctPhoneNumber;
+      API_DATA.append("personalPhoneNumber", completePhoneNumber);
+    } else {
+      API_DATA.append("personalPhoneNumber", "");
+    }
+
+    if (
+      formData.personalImage !== imagesInitialValueRef.current.personalImage
+    ) {
+      API_DATA.append("profilePicture", formData.personalImage);
+    }
+    API_DATA.append(
+      "currentPlan",
+      formData.currentPlan === "Free Tier"
+        ? "FREETIER"
+        : formData.currentPlan === "Standard Tier"
+        ? "STANDARDTIER"
+        : formData.currentPlan === "Top Tier"
+        ? "TOPTIER"
+        : ""
+    );
+    API_DATA.append("businessName", formData.businessName);
+    API_DATA.append("businessAddress", formData.businessAddress);
+
+    if (correctBusinessPhoneNumber !== "") {
+      const completePhoneNumber =
+        formData.businessCountryCode + correctBusinessPhoneNumber;
+      API_DATA.append("businessPhoneNumber", completePhoneNumber);
+    } else {
+      API_DATA.append("businessPhoneNumber", "");
+    }
+
+    API_DATA.append("businessWebsite", formData.businessWebsite);
+
+    // Check if the user has uploaded a new image
+    if (
+      formData.businessLogoImage !==
+      imagesInitialValueRef.current.businessLogoImage
+    ) {
+      API_DATA.append("businessLogo", formData.businessLogoImage);
+    }
+
+    API_DATA.append("pdfIntro", formData.headerParagraph);
+    API_DATA.append("pdfOutro", formData.footerParagraph);
+
+    updateProfileMutation.mutate(API_DATA);
+  };
 
   return (
     <EditUserDetailsForm.UserDetailsFormRoot
-      onFormSubmit={form.onSubmit(handleChangeUserInfo)}
+      onFormSubmit={form.onSubmit(handleUpdateUserInfo)}
     >
       <EditUserDetailsForm.UserDetailFormSection heading="User Details">
         <PictureInput
@@ -237,10 +291,11 @@ const ViewUserDetails = () => {
             formValueRef={form.getInputProps("phoneNumber")}
             value={form.values.phoneNumber}
             disabled={!editingUserDetails}
-            showError={!personalNumberValid}
-            errorText="Phone Number is Invalid!"
-            countryCode={personalPhoneCountryCode}
-            setCountryCode={setPersonalPhoneCountryCode}
+            errorText={form.errors.phoneNumber || form.errors.phoneCountryCode}
+            countryCode={form.values.phoneCountryCode}
+            setCountryCode={(value) =>
+              form.setFieldValue("phoneCountryCode", value)
+            }
           />
           <Select
             id="editUserPlanDetails"
@@ -289,10 +344,13 @@ const ViewUserDetails = () => {
             formValueRef={form.getInputProps("businessPhoneNumber")}
             value={form.values.businessPhoneNumber}
             disabled={!editingUserDetails}
-            showError={!businessNumberValid}
-            errorText="Phone Number is Invalid!"
-            countryCode={businessPhoneCountryCode}
-            setCountryCode={setBusinessPhoneCountryCode}
+            errorText={
+              form.errors.businessPhoneNumber || form.errors.businessCountryCode
+            }
+            countryCode={form.values.businessCountryCode}
+            setCountryCode={(value) =>
+              form.setFieldValue("businessCountryCode", value)
+            }
           />
           <TextInput
             label="Website"

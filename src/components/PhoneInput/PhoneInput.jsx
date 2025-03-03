@@ -9,7 +9,6 @@ const PhoneInput = ({
   formValueRef,
   value,
   disabled = false,
-  showError,
   errorText,
   countryCode,
   setCountryCode,
@@ -59,13 +58,7 @@ const PhoneInput = ({
             disabled={disabled}
           />
         </div>
-        <p
-          className={`text-[#FA5252] text-[12px] font-jakartaSans font-medium ${
-            !showError ? "hidden" : "block"
-          }`}
-        >
-          {errorText}
-        </p>
+        {errorText && <p className="text-[#fa5252] text-[12px]">{errorText}</p>}
       </div>
     </div>
   );
