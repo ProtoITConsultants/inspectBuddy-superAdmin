@@ -17,7 +17,7 @@ const Root = ({ children, className }) => {
   );
 };
 
-const Header = ({ children }) => {
+const Header = ({ children, showAddButton = false }) => {
   return (
     <div
       className={cn(
@@ -28,20 +28,22 @@ const Header = ({ children }) => {
       )}
     >
       {children}
-      <div
-        className={`${
-          window.innerWidth > 1150 ? "col-span-2" : "col-span-7"
-        } flex justify-end items-center`}
-      >
-        <div className="w-full flex justify-end items-end">
-          <Link
-            href="#"
-            className="flex items-center justify-center bg-primary text-white font-bold text-[14px] p-[12px_24px] rounded-[8px]"
-          >
-            Add New User
-          </Link>
+      {showAddButton && (
+        <div
+          className={`${
+            window.innerWidth > 1150 ? "col-span-2" : "col-span-7"
+          } flex justify-end items-center`}
+        >
+          <div className="w-full flex justify-end items-end">
+            <Link
+              href="#"
+              className="flex items-center justify-center bg-primary text-white font-bold text-[14px] p-[12px_24px] rounded-[8px]"
+            >
+              Add New User
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

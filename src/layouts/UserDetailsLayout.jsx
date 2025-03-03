@@ -25,7 +25,7 @@ const UserDetailsLayout = ({ children }) => {
               <div className="w-[294px] box-border min-[992px]:block hidden"></div>
             </React.Fragment>
           )}
-          {children}
+          <div className="flex-1">{children}</div>
         </div>
       </React.Fragment>
     </main>

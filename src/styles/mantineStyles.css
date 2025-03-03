@@ -159,3 +159,16 @@
   color: #000929 !important;
   opacity: 50% !important;
 }
+
+/* Mantine Select Filter Customization */
+#select-filter {
+  padding: 0 !important;
+  border: none !important;
+  font-weight: 600;
+  background-color: transparent !important;
+  height: 36px !important;
+}
+
+.mantine-Select-dropdown {
+  width: fit-content !important;
+}

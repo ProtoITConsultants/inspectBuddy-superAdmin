@@ -100,7 +100,7 @@ const UsersList = () => {
       {/* User List Table */}
       <Table.Root className="p-[12px] h-[calc(100%-84px)]">
         {/* Table Header */}
-        <Table.Header>
+        <Table.Header showAddButton={true}>
           {USERS_TABLE_HEADINGS.map((heading) =>
             heading.key === "userEmail" ? (
               <Table.DoubleColumn key={heading.key}>

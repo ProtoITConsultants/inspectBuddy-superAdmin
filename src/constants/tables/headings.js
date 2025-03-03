@@ -5,3 +5,11 @@ export const USERS_TABLE_HEADINGS = [
   { key: "userEmail", value: "User Email" },
   { key: "planStatus", value: "Plan Status" },
 ];
+
+// Sub Users Tables Headings - Sub Users page
+export const SUBUSERS_TABLE_HEADINGS = [
+  { key: "addedOn", value: "Added On" },
+  { key: "userName", value: "User Name" },
+  { key: "lastOnline", value: "Last Online" },
+  { key: "assignedCategories", value: "Assigned Categories" },
+];

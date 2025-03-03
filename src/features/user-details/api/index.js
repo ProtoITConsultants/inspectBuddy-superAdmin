@@ -33,4 +33,43 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // API to fetch user Added Property Categories
+  fetchUserAddedPropertyCategories: async ({ userId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL({
+          userId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching User Added Property Categories", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error fetching User Added Property Categories"
+      );
+    }
+  },
+
+  // API to fetch all sub users of a user
+  fetchSubUsers: async ({ userId, filtersData }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.FETCH_SUB_USER_FOR_USER_URL({
+          userId,
+        }),
+        {
+          page: filtersData.page,
+          search: filtersData.search,
+          keyword: filtersData.keyword,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching sub users", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching sub users"
+      );
+    }
+  },
 };
