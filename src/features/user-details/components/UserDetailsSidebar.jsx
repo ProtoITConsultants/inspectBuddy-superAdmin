@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import { useUserDetailsStore } from "../../../store/userDetailsStore";
 import { useEffect, useMemo } from "react";
 import { USER_DETAILS_SIDEBAR } from "../../../constants/sidebarItems";
@@ -14,6 +14,7 @@ const UserDetailsSidebar = () => {
   const showSubUserOption = useUserDetailsStore(
     (state) => state.showSubUserOption
   );
+  const { userId } = useParams();
 
   // Define a mapping of paths to active tab names
   const tabMapping = useMemo(
@@ -50,8 +51,8 @@ const UserDetailsSidebar = () => {
               isSubUsersDisabled
                 ? "#"
                 : page.pageTitle === "User Details"
-                ? ``
-                : `${page.pagePath}`
+                ? `${userId}`
+                : `${userId}/${page.pagePath}`
             }
             className={`w-full rounded-[4px] h-[40px] text-[16px] flex items-center !px-[16px] ${
               activeTab === page.pageTitle

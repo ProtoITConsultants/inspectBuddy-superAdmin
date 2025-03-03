@@ -11,6 +11,7 @@ import UsersList from "./pages/users-list/UsersList";
 import UserDetailsLayout from "./layouts/UserDetailsLayout";
 import UserDetails from "./pages/user-details/UserDetails";
 import ViewUserDetails from "./pages/user-details/view-user-details/ViewUserDetails";
+import SubUsers from "./pages/user-details/sub-users/SubUsers";
 
 export const router = createBrowserRouter([
   {
@@ -50,7 +51,6 @@ export const router = createBrowserRouter([
         <UserDetailsLayout>
           <UserDetails />
         </UserDetailsLayout>
-        ,
       </AuthMiddleware>
     ),
 
@@ -58,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: ":userId",
         element: <ViewUserDetails />,
+      },
+      {
+        path: ":userId/sub-users",
+        element: <SubUsers />,
       },
     ],
   },
