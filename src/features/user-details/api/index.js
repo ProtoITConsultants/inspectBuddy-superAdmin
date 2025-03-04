@@ -72,4 +72,28 @@ export const userDetailsAPIs = {
       );
     }
   },
+
+  // Fetch Properties added by a user
+  fetchUserAddedProperties: async ({ userId, filtersData }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.FETCH_USER_ADDED_PROPERTIES_URL({
+          userId,
+        }),
+        {
+          category: filtersData.propertyCategory,
+          page: filtersData.page,
+          search: filtersData.search,
+          startDate: filtersData.startdate,
+          endDate: filtersData.enddate,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching User Added Properties", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching User Added Properties"
+      );
+    }
+  },
 };
