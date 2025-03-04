@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { Select } from "@mantine/core";
 
-const FilterSelect = ({ options, onChange }) => {
-  const [value, setValue] = useState(options[0] || null);
+const FilterSelect = ({
+  options,
+  onChange,
+  initialValue,
+  placeholder,
+  isSubUserFilter,
+}) => {
+  const [value, setValue] = useState(initialValue);
 
   const handleChange = (option) => {
     if (!option) return;
@@ -15,6 +21,7 @@ const FilterSelect = ({ options, onChange }) => {
       id="select-filter"
       value={value?.value}
       onChange={(_value, option) => handleChange(option)}
+      placeholder={placeholder}
       data={options}
       withCheckIcon={false}
       comboboxProps={{
@@ -26,7 +33,8 @@ const FilterSelect = ({ options, onChange }) => {
       }}
       renderOption={(item) => (
         <div key={item.option._id}>
-          {item.option.label !== "All Members" &&
+          {isSubUserFilter &&
+            item.option.label !== "All Members" &&
             item.option.label !== "Unassigned" &&
             "Assigned to "}
           {item.option.label}
