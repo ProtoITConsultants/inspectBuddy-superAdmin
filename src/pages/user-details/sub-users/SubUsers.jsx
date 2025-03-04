@@ -97,8 +97,6 @@ const SubUsers = () => {
     );
   });
 
-  console.log(data);
-
   return (
     <React.Fragment>
       {/* Filters Topbar */}
