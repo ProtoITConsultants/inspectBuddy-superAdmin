@@ -1,8 +1,9 @@
 import debounce from "lodash.debounce";
 import { useCallback, useState } from "react";
 import searchIcon from "../../assets/icons/search-icon.svg";
+import { cn } from "../../utils/cn";
 
-const Searchbar = ({ placeholder, onSearch }) => {
+const Searchbar = ({ placeholder, onSearch, className = "" }) => {
   const [searchBarValue, setSearchBarValue] = useState("");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -13,7 +14,10 @@ const Searchbar = ({ placeholder, onSearch }) => {
 
   return (
     <div
-      className={`flex w-[305px] h-[40px] py-[8px] px-[16px] bg-[#F3F8FF] rounded-[8px] gap-[8px]`}
+      className={cn(
+        `flex w-[305px] h-[40px] py-[8px] px-[16px] bg-[#F3F8FF] rounded-[8px] gap-[8px]`,
+        className
+      )}
     >
       <img src={searchIcon} alt="search-icon" />
       <input

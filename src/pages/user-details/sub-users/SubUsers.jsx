@@ -115,10 +115,13 @@ const SubUsers = () => {
           onSearch={(value) =>
             setFiltersData((prev) => ({ ...prev, search: value }))
           }
+          className="md:col-span-1 col-span-2 md:w-[305px] w-full"
         />
       </FiltersTopbar>
       {/* Sub User List Table */}
-      <Table.Root className="p-[12px] h-[calc(100%-84px)]">
+      <Table.Root
+        className={`p-[12px] md:h-[calc(100%-84px)] h-[calc(100%-136px)]`}
+      >
         {/* Table Header */}
         <Table.Header>
           {SUBUSERS_TABLE_HEADINGS.map((heading) =>
@@ -137,8 +140,8 @@ const SubUsers = () => {
         <Table.Body
           className={`${
             data?.totalPages < 2
-              ? "h-[calc(100%-110px)]"
-              : "h-[calc(100%-120px)]"
+              ? "h-[calc(100%-31.69px)]"
+              : "h-[calc(100%-42px)]"
           }`}
         >
           {isPending ? (
