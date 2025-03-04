@@ -17,7 +17,7 @@ const useUserAddedPropertyCategories = ({ userId }) => {
 
   const updatedCategoriesArray = data?.categories?.map((category) => ({
     ...category,
-    label: `Assigned to ${category.value}`,
+    label: `${category.value}`,
   }));
 
   return updatedCategoriesArray || [];

@@ -36,7 +36,7 @@ export const MEMBER_CATEGORY_FILTER = [
   },
   {
     _id: 3,
-    label: "Assigned to All Categories",
-    value: "Assigned to All Categories",
+    label: "All Categories",
+    value: "All Categories",
   },
 ];

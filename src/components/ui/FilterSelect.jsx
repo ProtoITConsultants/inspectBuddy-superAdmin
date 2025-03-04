@@ -24,6 +24,14 @@ const FilterSelect = ({ options, onChange }) => {
         offset: 2,
         position: "bottom-start",
       }}
+      renderOption={(item) => (
+        <div key={item.option._id}>
+          {item.option.label !== "All Members" &&
+            item.option.label !== "Unassigned" &&
+            "Assigned to "}
+          {item.option.label}
+        </div>
+      )}
     />
   );
 };

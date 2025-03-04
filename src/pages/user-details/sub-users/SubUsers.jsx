@@ -19,6 +19,7 @@ import {
 } from "../../../assets/icons/DynamicIcons";
 import Button from "../../../components/ui/Button";
 import AssignedCategoriesCard from "../../../features/user-details/components/sub-users/AssignedCategoriesCard";
+import SubUserCard from "../../../features/user-details/components/sub-users/SubUserCard";
 
 const SubUsers = () => {
   const { userId } = useParams();
@@ -46,47 +47,55 @@ const SubUsers = () => {
     });
   }
 
-  const rows = data?.subUsers?.map((member) => (
-    <Table.ItemRoot key={member._id}>
-      <Table.SingleColumn>
-        <p className="text-[14px] font-medium text-tertiary">
-          {convertDateFormate.subUserAddedDate(member.addedOn)}
-        </p>
-      </Table.SingleColumn>
-      <Table.SingleColumn>
-        <p className="text-[14px] font-medium text-tertiary">
-          {member.userName}
-        </p>
-      </Table.SingleColumn>{" "}
-      <Table.SingleColumn>
-        <p className="text-[14px] font-medium text-tertiary">
-          {member.lastOnline}
-        </p>
-      </Table.SingleColumn>
-      <Table.DoubleColumn>
-        <AssignedCategoriesCard
-          assignedCategories={member.categoriesAssigned}
-          totalCategories={3 + USER_ADDED_PROPERTY_CATEGORIES.length}
-        />
-      </Table.DoubleColumn>
-      <Table.DoubleColumn>
-        <Table.ItemActions>
-          <IconLink
-            href={`details/${member._id}`}
-            icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
-            label="View Details"
+  const rows = data?.subUsers?.map((member) => {
+    return window.innerWidth > 1150 ? (
+      <Table.ItemRoot key={member._id}>
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-tertiary">
+            {convertDateFormate.subUserAddedDate(member.addedOn)}
+          </p>
+        </Table.SingleColumn>
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-tertiary">
+            {member.userName}
+          </p>
+        </Table.SingleColumn>{" "}
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-tertiary">
+            {member.lastOnline}
+          </p>
+        </Table.SingleColumn>
+        <Table.DoubleColumn>
+          <AssignedCategoriesCard
+            assignedCategories={member.categoriesAssigned}
+            totalCategories={3 + USER_ADDED_PROPERTY_CATEGORIES.length}
           />
-          <Button
-            id="delete-sub-user-btn"
-            buttonType="iconButton"
-            icon={<DELETE_ICON className="text-[#8885AA]" />}
-            type="button"
-            onClick={() => {}}
-          />
-        </Table.ItemActions>
-      </Table.DoubleColumn>
-    </Table.ItemRoot>
-  ));
+        </Table.DoubleColumn>
+        <Table.DoubleColumn>
+          <Table.ItemActions>
+            <IconLink
+              href={`details/${member._id}`}
+              icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
+              label="View Details"
+            />
+            <Button
+              id="delete-sub-user-btn"
+              buttonType="iconButton"
+              icon={<DELETE_ICON className="text-[#8885AA]" />}
+              type="button"
+              onClick={() => {}}
+            />
+          </Table.ItemActions>
+        </Table.DoubleColumn>
+      </Table.ItemRoot>
+    ) : (
+      <SubUserCard
+        key={member._id}
+        memberData={member}
+        totalCategories={3 + USER_ADDED_PROPERTY_CATEGORIES.length}
+      />
+    );
+  });
 
   return (
     <React.Fragment>
@@ -97,7 +106,9 @@ const SubUsers = () => {
             ...MEMBER_CATEGORY_FILTER,
             ...USER_ADDED_PROPERTY_CATEGORIES,
           ]}
-          onChange={() => {}}
+          onChange={(value) => {
+            setFiltersData((prev) => ({ ...prev, keyword: value }));
+          }}
         />
         <Searchbar
           placeholder="Search users by name..."
@@ -142,6 +153,7 @@ const SubUsers = () => {
             rows
           )}
         </Table.Body>
+        {/* Responsive Item Card */}
       </Table.Root>
     </React.Fragment>
   );

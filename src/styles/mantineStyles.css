@@ -172,3 +172,7 @@
 .mantine-Select-dropdown {
   width: fit-content !important;
 }
+
+.mantine-Select-wrapper {
+  width: fit-content;
+}
