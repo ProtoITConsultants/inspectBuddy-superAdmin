@@ -1,6 +1,6 @@
 import { Link, useLocation, useParams } from "react-router";
 import { useUserDetailsStore } from "../../../store/userDetailsStore";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { USER_DETAILS_SIDEBAR } from "../../../constants/sidebarItems";
 import { Tooltip } from "@mantine/core";
 
@@ -8,12 +8,13 @@ const UserDetailsSidebar = () => {
   // Hooks
   const location = useLocation();
 
+  // Local States
+  const [userRole, setUserRole] = useState("");
+
   // Global States
   const activeTab = useUserDetailsStore((state) => state.activeTab);
   const setActiveTab = useUserDetailsStore((state) => state.setActiveTab);
-  const showSubUserOption = useUserDetailsStore(
-    (state) => state.showSubUserOption
-  );
+
   const { userId } = useParams();
 
   // Define a mapping of paths to active tab names
@@ -38,11 +39,16 @@ const UserDetailsSidebar = () => {
     }
   }, [location.pathname, activeTab, setActiveTab, tabMapping]);
 
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    setUserRole(userRole);
+  }, []);
+
   return (
     <div className="border-[1.5px] border-[#CCE2FF] rounded-[8px] bg-white px-[26.5px] py-[16px] h-fit w-[278px] fixed top-[196px] min-[992px]:flex flex-col gap-[8px] hidden">
       {USER_DETAILS_SIDEBAR.map((page) => {
         const isSubUsersDisabled =
-          page.pageTitle === "Sub Users" && !showSubUserOption;
+          page.pageTitle === "Sub Users" && userRole !== "TOPTIER";
 
         return (
           <Link

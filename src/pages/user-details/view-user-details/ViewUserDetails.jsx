@@ -27,9 +27,6 @@ const ViewUserDetails = () => {
   const setEditingUserDetails = useUserDetailsStore(
     (state) => state.setEditingUserDetails
   );
-  const setShowSubUserOption = useUserDetailsStore(
-    (state) => state.setShowSubUserOption
-  );
 
   // Mantine Form
   const form = useForm({
@@ -172,8 +169,8 @@ const ViewUserDetails = () => {
       businessLogoImage: data?.businessLogo?.url,
     };
 
-    setShowSubUserOption(data?.role === "TOPTIER");
-  }, [data, setShowSubUserOption]);
+    localStorage.setItem("userRole", data?.role);
+  }, [data]);
 
   // Error Toast
   if (isError) {
