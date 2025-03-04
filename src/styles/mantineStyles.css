@@ -171,6 +171,7 @@
 
 .mantine-Select-dropdown {
   width: fit-content !important;
+  min-width: 155px;
 }
 
 .mantine-Select-wrapper {
