@@ -27,7 +27,7 @@ const BackButton = ({ isUserDetailsScreen = false }) => {
       {isUserDetailsScreen && !editingUserDetails && (
         <button
           type="button"
-          className="flex items-center gap-[8px] p-[10px_16px] rounded-[8px] border-[1.5px] border-[#cce2ff]"
+          className="md:flex hidden items-center gap-[8px] p-[10px_16px] rounded-[8px] border-[1.5px] border-[#cce2ff]"
           onClick={() => setEditingUserDetails(true)}
         >
           <img
