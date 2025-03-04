@@ -109,6 +109,7 @@ const SubUsers = () => {
           onChange={(value) => {
             setFiltersData((prev) => ({ ...prev, keyword: value }));
           }}
+          initialValue={MEMBER_CATEGORY_FILTER[0] || null}
         />
         <Searchbar
           placeholder="Search users by name..."
