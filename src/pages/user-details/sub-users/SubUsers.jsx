@@ -97,6 +97,8 @@ const SubUsers = () => {
     );
   });
 
+  console.log(data);
+
   return (
     <React.Fragment>
       {/* Filters Topbar */}
@@ -153,7 +155,20 @@ const SubUsers = () => {
             rows
           )}
         </Table.Body>
-        {/* Responsive Item Card */}
+        {/* Pagination */}
+        {data && data?.totalPages && (
+          <Table.Pagination
+            filtersData={filtersData}
+            setFiltersData={(value) =>
+              setFiltersData({ ...filtersData, page: value.page })
+            }
+            paginationData={{
+              totalPages: data?.totalPages,
+              currentPage: data?.currentPage,
+              totalItems: data?.totalSubUsers,
+            }}
+          />
+        )}
       </Table.Root>
     </React.Fragment>
   );
