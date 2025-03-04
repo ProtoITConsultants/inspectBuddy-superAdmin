@@ -145,7 +145,7 @@ const Pagination = ({ filtersData, setFiltersData, paginationData }) => {
         {paginationData?.currentPage * 10 > paginationData?.totalItems
           ? paginationData?.totalItems
           : paginationData?.currentPage * 10}
-        of {paginationData?.totalItems}
+        &nbsp;of&nbsp;{paginationData?.totalItems}
       </p>
       <div
         className={`flex items-center space-x-[24px] ${
