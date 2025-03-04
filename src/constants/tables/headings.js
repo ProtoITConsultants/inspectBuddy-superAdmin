@@ -13,3 +13,11 @@ export const SUBUSERS_TABLE_HEADINGS = [
   { key: "lastOnline", value: "Last Online" },
   { key: "assignedCategories", value: "Assigned Categories" },
 ];
+
+// Properties Tables Headings - Properties page
+export const PROPERTIES_TABLE_HEADINGS = [
+  { key: "addedOn", value: "Added On" },
+  { key: "lastInspection", value: "Last Inspection" },
+  { key: "category", value: "Category" },
+  { key: "property", value: "Property" },
+];

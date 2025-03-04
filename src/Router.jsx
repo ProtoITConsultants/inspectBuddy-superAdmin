@@ -12,6 +12,7 @@ import UserDetailsLayout from "./layouts/UserDetailsLayout";
 import UserDetails from "./pages/user-details/UserDetails";
 import ViewUserDetails from "./pages/user-details/view-user-details/ViewUserDetails";
 import SubUsers from "./pages/user-details/sub-users/SubUsers";
+import UserProperties from "./pages/user-details/user-properties/UserProperties";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: ":userId/sub-users",
         element: <SubUsers />,
+      },
+      {
+        path: ":userId/properties",
+        element: <UserProperties />,
       },
     ],
   },

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { Menu } from "@mantine/core";
 import calendarIcon from "../../assets/icons/calendar-icon.svg";
-import { convertDateToISO } from "../../utils/convertDataToISO";
+import { convertDateToISOForDateRange } from "../../utils/dateConvert";
 
 const DateRangeFilter = ({ filtersData, setFiltersData }) => {
   // Local States
@@ -17,7 +17,7 @@ const DateRangeFilter = ({ filtersData, setFiltersData }) => {
     if (dateValues[1] === null) {
       return;
     } else {
-      const { startDate, endDate } = convertDateToISO(
+      const { startDate, endDate } = convertDateToISOForDateRange(
         new Date(dateValues[0]),
         new Date(dateValues[1])
       );

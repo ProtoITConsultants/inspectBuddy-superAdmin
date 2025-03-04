@@ -21,18 +21,13 @@ const Header = ({ children, showAddButton = false }) => {
   return (
     <div
       className={cn(
-        "rounded-[8px] grid grid-cols-7 gap-x-[20px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]",
-        {
-          hidden: window.innerWidth < 1150,
-        }
+        "rounded-[8px]  w1150:grid hidden grid-cols-7 gap-x-[20px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]"
       )}
     >
       {children}
       {showAddButton && (
         <div
-          className={`${
-            window.innerWidth > 1150 ? "col-span-2" : "col-span-7"
-          } flex justify-end items-center`}
+          className={`w1150:col-span-2 col-end-7 flex justify-end items-center`}
         >
           <div className="w-full flex justify-end items-end">
             <Link

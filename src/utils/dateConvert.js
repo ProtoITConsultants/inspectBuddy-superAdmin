@@ -1,5 +1,5 @@
 // Function to convert date to ISO
-export const convertDateToISO = (startDate, endDate) => {
+export const convertDateToISOForDateRange = (startDate, endDate) => {
   const start = new Date(
     Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
   );
