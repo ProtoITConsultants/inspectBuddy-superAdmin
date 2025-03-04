@@ -170,10 +170,11 @@
 }
 
 .mantine-Select-dropdown {
-  width: fit-content !important;
+  /* width: fit-content !important; */
   min-width: 155px;
+  border-radius: 8px !important;
 }
 
-.mantine-Select-wrapper {
+.mantine-Select-wrapper:has(#select-filter) {
   width: fit-content;
 }

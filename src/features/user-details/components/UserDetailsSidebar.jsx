@@ -39,10 +39,14 @@ const UserDetailsSidebar = () => {
     }
   }, [location.pathname, activeTab, setActiveTab, tabMapping]);
 
+  const role = localStorage.getItem("userRole");
   useEffect(() => {
-    const userRole = localStorage.getItem("userRole");
-    setUserRole(userRole);
-  }, []);
+    setUserRole(role);
+
+    return () => {
+      setUserRole("");
+    };
+  }, [role]);
 
   return (
     <div className="border-[1.5px] border-[#CCE2FF] rounded-[8px] bg-white px-[26.5px] py-[16px] h-fit w-[278px] fixed top-[196px] min-[992px]:flex flex-col gap-[8px] hidden">
