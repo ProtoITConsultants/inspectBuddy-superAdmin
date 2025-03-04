@@ -62,7 +62,7 @@ const SidebarMobileVersion = () => {
       <div
         className={clsx(
           "absolute left-0 right-0 top-[72px] bg-white transition-all duration-300 ease-in-out overflow-auto z-[10]",
-          opened ? "max-h-[calc(100vh-72px)]" : "max-h-0"
+          opened ? "h-[calc(100vh-72px)]" : "h-0"
         )}
       >
         <div

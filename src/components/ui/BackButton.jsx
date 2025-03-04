@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import arrowBackIcon from "../../assets/icons/arrow-back.svg";
 import EditUserInfoIcon from "../../assets/icons/edit-icon.svg";
 import { useUserDetailsStore } from "../../store/userDetailsStore";
+import UserDetailsSidebarMobile from "../../features/user-details/components/Sidebar/UserDetailsSidebarMobile";
 
 const BackButton = ({ isUserDetailsScreen = false }) => {
   // Global States
@@ -21,6 +22,8 @@ const BackButton = ({ isUserDetailsScreen = false }) => {
         <img src={arrowBackIcon} alt="arrow-back-icon" />
         <p>Go Back</p>
       </Link>
+
+      <UserDetailsSidebarMobile />
       {isUserDetailsScreen && !editingUserDetails && (
         <button
           type="button"

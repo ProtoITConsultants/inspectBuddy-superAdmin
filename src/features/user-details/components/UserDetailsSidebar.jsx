@@ -59,7 +59,7 @@ const UserDetailsSidebar = () => {
                 ? "bg-[rgba(135,184,254,0.12)] text-primary hover:text-darkPrimary hover:bg-[rgba(135,184,254,0.30)]"
                 : isSubUsersDisabled
                 ? "text-gray-400 cursor-not-allowed"
-                : "text-[#5A5A5A] hover:text-gray-dark hover:bg-gray-100"
+                : "text-[#5A5A5A] hover:bg-gray-100"
             }`}
             onClick={() => {
               if (!isSubUsersDisabled && activeTab !== page.pageTitle) {
