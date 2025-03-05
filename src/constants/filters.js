@@ -48,3 +48,17 @@ export const TEMPLATE_CATEGORIES = [
   { id: 3, label: "Completed", value: "completed" },
   { id: 4, label: "Default Template", value: "default" },
 ];
+
+// Inspections Type - Inspections Page
+export const INSPECTIONS_CATEGORIES = [
+  { _id: 1, value: "all", label: "All Inspections" },
+  { _id: 2, value: "completed", label: "Completed" },
+  { _id: 3, value: "notcompleted", label: "In Progress" },
+  { _id: 4, value: "draft", label: "Drafted" },
+];
+
+export const INSPECTION_DATE_RANGE_FILTER = [
+  { value: "last-30-days", label: "Last 30 days" },
+  { value: "last-03-months", label: "Last 03 months" },
+  { value: "last-05-months", label: "Last 05 months" },
+];

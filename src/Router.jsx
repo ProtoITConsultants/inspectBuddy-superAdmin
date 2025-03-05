@@ -14,6 +14,7 @@ import ViewUserDetails from "./pages/user-details/view-user-details/ViewUserDeta
 import SubUsers from "./pages/user-details/sub-users/SubUsers";
 import UserProperties from "./pages/user-details/user-properties/UserProperties";
 import UserTemplates from "./pages/user-details/user-templates/UserTemplates";
+import UserInspections from "./pages/user-details/user-inspections/UserInspections";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
       {
         path: ":userId/templates",
         element: <UserTemplates />,
+      },
+      {
+        path: ":userId/inspections",
+        element: <UserInspections />,
       },
     ],
   },

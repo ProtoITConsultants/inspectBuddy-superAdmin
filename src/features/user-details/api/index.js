@@ -120,4 +120,45 @@ export const userDetailsAPIs = {
       );
     }
   },
+
+  // Fetch Inspections added by a user
+  fetchUserAddedInspections: async ({ userId, filtersData }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.FETCH_USER_ADDED_INSPECTIONS_URL({
+          userId,
+        }),
+        {
+          status: filtersData.status,
+          page: filtersData.page,
+          search: filtersData.search,
+          startdate: filtersData.startdate,
+          enddate: filtersData.enddate,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching User Added Inspections", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching User Added Inspections"
+      );
+    }
+  },
+
+  // Fetch Inspections Stats
+  fetchUserInspectionStats: async ({ userId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_USER_INSPECTION_STATS_URL({
+          userId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching User Inspection Stats", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching User Inspection Stats"
+      );
+    }
+  },
 };
