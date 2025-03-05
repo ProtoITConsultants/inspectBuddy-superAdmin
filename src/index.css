@@ -19,8 +19,11 @@
   --font-jakarta-sans: "Plus Jakarta Sans";
 
   /* Custom Breakpoints */
+  --breakpoint-ms: 440px;
   --breakpoint-xs: 330px;
   --breakpoint-w1150: 1150px;
+  --breakpoint-2xl: 1321px;
+  --breakpoint-3xl: 1382px;
 
   /* Custom Shadows */
   --shadow-custom: 0px 5px 20px rgba(14, 8, 84, 0.08);

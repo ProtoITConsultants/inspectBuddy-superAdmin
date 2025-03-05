@@ -17,11 +17,12 @@ const Root = ({ children, className }) => {
   );
 };
 
-const Header = ({ children, showAddButton = false }) => {
+const Header = ({ children, showAddButton = false, className = "" }) => {
   return (
     <div
       className={cn(
-        "rounded-[8px] w1150:grid hidden grid-cols-7 gap-x-[20px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]"
+        "rounded-[8px] w1150:grid hidden grid-cols-7 gap-x-[20px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]",
+        className
       )}
     >
       {children}

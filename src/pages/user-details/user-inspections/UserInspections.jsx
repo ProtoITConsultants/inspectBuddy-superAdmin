@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import { userDetailsAPIs } from "../../../features/user-details/api";
 import { toast } from "sonner";
@@ -14,6 +14,17 @@ import InspectionTableStats from "../../../features/user-details/components/insp
 import StatsSkeleton from "./../../../features/user-details/components/inspections/StatsSkeleton";
 import useMonthStartDates from "../../../features/user-details/hooks/useMonthStartDates";
 import Stats from "../../../features/user-details/components/inspections/Stats";
+import { INSPECTIONS_TABLE_HEADINGS } from "../../../constants/tables/headings";
+import TableSkeleton from "../../../components/ui/TableSkeleton";
+import { convertDateFormate } from "../../../features/user-details/services/convertDateFormate";
+import PropertyCard from "../../../features/user-details/components/properties/PropertyCard";
+import InspectionStatusCard from "../../../features/user-details/components/inspections/InspectionStatusCard";
+import IconLink from "../../../components/ui/IconLink";
+import {
+  GENERATE_REPORT_ICON,
+  VIEW_DETAIL_ICON,
+} from "../../../assets/icons/DynamicIcons";
+import Button from "../../../components/ui/Button";
 
 const UserInspections = () => {
   // Hooks
@@ -107,6 +118,71 @@ const UserInspections = () => {
     }
   };
 
+  console.log(userInspections.data.inspections);
+
+  const rows = userInspections?.data?.inspections.map((inspection) => {
+    return window.innerWidth > 1150 ? (
+      <Table.ItemRoot key={inspection._id}>
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-tertiary">
+            {convertDateFormate.localeDate(inspection?.updatedAt)}
+          </p>
+        </Table.SingleColumn>
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-tertiary">
+            {inspection?.name}
+          </p>
+        </Table.SingleColumn>
+        <Table.DoubleColumn>
+          <PropertyCard
+            propertyData={{
+              propertyName: inspection?.property?.name,
+              propertyAddress: [
+                inspection?.property?.address?.street,
+                inspection?.property?.address?.city,
+                inspection?.property?.address?.state,
+              ]
+                .filter(Boolean)
+                .join(", "),
+              propertyImageURL: inspection?.property?.image?.url,
+            }}
+          />
+        </Table.DoubleColumn>
+        <Table.SingleColumn>
+          <InspectionStatusCard
+            status={
+              inspection?.isDraft
+                ? "drafted"
+                : inspection?.isInspectionCompleted
+                ? "completed"
+                : "in progress"
+            }
+          />
+        </Table.SingleColumn>
+        <Table.DoubleColumn>
+          <Table.ItemActions>
+            <IconLink
+              href={`details/${inspection._id}`}
+              icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
+              label="View Details"
+            />
+            <Button
+              id="generate-report-btn"
+              buttonType="iconButton"
+              icon={<GENERATE_REPORT_ICON className="text-[#9EA3AE]" />}
+              type="button"
+              onClick={() => {}}
+              disabled={!inspection?.isInspectionCompleted}
+              className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium"
+            />
+          </Table.ItemActions>
+        </Table.DoubleColumn>
+      </Table.ItemRoot>
+    ) : (
+      <div></div>
+    );
+  });
+
   return (
     <React.Fragment>
       {/* Filters Topbar */}
@@ -149,8 +225,55 @@ const UserInspections = () => {
         </InspectionTableStats>
 
         {/* Table Header */}
+        <Table.Header className="mt-[12px]">
+          {INSPECTIONS_TABLE_HEADINGS.map((heading) =>
+            heading.key === "property" ? (
+              <Table.DoubleColumn key={heading.key}>
+                <Table.HeaderItem heading={heading.value} />
+              </Table.DoubleColumn>
+            ) : (
+              <Table.SingleColumn key={heading.key}>
+                <Table.HeaderItem heading={heading.value} />
+              </Table.SingleColumn>
+            )
+          )}
+        </Table.Header>
 
         {/* Table Body */}
+        <Table.Body
+          className={`${
+            userInspections?.data?.totalPages < 0
+              ? "xl:h-[calc(100%-275px)] 3xl:!h-[calc(100%-230px)] 2xl:!h-[calc(100%-250px)] w1150:!h-[calc(100%-295px)] sm:h-[calc(100%-208.98px)] ms:h-[calc(100%-273.8px)] h-[calc(100%-298.58px)]"
+              : "xl:h-[calc(100%-225.59px)] 3xl:!h-[calc(100%-240px)] 2xl:!h-[calc(100%-260px)] w1150:!h-[calc(100%-305px)] sm:h-[calc(100%-219.28px)] ms:h-[calc(100%-284.08px)] h-[calc(100%-308.88px)]"
+          }`}
+        >
+          {userInspections.isPending ? (
+            <TableSkeleton />
+          ) : userInspections?.data?.inspections.length < 1 ? (
+            <div className="flex justify-center items-center h-full">
+              <p className="text-[14px] font-medium text-dark-gray text-center">
+                No Inspections Found! <br /> Add a new Inspection to get
+                started.
+              </p>
+            </div>
+          ) : (
+            rows
+          )}
+        </Table.Body>
+
+        {userInspections?.data && (
+          <Table.Pagination
+            filtersData={filtersData}
+            setFiltersData={(value) =>
+              setFiltersData({ ...filtersData, page: value.page })
+            }
+            paginationData={{
+              totalPages: userInspections?.data?.totalPages,
+              currentPage: userInspections?.data?.currentPage,
+              totalItems: userInspections?.data?.totalInspections,
+            }}
+          />
+        )}
       </Table.Root>
     </React.Fragment>
   );

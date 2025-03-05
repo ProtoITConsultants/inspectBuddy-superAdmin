@@ -92,7 +92,7 @@ const UserProperties = () => {
             <Button
               id="delete-property-btn"
               buttonType="iconButton"
-              icon={<DELETE_ICON className="text-[#8885AA]" />}
+              icon={<DELETE_ICON className="text-[#9EA3AE]" />}
               type="button"
               onClick={() => {}}
             />

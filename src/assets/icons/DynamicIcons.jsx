@@ -176,3 +176,43 @@ export const ARROW_DOWN_ICON = ({ className }) => (
     </defs>
   </svg>
 );
+
+export const GENERATE_REPORT_ICON = ({ className }) => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M6 7.33331V11.3333L7.33333 9.99998"
+      stroke="currentColor"
+      strokeWidth="1.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5.99984 11.3333L4.6665 10"
+      stroke="currentColor"
+      strokeWidth="1.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.6668 6.66665V9.99998C14.6668 13.3333 13.3335 14.6666 10.0002 14.6666H6.00016C2.66683 14.6666 1.3335 13.3333 1.3335 9.99998V5.99998C1.3335 2.66665 2.66683 1.33331 6.00016 1.33331H9.3335"
+      stroke="currentColor"
+      strokeWidth="1.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.6668 6.66665H12.0002C10.0002 6.66665 9.3335 5.99998 9.3335 3.99998V1.33331L14.6668 6.66665Z"
+      stroke="currentColor"
+      strokeWidth="1.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

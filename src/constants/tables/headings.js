@@ -28,3 +28,11 @@ export const TEMPLATES_TABLE_HEADINGS = [
   { key: "templateName", value: "Template Name" },
   { key: "Status", value: "Status" },
 ];
+
+// Inspections Tables Headings - Inspections page
+export const INSPECTIONS_TABLE_HEADINGS = [
+  { key: "updatedOn", value: "Updated on" },
+  { key: "reportName", value: "Report Name" },
+  { key: "property", value: "Property" },
+  { key: "status", value: "Status" },
+];
