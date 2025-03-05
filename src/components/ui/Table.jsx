@@ -21,7 +21,7 @@ const Header = ({ children, showAddButton = false }) => {
   return (
     <div
       className={cn(
-        "rounded-[8px]  w1150:grid hidden grid-cols-7 gap-x-[20px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]"
+        "rounded-[8px] w1150:grid hidden grid-cols-7 gap-x-[20px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]"
       )}
     >
       {children}
@@ -77,11 +77,17 @@ const DoubleColumn = ({ children }) => {
   );
 };
 
+const TripleColumn = ({ children }) => {
+  return (
+    <div className="flex items-center gap-[4px] col-span-3">{children}</div>
+  );
+};
+
 const Body = ({ children, className = "" }) => {
   return (
     <div
       className={cn(
-        "flex flex-col md:gap-[24px] gap-[20px] overflow-auto xl:px-[24px] lg:px-[12px] lg:pt-[24px]",
+        "flex flex-col md:gap-[18px] gap-[12px] overflow-auto xl:px-[24px] lg:px-[12px] lg:pt-[24px]",
         className
       )}
       id="table-list"
@@ -94,7 +100,7 @@ const Body = ({ children, className = "" }) => {
 const ItemRoot = ({ children }) => {
   return (
     <div
-      className={`border-b-[1.5px] border-[#E4F0FF] pb-[24px] grid grid-cols-7 gap-x-[20px] gap-[10px]`}
+      className={`border-b-[1.5px] border-[#E4F0FF] md:pb-[18px] pb-[12px] grid grid-cols-7 gap-x-[20px] gap-[10px]`}
     >
       {children}
     </div>
@@ -181,6 +187,7 @@ const Table = {
   HeaderItem,
   SingleColumn,
   DoubleColumn,
+  TripleColumn,
   Body,
   ItemRoot,
   ItemActions,

@@ -13,6 +13,15 @@ const DateRangeFilter = ({ filtersData, setFiltersData }) => {
 
   // Function to handle date range change
   const updateFiltersDate = (dateValues) => {
+    if (dateValues[0] === null && dateValues[1] === null) {
+      setDateRange([]);
+      return setFiltersData((prev) => ({
+        ...prev,
+        startdate: "",
+        enddate: "",
+      }));
+    }
+
     setDateRange(dateValues);
     if (dateValues[1] === null) {
       return;

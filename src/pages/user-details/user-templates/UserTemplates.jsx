@@ -1,106 +1,112 @@
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useParams } from "react-router";
-import useUserAddedPropertyCategories from "../../../hooks/useUserAddedPropertyCategories";
-import { useQuery } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../features/user-details/api";
 import { toast } from "sonner";
 import FiltersTopbar from "../../../components/ui/FiltersTopbar";
+import { TEMPLATE_CATEGORIES } from "../../../constants/filters";
 import FilterSelect from "../../../components/ui/FilterSelect";
 import { Group } from "@mantine/core";
 import Searchbar from "../../../components/ui/Searchbar";
 import DateRangeFilter from "../../../components/ui/DateRangeFilter";
 import Table from "../../../components/ui/Table";
-import { PROPERTIES_TABLE_HEADINGS } from "../../../constants/tables/headings";
-import Button from "../../../components/ui/Button";
+import { TEMPLATES_TABLE_HEADINGS } from "../../../constants/tables/headings";
+import AddNewTemplateBtn from "../../../features/user-details/components/templates/AddNewTemplateBtn";
 import TableSkeleton from "../../../components/ui/TableSkeleton";
 import { convertDateFormate } from "../../../features/user-details/services/convertDateFormate";
+import TemplateCategoryCard from "../../../features/user-details/components/templates/TemplateCategoryCard";
+import IconLink from "../../../components/ui/IconLink";
 import {
+  CLONE_ICON,
   DELETE_ICON,
   VIEW_DETAIL_ICON,
 } from "../../../assets/icons/DynamicIcons";
-import IconLink from "../../../components/ui/IconLink";
-import PropertyCard from "../../../features/user-details/components/properties/PropertyCard";
-import ResponsivePropertyCard from "../../../features/user-details/components/properties/ResponsivePropertyCard";
-import AddPropertyButton from "../../../features/user-details/components/properties/AddPropertyButton";
+import Button from "../../../components/ui/Button";
+import ResponsiveTemplateCard from "../../../features/user-details/components/templates/ResponsiveTemplateCard";
 
-const UserProperties = () => {
+const UserTemplates = () => {
   // Hooks
   const { userId } = useParams();
-  const USER_ADDED_PROPERTY_CATEGORIES = useUserAddedPropertyCategories({
-    userId: userId,
-  });
 
-  // Filters Data
+  //  Local States
   const [filtersData, setFiltersData] = useState({
-    propertyCategory: "",
+    status: "all",
     page: 1,
     search: "",
     startdate: "",
     enddate: "",
   });
 
-  // Query to fetch the Properties
+  // Query to fetch the Templates
   const { data, isError, error, isPending } = useQuery({
-    queryKey: ["propertiesQuery", filtersData, userId],
+    queryKey: ["templatesQuery", filtersData, userId],
     queryFn: () =>
-      userDetailsAPIs.fetchUserAddedProperties({ userId: userId, filtersData }),
+      userDetailsAPIs.fetchUserAddedTemplates({ userId: userId, filtersData }),
   });
 
   if (isError) {
     return toast.error("Error!", {
-      description: error?.message || "Couldn't fetch properties!",
+      description: error.message || "Couldn't fetch user's Templates!",
       duration: 3000,
     });
   }
 
-  const rows = data?.properties?.map((property) => {
+  const rows = data?.templates.map((template) => {
     return window.innerWidth > 1150 ? (
-      <Table.ItemRoot key={property._id}>
+      <Table.ItemRoot key={template._id}>
         <Table.SingleColumn>
           <p className="text-[14px] font-medium text-tertiary">
-            {convertDateFormate.localeDate(property.createdAt)}
-          </p>
-        </Table.SingleColumn>
-        <Table.SingleColumn>
-          <p className="text-[14px] font-medium text-tertiary">
-            {property.lastInspectionDate === null
-              ? "No Inspection Yet"
-              : convertDateFormate.localeDate(property.lastInspectionDate)}
-          </p>
-        </Table.SingleColumn>
-        <Table.SingleColumn>
-          <p className="text-[14px] font-medium text-tertiary">
-            {property.category.value}
+            {convertDateFormate.internationalDate(template.updatedAt)}
           </p>
         </Table.SingleColumn>
         <Table.DoubleColumn>
-          <PropertyCard
-            propertyData={{
-              propertyName: property.name,
-              propertyAddress: property.address,
-              propertyImageURL: property.image.url,
-            }}
-          />
+          <p className="text-[14px] font-medium text-tertiary">
+            {template.name}
+          </p>
         </Table.DoubleColumn>
-        <Table.DoubleColumn>
+        <Table.SingleColumn>
+          <TemplateCategoryCard
+            templateType={
+              template.isDefault
+                ? "default"
+                : template.isDraft
+                ? "draft"
+                : "published"
+            }
+          />
+        </Table.SingleColumn>
+        <Table.TripleColumn>
           <Table.ItemActions>
             <IconLink
-              href={`details/${property._id}`}
+              href={`details/${template._id}`}
               icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
               label="View Details"
             />
             <Button
-              id="delete-property-btn"
+              id="clone-template-btn"
+              label="Clone Template"
               buttonType="iconButton"
-              icon={<DELETE_ICON className="text-[#8885AA]" />}
+              icon={<CLONE_ICON className="text-[#9EA3AE] h-[16px] w-[16px]" />}
+              type="button"
+              onClick={() => {}}
+              className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium"
+            />
+            <Button
+              id="delete-template-btn"
+              buttonType="iconButton"
+              icon={<DELETE_ICON className="text-[#9EA3AE]" />}
               type="button"
               onClick={() => {}}
             />
           </Table.ItemActions>
-        </Table.DoubleColumn>
+        </Table.TripleColumn>
       </Table.ItemRoot>
     ) : (
-      <ResponsivePropertyCard key={property._id} propertyData={property} />
+      <ResponsiveTemplateCard
+        key={template._id}
+        templateData={template}
+        onCloneTemplate={() => {}}
+      />
     );
   });
 
@@ -109,12 +115,9 @@ const UserProperties = () => {
       {/* Filters Topbar */}
       <FiltersTopbar>
         <FilterSelect
-          options={[
-            { _id: "1", label: "All Properties", value: "" },
-            ...USER_ADDED_PROPERTY_CATEGORIES,
-          ]}
+          options={TEMPLATE_CATEGORIES}
           onChange={(value) => {
-            setFiltersData((prev) => ({ ...prev, propertyCategory: value }));
+            setFiltersData((prev) => ({ ...prev, status: value }));
           }}
           initialValue={null}
           placeholder="Select Category"
@@ -132,14 +135,14 @@ const UserProperties = () => {
           />
         </Group>
       </FiltersTopbar>
-      {/* Properties Table */}
+      {/* Templates Table */}
       <Table.Root
         className={`p-[12px] md:h-[calc(100%-84px)] h-[calc(100%-136px)]`}
       >
         {/* Table Header */}
         <Table.Header>
-          {PROPERTIES_TABLE_HEADINGS.map((heading) =>
-            heading.key === "property" ? (
+          {TEMPLATES_TABLE_HEADINGS.map((heading) =>
+            heading.key === "templateName" ? (
               <Table.DoubleColumn key={heading.key}>
                 <Table.HeaderItem heading={heading.value} />
               </Table.DoubleColumn>
@@ -149,10 +152,10 @@ const UserProperties = () => {
               </Table.SingleColumn>
             )
           )}
-          <AddPropertyButton className="col-span-2" />
+          <AddNewTemplateBtn className="col-span-3" />
         </Table.Header>
 
-        <AddPropertyButton className="w1150:hidden lg:pb-[24px] pb-[12px] lg:mb-0 mb-[12px] border-b border-[#E4F0FF]" />
+        <AddNewTemplateBtn className="w1150:hidden lg:pb-[24px] pb-[12px] lg:mb-0 mb-[12px] border-b border-[#E4F0FF]" />
 
         {/* Table Body */}
         <Table.Body
@@ -164,16 +167,18 @@ const UserProperties = () => {
         >
           {isPending ? (
             <TableSkeleton />
-          ) : data?.properties?.length < 1 ? (
+          ) : data?.templates?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
               <p className="text-[14px] font-medium text-gray-dark text-center">
-                No Properties Found! <br /> Add a new Property to get started.
+                No Templates Found! <br /> Add a new Template to get started.
               </p>
             </div>
           ) : (
             rows
           )}
         </Table.Body>
+
+        {/* Pagination */}
         {data && data?.totalPages && (
           <Table.Pagination
             filtersData={filtersData}
@@ -183,7 +188,7 @@ const UserProperties = () => {
             paginationData={{
               totalPages: data?.totalPages,
               currentPage: data?.currentPage,
-              totalItems: data?.totalProperties,
+              totalItems: data?.totalTemplates,
             }}
           />
         )}
@@ -192,4 +197,4 @@ const UserProperties = () => {
   );
 };
 
-export default UserProperties;
+export default UserTemplates;

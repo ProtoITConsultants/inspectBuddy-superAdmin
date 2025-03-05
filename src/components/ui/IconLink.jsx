@@ -12,7 +12,7 @@ const IconLink = ({ id, href, label, icon, className }) => {
       )}
     >
       {icon}
-      <p className="text-[12px] text-darkBlue font-medium">{label}</p>
+      <p className="text-[12px] text-dark-blue font-medium">{label}</p>
     </Link>
   );
 };

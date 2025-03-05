@@ -40,3 +40,11 @@ export const MEMBER_CATEGORY_FILTER = [
     value: "All Categories",
   },
 ];
+
+// Template Type - Templates Page
+export const TEMPLATE_CATEGORIES = [
+  { id: 1, label: "All Templates", value: "all" },
+  { id: 2, label: "Drafted", value: "drafted" },
+  { id: 3, label: "Completed", value: "completed" },
+  { id: 4, label: "Default Template", value: "default" },
+];

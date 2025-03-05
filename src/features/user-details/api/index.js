@@ -96,4 +96,28 @@ export const userDetailsAPIs = {
       );
     }
   },
+
+  // Fetch Templates added by a user
+  fetchUserAddedTemplates: async ({ userId, filtersData }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.FETCH_USER_ADDED_TEMPLATES_URL({
+          userId,
+        }),
+        {
+          status: filtersData.status,
+          page: filtersData.page,
+          search: filtersData.search,
+          startdate: filtersData.startdate,
+          enddate: filtersData.enddate,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching User Added Templates", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching User Added Templates"
+      );
+    }
+  },
 };

@@ -21,3 +21,10 @@ export const PROPERTIES_TABLE_HEADINGS = [
   { key: "category", value: "Category" },
   { key: "property", value: "Property" },
 ];
+
+// Templates Tables Headings - Templates page
+export const TEMPLATES_TABLE_HEADINGS = [
+  { key: "updatedOn", value: "Updated on" },
+  { key: "templateName", value: "Template Name" },
+  { key: "Status", value: "Status" },
+];
