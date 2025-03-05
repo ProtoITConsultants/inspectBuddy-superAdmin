@@ -25,6 +25,7 @@ import {
   VIEW_DETAIL_ICON,
 } from "../../../assets/icons/DynamicIcons";
 import Button from "../../../components/ui/Button";
+import ResponsiveInspectionCard from "../../../features/user-details/components/inspections/ResponsiveInspectionCard";
 
 const UserInspections = () => {
   // Hooks
@@ -179,7 +180,7 @@ const UserInspections = () => {
         </Table.DoubleColumn>
       </Table.ItemRoot>
     ) : (
-      <div></div>
+      <ResponsiveInspectionCard />
     );
   });
 
