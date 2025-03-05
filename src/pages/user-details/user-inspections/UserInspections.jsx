@@ -119,8 +119,6 @@ const UserInspections = () => {
     }
   };
 
-  console.log(userInspections.data.inspections);
-
   const rows = userInspections?.data?.inspections.map((inspection) => {
     return window.innerWidth > 1150 ? (
       <Table.ItemRoot key={inspection._id}>
@@ -180,7 +178,10 @@ const UserInspections = () => {
         </Table.DoubleColumn>
       </Table.ItemRoot>
     ) : (
-      <ResponsiveInspectionCard />
+      <ResponsiveInspectionCard
+        key={inspection._id}
+        inspectionData={inspection}
+      />
     );
   });
 
@@ -246,9 +247,9 @@ const UserInspections = () => {
             userInspections?.data?.totalPages < 0
               ? "xl:h-[calc(100%-275px)] 3xl:!h-[calc(100%-230px)] 2xl:!h-[calc(100%-250px)] w1150:!h-[calc(100%-295px)] sm:h-[calc(100%-208.98px)] ms:h-[calc(100%-273.8px)] h-[calc(100%-298.58px)]"
               : "xl:h-[calc(100%-225.59px)] 3xl:!h-[calc(100%-240px)] 2xl:!h-[calc(100%-260px)] w1150:!h-[calc(100%-305px)] sm:h-[calc(100%-219.28px)] ms:h-[calc(100%-284.08px)] h-[calc(100%-308.88px)]"
-          }`}
+          } pt-[12px]`}
         >
-          {userInspections.isPending ? (
+          {userInspections?.isPending ? (
             <TableSkeleton />
           ) : userInspections?.data?.inspections.length < 1 ? (
             <div className="flex justify-center items-center h-full">

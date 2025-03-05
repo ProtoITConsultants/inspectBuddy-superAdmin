@@ -8,7 +8,7 @@ const AddInspectionMenu = ({ disabled = false }) => {
     <Menu shadow="md" position="bottom-end" disabled={disabled}>
       <Menu.Target>
         <button
-          className={` text-white px-[24px] py-[12px] rounded-[8px] h-fit min-w-[190.14px] sm:ml-[16px] sm:w-fit w-full flex items-center gap-[8px] ${
+          className={`text-white px-[24px] py-[12px] rounded-[8px] h-fit min-w-[190.14px] sm:ml-[16px] sm:w-fit w-full flex items-center justify-center gap-[8px] ${
             disabled ? "bg-dark-gray hover:!cursor-not-allowed" : "bg-primary"
           }`}
         >

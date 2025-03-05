@@ -1,15 +1,15 @@
 import { convertDateFormate } from "../../services/convertDateFormate";
 import InspectionStatusCard from "./InspectionStatusCard";
 import Button from "../../../../components/ui/Button";
-import IconLink from "../../../../components/ui/IconLink";
-import {
-  GENERATE_REPORT_ICON,
-  VIEW_DETAIL_ICON,
-} from "../../../../assets/icons/DynamicIcons";
+import { GENERATE_REPORT_ICON } from "../../../../assets/icons/DynamicIcons";
+import { Link } from "react-router";
 
 const ResponsiveInspectionCard = ({ inspectionData }) => {
   return (
-    <div className="rounded-[8px] w-full border border-[#e4f0ff] shadow-custom flex gap-[18px]">
+    <Link
+      to={`details/${inspectionData._id}`}
+      className="rounded-[8px] w-full border border-[#e4f0ff] shadow-custom flex gap-[18px]"
+    >
       <img
         src={inspectionData?.property?.image?.url}
         alt="propert image"
@@ -21,22 +21,16 @@ const ResponsiveInspectionCard = ({ inspectionData }) => {
           <h2 className="font-bold lg:text-[16px] md:text-[14px] text-darkBlue capitalize leading-none">
             {inspectionData?.name}
           </h2>
-          <div className="flex items-center justify-end gap-[8px]">
-            <IconLink
-              href={`details/${inspectionData._id}`}
-              icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
-              label="View Details"
-            />
-            <Button
-              id="generate-report-btn"
-              buttonType="iconButton"
-              icon={<GENERATE_REPORT_ICON className="text-[#9EA3AE]" />}
-              type="button"
-              onClick={() => {}}
-              disabled={!inspectionData?.isInspectionCompleted}
-              className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium"
-            />
-          </div>
+          <Button
+            id="generate-report-btn"
+            buttonType="iconButton"
+            label="Generate Report"
+            icon={<GENERATE_REPORT_ICON className="text-[#9EA3AE]" />}
+            type="button"
+            onClick={() => {}}
+            disabled={!inspectionData?.isInspectionCompleted}
+            className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium"
+          />
         </div>
 
         <div className="flex w-full justify-between items-end gap-[12px]">
@@ -56,7 +50,7 @@ const ResponsiveInspectionCard = ({ inspectionData }) => {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
