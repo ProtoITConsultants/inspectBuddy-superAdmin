@@ -24,11 +24,11 @@ const InspectionsSection = ({ children }) => {
 const InspectionSectionHeader = () => {
   return (
     <div className="lg:block flex flex-col gap-[4px]">
-      <h1 className="lg:text-[24px] text-[20px] font-bold text-darkBlue">
+      <h1 className="lg:text-[24px] text-[20px] font-bold text-dark-blue">
         OverView
       </h1>
       <div className="flex lg:flex-row flex-col text-[14px] lg:gap-[8px] gap-[2px]">
-        <p className="opacity-70 text-darkBlue">
+        <p className="opacity-70 text-dark-blue">
           Inspections & Reports overview!
         </p>
       </div>
@@ -44,7 +44,7 @@ const InspectionsOverview = ({ inspectionsDone }) => {
         alt="inspections-icon"
         className="max-w-[56px]"
       />
-      <div className="flex flex-col gap-[12px] text-darkBlue">
+      <div className="flex flex-col gap-[12px] text-dark-blue">
         <p className="font-medium md:text-[16px] text-[14px]">
           Inspections Done
         </p>
@@ -64,7 +64,7 @@ const ReportsGeneratedOverview = ({ reportsGenerated }) => {
         alt="reports-icon"
         className="max-w-[56px]"
       />
-      <div className="flex flex-col gap-[12px] text-darkBlue">
+      <div className="flex flex-col gap-[12px] text-dark-blue">
         <p className="font-medium md:text-[16px] text-[14px]">
           Reports Generated
         </p>
@@ -83,7 +83,7 @@ const PropertiesSection = ({ propertiesData }) => {
       <div className="flex md:flex-row flex-col md:gap-[24px] gap-[12px] md:justify-between md:items-end">
         <div className="flex gap-[16px]">
           <img src={PropertiesIcon} alt="properties-icon" />
-          <div className="flex flex-col md:justify-between gap-[4px] text-darkBlue">
+          <div className="flex flex-col md:justify-between gap-[4px] text-dark-blue">
             <h2 className="font-bold xl:text-[32px] md:text-[28px] sm:text-[24px] text-[20px]">
               {propertiesData.totalProperties}
             </h2>
@@ -95,7 +95,7 @@ const PropertiesSection = ({ propertiesData }) => {
       </div>
 
       <div className="bg-[#F3F8FF] rounded-[8px] p-[16px] flex items-center gap-[12px] justify-between">
-        <div className="text-center text-darkBlue w-[calc(50%-1px)]">
+        <div className="text-center text-dark-blue w-[calc(50%-1px)]">
           <h2 className="font-bold lg:text-[24px] md:[text-18px] text-[16px]">
             {propertiesData.inspectedProperties}
           </h2>
@@ -104,7 +104,7 @@ const PropertiesSection = ({ propertiesData }) => {
           </p>
         </div>
         <div className="w-[2px] bg-[#CCE2FF] h-[48px]"></div>
-        <div className="text-center text-darkBlue w-[calc(50%-1px)]">
+        <div className="text-center text-dark-blue w-[calc(50%-1px)]">
           <h2 className="font-bold lg:text-[24px] md:[text-18px] text-[16px]">
             {propertiesData.nonInspectedProperties}
           </h2>

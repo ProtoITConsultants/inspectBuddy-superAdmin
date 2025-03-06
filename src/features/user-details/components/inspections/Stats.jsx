@@ -8,7 +8,7 @@ const StatItem = ({ title, detail, className = "" }) => (
     <h2
       className={`${
         title.bold
-          ? "text-darkBlue font-bold text-[16px]"
+          ? "text-dark-blue font-bold text-[16px]"
           : "text-[#6C727F] text-[14px] font-medium"
       }`}
     >
@@ -18,7 +18,7 @@ const StatItem = ({ title, detail, className = "" }) => (
       className={`${
         !detail.bold
           ? "text-[#6C727F] text-[14px] font-medium"
-          : "text-darkBlue font-bold text-[16px]"
+          : "text-dark-blue font-bold text-[16px]"
       }`}
     >
       {detail.text === -999 ? "unlimited" : detail.text}

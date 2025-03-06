@@ -30,7 +30,7 @@ export const SubUserPhoneNumber = ({
   return (
     <div>
       <div className="flex flex-col gap-[8px]">
-        <p className="text-[14px] text-darkBlue font-medium">{label}</p>
+        <p className="text-[14px] text-dark-blue font-medium">{label}</p>
         <Input
           id="subUserPhoneNumber"
           component={IMaskInput}

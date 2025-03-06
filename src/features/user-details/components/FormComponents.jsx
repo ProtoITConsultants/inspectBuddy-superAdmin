@@ -21,7 +21,7 @@ const UserDetailFormSection = ({ children, heading }) => {
   return (
     <div className="flex flex-col gap-[32px]">
       <div className="flex justify-between items-center">
-        <h1 className="text-darkBlue font-bold text-[20px]">{heading}</h1>
+        <h1 className="text-dark-blue font-bold text-[20px]">{heading}</h1>
         {heading === "User Details" && !editingUserDetails && (
           <button
             type="button"

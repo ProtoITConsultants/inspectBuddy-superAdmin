@@ -11,7 +11,7 @@ export const UserDetailsGrid = ({ children }) => {
 export const UserDetailsItem = ({ title, value }) => {
   return (
     <div className="flex flex-col gap-[8px]">
-      <p className="text-[16px] text-darkBlue font-medium">{title}</p>
+      <p className="text-[16px] text-dark-blue font-medium">{title}</p>
       <div className="text-[16px] text-[#777B8B] font-medium p-[12px_16px] bg-[#EEEEEE] border border-[#DEDEDE] rounded-[8px]">
         {value}
       </div>
@@ -30,7 +30,7 @@ const UserSelectedCategoriesChip = ({ label }) => {
 export const AssignedCategoriesSection = ({ assignedCategories }) => {
   return (
     <div className="flex flex-col gap-[8px] col-span-2">
-      <p className="text-[16px] text-darkBlue font-medium">
+      <p className="text-[16px] text-dark-blue font-medium">
         Assigned Categories
       </p>
       <div className="flex items-center gap-[8px]">

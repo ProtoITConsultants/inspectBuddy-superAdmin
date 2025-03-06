@@ -32,7 +32,7 @@ export const PropertyDetailsBody = ({ children }) => {
 export const PropertyDetails = ({ propertyDetails }) => {
   return (
     <div className="md:flex items-center justify-between lg:px-[32px]">
-      <div className="text-darkBlue">
+      <div className="text-dark-blue">
         <h1 className="lg:text-[32px] md:text-[28px] text-[20px] font-bold">
           {propertyDetails?.name}
         </h1>
@@ -66,10 +66,10 @@ export const PropertyDetails = ({ propertyDetails }) => {
 export const PropertyDetailsItem = ({ label, value, className }) => {
   return (
     <div className={`flex flex-col gap-[12px] ${className ? className : null}`}>
-      <p className="text-[16px] text-darkBlue font-medium opacity-50 leading-none">
+      <p className="text-[16px] text-dark-blue font-medium opacity-50 leading-none">
         {label}
       </p>
-      <p className="text-[16px] text-darkBlue font-bold leading-none">
+      <p className="text-[16px] text-dark-blue font-bold leading-none">
         {value}
       </p>
     </div>
@@ -87,14 +87,14 @@ export const PropertyDetailsGrid = ({ children }) => {
 export const InspectionStatsItem = ({ label, value, className }) => {
   return (
     <div className={`flex flex-col gap-[12px] ${className}`}>
-      <p className="text-[14px] text-darkBlue font-medium leading-none">
+      <p className="text-[14px] text-dark-blue font-medium leading-none">
         {label}
       </p>
       <p
         className={`${
           typeof value === "string"
-            ? " text-[16px] text-gray-dark font-normal"
-            : "lg:text-[32px] md:text-[24px] text-[20px] text-darkBlue font-bold"
+            ? " text-[16px] text-[#6C727F] font-normal"
+            : "lg:text-[32px] md:text-[24px] text-[20px] text-dark-blue font-bold"
         }  leading-none`}
       >
         {value}

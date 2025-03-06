@@ -29,7 +29,7 @@ const Searchbar = ({ placeholder, onSearch, className = "" }) => {
           debouncedHandleSearch(e.target.value);
         }}
         placeholder={placeholder ? placeholder : "Search..."}
-        className="px-[8px] w-full bg-[#F3F8FF] border-0 focus:outline-none h-[24px] font-medium text-darkBlue md:text-[16px] sm:text-[14px]"
+        className="px-[8px] w-full bg-[#F3F8FF] border-0 focus:outline-none h-[24px] font-medium text-dark-blue md:text-[16px] sm:text-[14px]"
       />
     </div>
   );

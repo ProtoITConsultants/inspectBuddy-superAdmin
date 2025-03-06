@@ -18,7 +18,7 @@ const ResponsiveInspectionCard = ({ inspectionData }) => {
 
       <div className="flex flex-col justify-between w-full gap-[8px] md:py-[12px] md:pr-[12px] py-[8px] pr-[10px]">
         <div className="flex w-full justify-between gap-[12px]">
-          <h2 className="font-bold lg:text-[16px] md:text-[14px] text-darkBlue capitalize leading-none">
+          <h2 className="font-bold lg:text-[16px] md:text-[14px] text-dark-blue capitalize leading-none">
             {inspectionData?.name}
           </h2>
           <Button

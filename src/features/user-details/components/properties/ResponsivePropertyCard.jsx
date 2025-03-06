@@ -15,7 +15,7 @@ const ResponsivePropertyCard = ({ propertyData }) => {
 
       <div className="flex flex-col justify-between md:pr-[20px] pr-[10px] md:py-[16px] py-[8px] h-full w-full">
         <div className="w-full">
-          <h2 className="text-darkBlue font-semibold text-[14px]">
+          <h2 className="text-dark-blue font-semibold text-[14px]">
             {propertyData.name}
           </h2>
           <p className="text-[#6C727F] text-[12px]">

@@ -16,7 +16,7 @@ const UserNavMenu = () => {
             </p>
           </div>
 
-          <span className="font-medium text-[16px] text-darkBlue md:block hidden">
+          <span className="font-medium text-[16px] text-dark-blue md:block hidden">
             {user?.fullname?.split(" ")[0]}
           </span>
           <img

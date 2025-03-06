@@ -21,7 +21,7 @@ const WarningModal = ({
           <h1 className="text-red-500 font-bold md:text-[24px] text-[20px]">
             Warning!
           </h1>
-          <p className="md:text-[16px] text-[14px] text-darkBlue opacity-80">
+          <p className="md:text-[16px] text-[14px] text-dark-blue opacity-80">
             Subscriptions will be cancelled for all the users who bought the
             subscription on old prices and will not be renewed automatically, If
             you change the subscription Model. <br />

@@ -46,15 +46,15 @@ const UsersList = () => {
   const rows = data?.users?.map((user, index) => (
     <Table.ItemRoot key={user._id}>
       <Table.SingleColumn>
-        <p className="text-[14px] font-medium text-gray-dark">{index + 1}</p>
+        <p className="text-[14px] font-medium text-[#6C727F]">{index + 1}</p>
       </Table.SingleColumn>
       <Table.SingleColumn>
-        <p className="text-[14px] font-medium text-gray-dark">
+        <p className="text-[14px] font-medium text-[#6C727F]">
           {user.fullname}
         </p>
       </Table.SingleColumn>
       <Table.DoubleColumn>
-        <p className="text-[14px] font-medium text-gray-dark">{user.email}</p>
+        <p className="text-[14px] font-medium text-[#6C727F]">{user.email}</p>
       </Table.DoubleColumn>
       <Table.SingleColumn>
         <UserSubscriptionCard subscriptionPlan={user.role} />
@@ -125,7 +125,7 @@ const UsersList = () => {
             <TableSkeleton />
           ) : data?.users?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
-              <p className="text-[14px] font-medium text-gray-dark text-center">
+              <p className="text-[14px] font-medium text-[#6C727F] text-center">
                 No Users Found! <br /> Add a new User to get started.
               </p>
             </div>

@@ -24,7 +24,7 @@ const BusinessLogoInput = ({
 
   return (
     <div className="space-y-[16px]">
-      <h2 className="font-medium text-[16px] text-darkBlue">{title}</h2>
+      <h2 className="font-medium text-[16px] text-dark-blue">{title}</h2>
       <div className="flex items-center gap-[24px]">
         <img
           src={selectedImage || pictureURL || companyLogoIcon}

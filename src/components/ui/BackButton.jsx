@@ -17,7 +17,7 @@ const BackButton = ({ isUserDetailsScreen = false }) => {
     <div className="bg-white md:px-[32px] px-[20px] h-[68px] flex items-center justify-between border-b-[1.5px] border-[#E4F0FF] fixed md:top-[96px] top-[72px] z-[10] w-full">
       <Link
         to={-1}
-        className="flex items-center gap-[16px] font-bold text-[14px] text-[#6C727F] hover:text-gray-dark hover:underline"
+        className="flex items-center gap-[16px] font-bold text-[14px] text-[#6C727F] hover:text-[#6C727F] hover:underline"
       >
         <img src={arrowBackIcon} alt="arrow-back-icon" />
         <p>Go Back</p>
@@ -35,7 +35,7 @@ const BackButton = ({ isUserDetailsScreen = false }) => {
             alt="Edit Icons"
             className="w-[16px] h-[16px]"
           />
-          <p className="text-[14px] font-medium text-darkBlue">Edit Details</p>
+          <p className="text-[14px] font-medium text-dark-blue">Edit Details</p>
         </button>
       )}
     </div>

@@ -6,13 +6,13 @@ const ResponsiveTemplateCard = ({ templateData, onCloneTemplate }) => {
   return (
     <div className="flex flex-col gap-[12px] shadow-sm p-[8px_12px] rounded-[8px] border-[1.5px] border-[#E4F0FF]">
       <div className="flex justify-between">
-        <h2 className="text-darkBlue font-semibold text-[14px]">
+        <h2 className="text-dark-blue font-semibold text-[14px]">
           {templateData.name}
         </h2>
         <div className="flex items-center gap-[8px]">
           <Link
             to={`details/${templateData._id}`}
-            className="px-[16px] py-[10px] rounded-[8px] border-[#E5E6EB] border-[1.5px] text-darkBlue font-medium text-[14px] w-fit"
+            className="px-[16px] py-[10px] rounded-[8px] border-[#E5E6EB] border-[1.5px] text-dark-blue font-medium text-[14px] w-fit"
           >
             <span>View</span>
           </Link>
@@ -21,7 +21,9 @@ const ResponsiveTemplateCard = ({ templateData, onCloneTemplate }) => {
             type="button"
             onClick={onCloneTemplate}
           >
-            <p className={`text-darkBlue text-[14px] font-medium leading-none`}>
+            <p
+              className={`text-dark-blue text-[14px] font-medium leading-none`}
+            >
               Clone
             </p>
           </button>

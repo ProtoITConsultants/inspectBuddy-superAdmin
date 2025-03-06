@@ -53,7 +53,7 @@ const DateRangeFilter = ({ filtersData, setFiltersData }) => {
             className="w-[16px] h-auto"
           />
           {dateRange[0] && dateRange[1] ? (
-            <p className="text-darkBlue font-medium sm:text-[14px] text-[12px]">
+            <p className="text-dark-blue font-medium sm:text-[14px] text-[12px]">
               {dateRange[0] &&
                 new Date(dateRange[0]).toLocaleDateString("en-GB", {
                   day: "2-digit",
@@ -66,7 +66,7 @@ const DateRangeFilter = ({ filtersData, setFiltersData }) => {
                 })}`}
             </p>
           ) : (
-            <p className="text-[14px] text-darkBlue">Select Date</p>
+            <p className="text-[14px] text-dark-blue">Select Date</p>
           )}
         </div>
       </Menu.Target>

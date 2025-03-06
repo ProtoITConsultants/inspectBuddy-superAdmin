@@ -12,7 +12,7 @@ const Form = ({ children, onSubmit }) => {
 const FormSection = ({ children, sectionHeading }) => {
   return (
     <div className="flex flex-col md:gap-[20px] gap-[16px]">
-      <h2 className="text-darkBlue font-bold text-[20px]">{sectionHeading}</h2>
+      <h2 className="text-dark-blue font-bold text-[20px]">{sectionHeading}</h2>
       <div className="grid md:grid-cols-2 grid-cols-1 gap-[16px]">
         {children}
       </div>

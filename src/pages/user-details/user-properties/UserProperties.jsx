@@ -166,7 +166,7 @@ const UserProperties = () => {
             <TableSkeleton />
           ) : data?.properties?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
-              <p className="text-[14px] font-medium text-gray-dark text-center">
+              <p className="text-[14px] font-medium text-[#6C727F] text-center">
                 No Properties Found! <br /> Add a new Property to get started.
               </p>
             </div>

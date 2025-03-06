@@ -47,7 +47,7 @@ const Header = ({ children, showAddButton = false, className = "" }) => {
 const HeaderItem = ({ heading }) => {
   return (
     <div className="flex items-center gap-[8px]">
-      <h2 className="font-bold text-[16px] text-darkBlue">{heading}</h2>
+      <h2 className="font-bold text-[16px] text-dark-blue">{heading}</h2>
       <div className="flex flex-col justify-center gap-[4px] h-[8px]">
         <img
           src={filledArrowUp}
@@ -139,7 +139,7 @@ const Pagination = ({ filtersData, setFiltersData, paginationData }) => {
       className={`flex justify-between items-center pt-[10px]`}
     >
       <p
-        className={`text-darkBlue font-medium text-[14px] ${
+        className={`text-dark-blue font-medium text-[14px] ${
           paginationData?.totalItems < 1 ? "hidden" : "block"
         }`}
       >
@@ -154,7 +154,7 @@ const Pagination = ({ filtersData, setFiltersData, paginationData }) => {
           paginationData?.totalPages < 2 ? "hidden" : "block"
         }`}
       >
-        <p className={`text-darkBlue font-medium text-[14px]`}>
+        <p className={`text-dark-blue font-medium text-[14px]`}>
           {paginationData?.currentPage} of {paginationData?.totalPages}
         </p>
         <div className={`flex gap-[16px] items-center`}>

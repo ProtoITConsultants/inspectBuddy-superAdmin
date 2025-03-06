@@ -32,7 +32,7 @@ const Navbar = ({ withSidebar = false }) => {
             <img src={LogoIcon} alt="logo-icon" />
           </Link>
         )}
-        <p className="font-bold sm:text-[24px] text-[20px] text-darkBlue leading-none">
+        <p className="font-bold sm:text-[24px] text-[20px] text-dark-blue leading-none">
           {pageTitle}
         </p>
       </div>
