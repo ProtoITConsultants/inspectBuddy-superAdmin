@@ -72,6 +72,48 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Fetch Sub users details
+  fetchSubUserDetails: async ({ subUserId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_SUB_USER_DETAILS_URL({
+          subUserId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching sub user details", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching sub user details"
+      );
+    }
+  },
+  // Update Sub users details
+  updateSubUserDetails: async (params) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_SUB_USER_DETAILS_URL({
+          userId: params.userId,
+        }),
+        {
+          subUserId: params.subUserId,
+          fullname: params.userName,
+          email: params.userEmail,
+          address: params.userAddress,
+          phoneNumber: params.userPhoneNumber,
+          canCreateInspectionQuestions: params.allowCreateNewQuestions,
+          canInspectFromScratch: params.allowStartFromScratch,
+          assignedCategories: params.assignedCategories,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating sub user details", error);
+      throw new Error(
+        error.response?.data?.message || "Error updating sub user details"
+      );
+    }
+  },
 
   // Fetch Properties added by a user
   fetchUserAddedProperties: async ({ userId, filtersData }) => {

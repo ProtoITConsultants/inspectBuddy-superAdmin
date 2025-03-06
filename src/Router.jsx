@@ -15,6 +15,8 @@ import SubUsers from "./pages/user-details/sub-users/SubUsers";
 import UserProperties from "./pages/user-details/user-properties/UserProperties";
 import UserTemplates from "./pages/user-details/user-templates/UserTemplates";
 import UserInspections from "./pages/user-details/user-inspections/UserInspections";
+import NoSidebarLayout from "./layouts/NoSidebarLayout";
+import ViewSubUser from "./pages/user-details/sub-users/view-sub-user/ViewSubUser";
 
 export const router = createBrowserRouter([
   {
@@ -51,32 +53,60 @@ export const router = createBrowserRouter([
     path: "/user-details",
     element: (
       <AuthMiddleware>
-        <UserDetailsLayout>
-          <UserDetails />
-        </UserDetailsLayout>
+        <UserDetails />
       </AuthMiddleware>
     ),
-
     children: [
       {
         path: ":userId",
-        element: <ViewUserDetails />,
+        element: (
+          <UserDetailsLayout>
+            <ViewUserDetails />
+          </UserDetailsLayout>
+        ),
       },
       {
         path: ":userId/sub-users",
-        element: <SubUsers />,
+        element: (
+          <UserDetailsLayout>
+            <SubUsers />
+          </UserDetailsLayout>
+        ),
       },
       {
         path: ":userId/properties",
-        element: <UserProperties />,
+
+        element: (
+          <UserDetailsLayout>
+            <UserProperties />
+          </UserDetailsLayout>
+        ),
       },
       {
         path: ":userId/templates",
-        element: <UserTemplates />,
+        element: (
+          <UserDetailsLayout>
+            <UserTemplates />
+          </UserDetailsLayout>
+        ),
       },
       {
         path: ":userId/inspections",
-        element: <UserInspections />,
+        element: (
+          <UserDetailsLayout>
+            <UserInspections />
+          </UserDetailsLayout>
+        ),
+      },
+      {
+        path: ":userId/sub-users/details",
+        element: <NoSidebarLayout />,
+        children: [
+          {
+            path: ":subUserId",
+            element: <ViewSubUser />,
+          },
+        ],
       },
     ],
   },

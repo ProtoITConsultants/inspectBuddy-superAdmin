@@ -141,8 +141,8 @@ const SubUsers = () => {
         <Table.Body
           className={`${
             data?.totalPages < 2
-              ? "h-[calc(100%-31.69px)]"
-              : "h-[calc(100%-42px)]"
+              ? "h-[calc(100%-105px)]"
+              : "h-[calc(100%-115px)]"
           }`}
         >
           {isPending ? (

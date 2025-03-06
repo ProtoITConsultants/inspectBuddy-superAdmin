@@ -37,12 +37,12 @@ const ROUTES = [
     title: "Edit Room",
   },
   {
-    path: "/user-details/:userId/sub-user-detail/:memberId",
-    title: "Sub User Details",
+    path: "/user-details/:userId/sub-users/details/:memberId",
+    title: "Subuser Detail",
   },
   {
-    path: "/user-details/:userId/sub-user-detail/:memberId/edit-details",
-    title: "Edit Sub User",
+    path: "/user-details/:userId/sub-users/details/:memberId/edit-details",
+    title: "Edit Subuser",
   },
 ];
 
