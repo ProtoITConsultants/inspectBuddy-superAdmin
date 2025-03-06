@@ -1,0 +1,6 @@
+.gridParent {
+  display: grid;
+  grid-template-columns: 1.8fr 3fr 1.5fr 5fr;
+  grid-gap: 24px;
+  grid-template-rows: auto;
+}

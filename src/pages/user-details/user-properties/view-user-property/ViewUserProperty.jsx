@@ -11,6 +11,7 @@ import {
   PropertyDetailsGrid,
   PropertyDetailsItem,
   PropertyInspectionStats,
+  RelatedInspectionsTable,
 } from "../../../../features/user-details/components/properties/details/PropertyDetails";
 import { convertDateFormate } from "../../../../features/user-details/services/convertDateFormate";
 
@@ -43,7 +44,7 @@ const ViewUserProperty = () => {
   const propertyDetails = data?.property;
 
   return (
-    <DetailPagesRoot className="max-w-[892px]">
+    <DetailPagesRoot className="max-w-[892px] !h-full">
       <PropertyDetailsContainer>
         <PropertyDetailsHeader propertyImageURL={propertyDetails?.image?.url} />
         <PropertyDetailsBody>
@@ -91,6 +92,9 @@ const ViewUserProperty = () => {
             daysSinceLastCompletedInspection={
               data?.daysSinceLastCompletedInspection
             }
+          />
+          <RelatedInspectionsTable
+            relatedInspections={data?.relatedInspections || []}
           />
         </PropertyDetailsBody>
       </PropertyDetailsContainer>
