@@ -14,6 +14,7 @@ import {
   RelatedInspectionsTable,
 } from "../../../../features/user-details/components/properties/details/PropertyDetails";
 import { convertDateFormate } from "../../../../features/user-details/services/convertDateFormate";
+import PropertyDetailsSkeleton from "../../../../features/user-details/components/properties/details/PropertyDetailsSkeleton";
 
 const ViewUserProperty = () => {
   // Hooks
@@ -30,7 +31,7 @@ const ViewUserProperty = () => {
   });
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <PropertyDetailsSkeleton />;
   }
 
   if (isError) {

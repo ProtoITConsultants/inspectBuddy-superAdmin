@@ -10,7 +10,7 @@ import styles from "./PropertyDetails.module.css";
 
 export const PropertyDetailsContainer = ({ children }) => {
   return (
-    <div className="w-full max-w-[890px] lg:border-[1.5px] border-[#E4F0FF] rounded-[8px] pb-[24px]">
+    <div className="w-full max-w-[896px] lg:border-[1.5px] border-[#E4F0FF] rounded-[8px] pb-[24px]">
       {children}
     </div>
   );
@@ -51,14 +51,14 @@ export const PropertyDetails = ({ propertyDetails }) => {
           to={`edit-property`}
           className="px-[10px] py-[8px] rounded-[8px] border-[1.5px] border-[#cce2ff] flex items-center justify-center gap-[8px] md:w-fit w-full"
         >
-          <EDIT_DETAILS_ICON className="text-[#9EA3AE] h-[22px] w-[22px]" />
+          <EDIT_DETAILS_ICON className="text-[#9EA3AE] h-[20px] w-[20px]" />
           <p className="text-dark-blue font-medium text-[14px]">Edit Details</p>
         </Link>
         <Button
           id="delete-report-btn"
           label="Delete Property"
           buttonType="iconButton"
-          icon={<DELETE_ICON className="text-[#FF613E] h-[22px] w-[22px]" />}
+          icon={<DELETE_ICON className="text-[#FF613E] h-[20px] w-[20px]" />}
           type="button"
           onClick={() => {}}
           className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#FF613E] md:w-fit w-full !text-[#FF613E] !text-[14px] h-fit !font-medium"
