@@ -61,8 +61,8 @@ const UserDetailsSidebar = () => {
               isSubUsersDisabled
                 ? "#"
                 : page.pageTitle === "User Details"
-                ? `${userId}`
-                : `${userId}/${page.pagePath}`
+                ? `/user-details/${userId}`
+                : `/user-details/${userId}/${page.pagePath}`
             }
             className={`w-full rounded-[4px] h-[40px] text-[16px] flex items-center !px-[16px] ${
               activeTab === page.pageTitle

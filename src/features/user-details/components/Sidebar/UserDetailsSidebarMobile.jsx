@@ -78,8 +78,8 @@ const UserDetailsSidebarMobile = () => {
               isSubUsersDisabled
                 ? "#"
                 : item.pageTitle === "User Details"
-                ? `${userId}`
-                : `${userId}/${item.pagePath}`
+                ? `/user-details/${userId}`
+                : `/user-details/${userId}/${item.pagePath}`
             }
             isActive={activeTab === item.pageTitle}
             onClick={() => setOpened(false)}
