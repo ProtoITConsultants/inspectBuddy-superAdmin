@@ -18,6 +18,7 @@ import UserInspections from "./pages/user-details/user-inspections/UserInspectio
 import NoSidebarLayout from "./layouts/NoSidebarLayout";
 import ViewSubUser from "./pages/user-details/sub-users/view-sub-user/ViewSubUser";
 import EditSubUserDetails from "./pages/user-details/sub-users/edit-sub-user/EditSubUserDetails";
+import ViewUserProperty from "./pages/user-details/user-properties/view-user-property/ViewUserProperty";
 
 export const router = createBrowserRouter([
   {
@@ -110,6 +111,16 @@ export const router = createBrowserRouter([
           {
             path: ":subUserId/edit-details",
             element: <EditSubUserDetails />,
+          },
+        ],
+      },
+      {
+        path: ":userId/properties/details",
+        element: <NoSidebarLayout />,
+        children: [
+          {
+            path: ":propertyId",
+            element: <ViewUserProperty />,
           },
         ],
       },

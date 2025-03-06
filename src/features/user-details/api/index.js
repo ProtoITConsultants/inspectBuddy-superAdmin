@@ -138,6 +138,42 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Fetch Specific Property Data
+  fetchPropertyDetails: async ({ propertyId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_PROPERTY_DETAILS_URL({
+          propertyId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Property Details", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching Property Details"
+      );
+    }
+  },
+  // Update Specific Property Data
+  updatePropertyDetails: async (params) => {
+    try {
+      const response = await axiosInstance.put(
+        USER_DETAILS_ENDPOINTS.UPDATE_PROPERTY_DETAILS_URL,
+        params,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Property Details", error);
+      throw new Error(
+        error.response?.data?.message || "Error updating Property Details"
+      );
+    }
+  },
 
   // Fetch Templates added by a user
   fetchUserAddedTemplates: async ({ userId, filtersData }) => {

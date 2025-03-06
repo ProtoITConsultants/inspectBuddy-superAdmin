@@ -18,6 +18,9 @@ const UPDATE_SUB_USER_DETAILS_URL = ({ userId }) =>
 // Properties
 const FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL = ({ userId }) =>
   `/getUserPropertyCategories?id=${encodeURIComponent(userId)}`;
+const FETCH_PROPERTY_DETAILS_URL = ({ propertyId }) =>
+  `/getPropertyById/${encodeURIComponent(propertyId)}`;
+const UPDATE_PROPERTY_DETAILS_URL = "/editExistingProperty";
 
 const FETCH_USER_ADDED_PROPERTIES_URL = ({ userId }) =>
   `/getCompleteProperties?id=${encodeURIComponent(userId)}`;
@@ -43,6 +46,8 @@ const USER_DETAILS_ENDPOINTS = {
   // Properties
   FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL,
   FETCH_USER_ADDED_PROPERTIES_URL,
+  FETCH_PROPERTY_DETAILS_URL,
+  UPDATE_PROPERTY_DETAILS_URL,
   // Templates
   FETCH_USER_ADDED_TEMPLATES_URL,
   // Inspections

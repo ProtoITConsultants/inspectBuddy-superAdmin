@@ -9,11 +9,11 @@ const ROUTES = [
   { path: "/user-details/:userId", title: "User's Details" },
   { path: "/user-details/:userId/:section", title: "User's Details" },
   {
-    path: "/user-details/:userId/property-details/:propertyId",
+    path: "/user-details/:userId/properties/details/:propertyId",
     title: "Property Details",
   },
   {
-    path: "/user-details/:userId/property-details/:propertyId/edit-property",
+    path: "/user-details/:userId/properties/details/:propertyId/edit-property",
     title: "Edit Property",
   },
   {
