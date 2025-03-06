@@ -9,7 +9,7 @@ import {
   SwitchItem,
   UserDetailsGrid,
   UserDetailsItem,
-} from "../../../../features/user-details/components/sub-users/details/viewDetailsForm";
+} from "../../../../features/user-details/components/sub-users/details/ViewDetailsForm";
 import SubUserDetailsSkeleton from "../../../../features/user-details/components/sub-users/details/subUserDetailsSkeleton";
 
 const ViewSubUser = () => {

@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, useParams } from "react-router";
 import Navbar from "../components/Navbar/Navbar";
 import React from "react";
 import NoSidebarBackButton from "../components/ui/NoSidebarBackButton";
@@ -8,6 +8,7 @@ import IconLink from "../components/ui/IconLink";
 
 const NoSidebarLayout = () => {
   const { pageTitle } = useNavbarTitle();
+  const { subUserId } = useParams();
 
   return (
     <main className="App overflow-x-hidden">
@@ -18,7 +19,7 @@ const NoSidebarLayout = () => {
         <NoSidebarBackButton>
           {pageTitle === "Subuser Detail" ? (
             <IconLink
-              href={`edit-details`}
+              href={`${subUserId}/edit-details`}
               icon={
                 <EDIT_DETAILS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
               }

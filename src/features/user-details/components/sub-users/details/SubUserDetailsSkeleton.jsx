@@ -1,6 +1,6 @@
 import { Skeleton } from "@mantine/core";
 import DetailPagesRoot from "../../DetailPagesRoot";
-import { UserDetailsGrid } from "./viewDetailsForm";
+import { UserDetailsGrid } from "./ViewDetailsForm";
 
 const SubUserDetailsSkeleton = () => {
   return (
