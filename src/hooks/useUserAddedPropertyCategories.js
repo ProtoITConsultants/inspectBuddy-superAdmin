@@ -7,6 +7,7 @@ const useUserAddedPropertyCategories = ({ userId }) => {
     queryKey: ["userAddedPropertyCategories"],
     queryFn: () =>
       userDetailsAPIs.fetchUserAddedPropertyCategories({ userId: userId }),
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   if (isError) {

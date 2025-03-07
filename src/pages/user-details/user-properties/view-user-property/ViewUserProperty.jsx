@@ -23,11 +23,10 @@ const ViewUserProperty = () => {
 
   // Query to fetch user Details
   const { data, isError, error, isPending } = useQuery({
-    queryKey: ["subUserDetailsQuery", propertyId],
+    queryKey: ["propertyDetailsQuery", propertyId],
     queryFn: () =>
       userDetailsAPIs.fetchPropertyDetails({ propertyId: propertyId }),
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 5 * 60 * 1000, // 5 minutes
   });
 
   if (isPending) {
