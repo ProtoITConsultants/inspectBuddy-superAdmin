@@ -119,16 +119,24 @@ const UserProperties = () => {
           initialValue={null}
           placeholder="Select Category"
         />
-        <Group gap="sm">
+        <Group className="w-full !justify-end md:!hidden block">
+          <DateRangeFilter
+            filtersData={filtersData}
+            setFiltersData={setFiltersData}
+          />
+        </Group>
+        <Group gap="sm" className="md:col-span-1 col-span-2">
           <Searchbar
             placeholder="Search properties by name..."
             onSearch={(value) =>
               setFiltersData((prev) => ({ ...prev, search: value }))
             }
+            className="md:w-[305px] w-full"
           />
           <DateRangeFilter
             filtersData={filtersData}
             setFiltersData={setFiltersData}
+            className="md:flex hidden"
           />
         </Group>
       </FiltersTopbar>

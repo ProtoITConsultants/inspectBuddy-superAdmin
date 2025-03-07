@@ -3,8 +3,9 @@ import { DatePicker } from "@mantine/dates";
 import { Menu } from "@mantine/core";
 import calendarIcon from "../../assets/icons/calendar-icon.svg";
 import { convertDateToISOForDateRange } from "../../utils/dateConvert";
+import { cn } from "../../utils/cn";
 
-const DateRangeFilter = ({ filtersData, setFiltersData }) => {
+const DateRangeFilter = ({ filtersData, setFiltersData, className = "" }) => {
   // Local States
   const [dateRange, setDateRange] = useState([
     filtersData.startdate,
@@ -44,6 +45,7 @@ const DateRangeFilter = ({ filtersData, setFiltersData }) => {
       position="bottom-end"
       withArrow
       transitionProps={{ transition: "fade-right", duration: 150 }}
+      className={cn(className)}
     >
       <Menu.Target className="border-[1.5px] border-[#DAEAFF] rounded-[8px] py-[8px] sm:px-[16px] px-[8px] w-fit">
         <div className="flex items-center gap-[8px] hover:cursor-pointer">
