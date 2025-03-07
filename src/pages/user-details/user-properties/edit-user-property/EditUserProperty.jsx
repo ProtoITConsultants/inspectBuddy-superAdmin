@@ -11,6 +11,7 @@ import { TextInput } from "@mantine/core";
 import CountryInput from "../../../../features/user-details/components/properties/details/CountryInput";
 import PropertyCategorySelect from "../../../../features/user-details/components/properties/PropertyCategorySelect";
 import Button from "../../../../components/ui/Button";
+import EditPropertySkeletion from "../../../../features/user-details/components/properties/details/EditPropertySkeletion";
 
 const PROPERTY_CATEGORIES = [
   { _id: 1, value: "Residential", iconId: "2" },
@@ -172,7 +173,7 @@ const EditUserProperty = () => {
 
   // Return Function if Loading
   if (isPending || mutationUpdatePropertyDetails.isPending) {
-    return <div>Loading...</div>;
+    return <EditPropertySkeletion />;
   }
 
   // Return Function if Error Occured in Fetching
@@ -184,7 +185,7 @@ const EditUserProperty = () => {
     });
   }
   return (
-    <DetailPagesRoot className="!h-full">
+    <DetailPagesRoot>
       <EditPropertyForm.Root heading="Property Details">
         <EditPropertyForm.ImageInput
           imageURL={form.values.propertyImage}
