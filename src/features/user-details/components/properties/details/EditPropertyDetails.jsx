@@ -56,7 +56,7 @@ const ImageInput = ({
   }, [imageURL, objectURL]);
 
   return (
-    <div className="flex flex-col gap-[8px] sm:w-fit w-full">
+    <div className="flex flex-col gap-[8px] sm:w-fit w-[calc(100%-8px)]">
       <p className="text-dark-blue text-[16px] font-medium">{inputLabel}</p>
       {propertyImage ? (
         <div className="relative">

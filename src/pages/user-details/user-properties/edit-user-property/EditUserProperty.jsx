@@ -1,5 +1,5 @@
 import { useForm } from "@mantine/form";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import useUserAddedPropertyCategories from "../../../../hooks/useUserAddedPropertyCategories";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../../features/user-details/api";
@@ -184,7 +184,7 @@ const EditUserProperty = () => {
     });
   }
   return (
-    <DetailPagesRoot>
+    <DetailPagesRoot className="!h-full">
       <EditPropertyForm.Root heading="Property Details">
         <EditPropertyForm.ImageInput
           imageURL={form.values.propertyImage}
@@ -304,15 +304,13 @@ const EditUserProperty = () => {
               className="sm:!w-[216px] w-full font-bold !py-[12px]"
               buttonType="contained"
             />
-            <Button
+            <Link
+              to={-1}
               id="cancel-property-update"
-              label="Cancel"
-              type="button"
-              className="sm:!w-[216px] w-full font-bold !text-[#FF613E] hover:!text-white hover:!bg-[#FF613E] !py-[12px]"
-              buttonType="outlined"
-              onClick={() => navigate(1)}
-              borderColor="#FF613E"
-            />
+              className="sm:w-[216px] w-full font-bold text-[#FF613E] hover:text-white hover:bg-[#FF613E] py-[12px] flex items-center justify-center border rounded-[8px]"
+            >
+              Cancel
+            </Link>
           </EditPropertyForm.ActionButtons>
         </EditPropertyForm.Form>
       </EditPropertyForm.Root>
