@@ -4,6 +4,7 @@ import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { toast } from "sonner";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import ViewTemplate from "../../../../features/user-details/components/templates/details/ViewUserTemplate";
+import ViewTemplateSkeleton from "../../../../features/user-details/components/templates/details/ViewTemplateSkeleton";
 const ViewUserTemplate = () => {
   // Hooks
   const { templateId } = useParams();
@@ -29,10 +30,8 @@ const ViewUserTemplate = () => {
   }
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <ViewTemplateSkeleton />;
   }
-
-  console.log(templateData);
 
   return (
     <DetailPagesRoot className="!overflow-hidden">
