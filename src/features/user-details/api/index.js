@@ -198,6 +198,22 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Fetch Specific Template Data
+  fetchTemplateDetails: async ({ templateId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_TEMPLATE_DETAILS_URL({
+          templateId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Template Details", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching Template Details"
+      );
+    }
+  },
 
   // Fetch Inspections added by a user
   fetchUserAddedInspections: async ({ userId, filtersData }) => {

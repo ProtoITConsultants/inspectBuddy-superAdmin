@@ -20,6 +20,7 @@ import ViewSubUser from "./pages/user-details/sub-users/view-sub-user/ViewSubUse
 import EditSubUserDetails from "./pages/user-details/sub-users/edit-sub-user/EditSubUserDetails";
 import ViewUserProperty from "./pages/user-details/user-properties/view-user-property/ViewUserProperty";
 import EditUserProperty from "./pages/user-details/user-properties/edit-user-property/EditUserProperty";
+import ViewUserTemplate from "./pages/user-details/user-templates/view-user-template/ViewUserTemplate";
 
 export const router = createBrowserRouter([
   {
@@ -126,6 +127,17 @@ export const router = createBrowserRouter([
           {
             path: ":propertyId/edit-property",
             element: <EditUserProperty />,
+          },
+        ],
+      },
+
+      {
+        path: ":userId/templates/details",
+        element: <NoSidebarLayout />,
+        children: [
+          {
+            path: ":templateId",
+            element: <ViewUserTemplate />,
           },
         ],
       },

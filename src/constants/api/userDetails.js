@@ -28,6 +28,8 @@ const FETCH_USER_ADDED_PROPERTIES_URL = ({ userId }) =>
 // Templates
 const FETCH_USER_ADDED_TEMPLATES_URL = ({ userId }) =>
   `/getAllTemplates?id=${encodeURIComponent(userId)}`;
+const FETCH_TEMPLATE_DETAILS_URL = ({ templateId }) =>
+  `/getSpecificTemplate/${encodeURIComponent(templateId)}`;
 
 // Inspections
 const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
@@ -50,6 +52,7 @@ const USER_DETAILS_ENDPOINTS = {
   UPDATE_PROPERTY_DETAILS_URL,
   // Templates
   FETCH_USER_ADDED_TEMPLATES_URL,
+  FETCH_TEMPLATE_DETAILS_URL,
   // Inspections
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,

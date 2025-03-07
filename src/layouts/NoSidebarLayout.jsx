@@ -8,7 +8,7 @@ import IconLink from "../components/ui/IconLink";
 
 const NoSidebarLayout = () => {
   const { pageTitle } = useNavbarTitle();
-  const { subUserId } = useParams();
+  const { subUserId, templateId } = useParams();
 
   return (
     <main className="App overflow-x-hidden">
@@ -20,6 +20,14 @@ const NoSidebarLayout = () => {
           {pageTitle === "Subuser Detail" ? (
             <IconLink
               href={`${subUserId}/edit-details`}
+              icon={
+                <EDIT_DETAILS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
+              }
+              label="Edit Details"
+            />
+          ) : pageTitle === "Template Details" ? (
+            <IconLink
+              href={`${templateId}/edit-details`}
               icon={
                 <EDIT_DETAILS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
               }

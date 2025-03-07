@@ -29,7 +29,11 @@ const ROUTES = [
     title: "Edit Room",
   },
   {
-    path: "/user-details/:userId/template-details/:templateId/edit-template",
+    path: "/user-details/:userId/templates/details/:templateId",
+    title: "Template Details",
+  },
+  {
+    path: "/user-details/:userId/templates/details/:templateId/edit-template",
     title: "Edit Template",
   },
   {
