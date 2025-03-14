@@ -1,4 +1,4 @@
-import loginPagePic from "../assets/images/dashboard-snapshot.svg";
+// import loginPagePic from "../assets/images/dashboard-snapshot.svg";
 import adminLogo from "../assets/large-logo.svg";
 
 const AuthLayout = ({ children }) => {
@@ -16,7 +16,7 @@ const AuthLayout = ({ children }) => {
       {/* Right Side Section */}
       <section className="loginPicSection min-h-screen min-[992px]:block hidden">
         <img
-          src={loginPagePic}
+          src="https://storage.googleapis.com/helloinspector_data_storage/frontend-imgs/dashboard-snapshot.svg"
           alt="platform Snapshot"
           className="object-cover w-full h-full object-left"
         />
