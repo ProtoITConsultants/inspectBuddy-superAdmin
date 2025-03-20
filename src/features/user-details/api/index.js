@@ -232,6 +232,79 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Delete Room from a Template
+  deleteRoomFromTemplate: async ({ templateId, roomIdArray }) => {
+    try {
+      const response = await axiosInstance.delete(
+        USER_DETAILS_ENDPOINTS.DELETE_ROOM_FROM_TEMPLATE_URL,
+        {
+          templateId: templateId,
+          roomIdArray: roomIdArray,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting Room from Template", error);
+      throw new Error(
+        error.response?.data?.message || "Error deleting Room from Template"
+      );
+    }
+  },
+
+  // Update Rooms Order in a Template
+  updateRoomOrderInTemplate: async ({ templateId, roomIds }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_ROOM_ORDER_IN_TEMPLATE_URL,
+        {
+          templateId,
+          roomIds,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Room Order in Template", error);
+      throw new Error(
+        error.response?.data?.message || "Error updating Room Order in Template"
+      );
+    }
+  },
+
+  // Save Template as Draft
+  saveTemplateAsDraft: async ({ templateId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.SAVE_TEMPLATE_AS_DRAFT_URL,
+        {
+          templateId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error saving Template as Draft", error);
+      throw new Error(
+        error.response?.data?.message || "Error saving Template as Draft"
+      );
+    }
+  },
+  // Save Inspection Template as Completed
+  saveInspectionTemplateAsCompleted: async ({ templateId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.SAVE_INSPECTION_TEMPLATE_AS_COMPLETED_URL,
+        {
+          templateId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error saving Inspection Template as Completed", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error saving Inspection Template as Completed"
+      );
+    }
+  },
 
   // Fetch Inspections added by a user
   fetchUserAddedInspections: async ({ userId, filtersData }) => {

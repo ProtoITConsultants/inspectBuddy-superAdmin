@@ -1,6 +1,9 @@
 import { cn } from "../../../utils/cn";
 import { ADD_ICON } from "./../../../assets/icons/AddIcon";
-import { TICK_ICON } from "./../../../assets/icons/TickIcon";
+import {
+  DISABLED_TICK_ICON,
+  TICK_ICON,
+} from "./../../../assets/icons/TickIcon";
 import { CROSS_ICON } from "./../../../assets/icons/CrossIcon";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -111,8 +114,9 @@ const NewRoomCard = ({ onCancel, onSaveNewItem }) => {
             setNewItemName("");
           }}
           type="button"
+          disabled={!newItemName}
         >
-          <TICK_ICON />
+          {!newItemName ? <DISABLED_TICK_ICON /> : <TICK_ICON />}
         </button>
         <button
           className="border-none outline-none focus:outline-none"

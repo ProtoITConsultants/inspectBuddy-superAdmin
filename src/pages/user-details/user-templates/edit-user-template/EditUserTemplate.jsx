@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import EditInspection from "../../../../features/user-details/components/EditInspectionDetails";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { toast } from "sonner";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Button from "./../../../../components/ui/Button";
 
 const EditUserTemplate = () => {
   // Hooks
-  const { templateId } = useParams();
+  const { userId, templateId } = useParams();
+  const navigate = useNavigate();
 
   // Local States
   const [addingRoom, setAddingRoom] = useState(false);
@@ -22,31 +23,76 @@ const EditUserTemplate = () => {
       userDetailsAPIs.fetchTemplateDetails({ templateId: templateId }),
   });
 
-  // Function to handle Rearrange Rooms
-  const resetRoomsData = () => {
-    setRearrangingRooms(false);
-  };
+  // Update Room Order - Mutation
+  const handleUpdateRoomOrder = useMutation({
+    mutationFn: () => {
+      setRearrangingRooms(false);
+      const updatedRoomIds = templateRooms.map((room) => room._id);
+      return userDetailsAPIs.updateRoomOrderInTemplate({
+        templateId,
+        roomIds: updatedRoomIds,
+      });
+    },
 
-  const handleUpdateRoomOrder = async () => {
-    setRearrangingRooms(false);
-  };
-
-  // Functions to handle Add New Room
-  const handleAddNewRoom = async (newRoomName) => {
-    if (!newRoomName) {
-      return toast.error("Error!", {
-        description: "Please enter a room name.",
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: "Room order updated successfully.",
         duration: 3000,
       });
-    }
-  };
+    },
 
-  // Function to handle Save Inspection Template
-  const handleSaveInspectionTemplate = async () => {};
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || `Couldn't update Room order.`,
+        duration: 3000,
+      });
+    },
+  });
 
-  // Function to handle Save Inspection Template as Draft
-  const handleSaveInspectionTemplateAsDraft = async () => {};
+  // Add New Room - Mutation
+  const handleAddNewRoom = useMutation({
+    mutationFn: (newRoomName) =>
+      userDetailsAPIs.addNewRoomInTemplate({
+        templateId: templateId,
+        roomName: newRoomName,
+      }),
+    onSuccess: (data) => {
+      setTemplateRooms([...templateRooms, data]);
+      setAddingRoom(false);
+      toast.success("Success!", {
+        description: "Room added successfully.",
+        duration: 3000,
+      });
+    },
 
+    onError: (error) => {
+      setAddingRoom(false);
+      toast.error("Error!", {
+        description: error.message || `Couldn't add new Room.`,
+        duration: 3000,
+      });
+    },
+  });
+
+  // Save Inspection Template - Mutation
+  const saveInspectionTemplate = useMutation({
+    mutationFn: (savingType) => {
+      return savingType === "draft"
+        ? userDetailsAPIs.saveTemplateAsDraft({ templateId })
+        : userDetailsAPIs.saveInspectionTemplateAsCompleted({ templateId });
+    },
+
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: "Template saved successfully.",
+        duration: 3000,
+      });
+
+      navigate(`/user-details/${userId}/templates`, {
+        replace: true,
+      });
+    },
+  });
   useEffect(() => {
     if (data) {
       setTemplateRooms(data);
@@ -70,8 +116,8 @@ const EditUserTemplate = () => {
         <EditInspection.Header heading="Template Rooms">
           {rearrangingRooms ? (
             <EditInspection.SaveActionBtn
-              onSave={handleUpdateRoomOrder}
-              onCancel={resetRoomsData}
+              onSave={handleUpdateRoomOrder.mutate}
+              onCancel={() => setRearrangingRooms(false)}
             />
           ) : data?.length > 1 ? (
             <EditInspection.RearrangeElementsBtn
@@ -98,7 +144,7 @@ const EditUserTemplate = () => {
           {addingRoom && (
             <EditInspection.NewRoomCard
               onCancel={() => setAddingRoom(false)}
-              onSaveNewItem={(newRoomName) => handleAddNewRoom(newRoomName)}
+              onSaveNewItem={handleAddNewRoom.mutate}
             />
           )}
         </EditInspection.EditInspectionBody>
@@ -112,7 +158,7 @@ const EditUserTemplate = () => {
             id="save-inspection-template"
             label="Save Template"
             type="button"
-            onClick={handleSaveInspectionTemplate}
+            onClick={() => saveInspectionTemplate.mutate("completed")}
             className="sm:w-[216px] w-full font-bold"
             buttonType="contained"
             disabled={templateRooms.length === 0 || addingRoom}
@@ -121,7 +167,7 @@ const EditUserTemplate = () => {
             id="save-template-draft"
             label="Save as Draft"
             type="button"
-            onClick={handleSaveInspectionTemplateAsDraft}
+            onClick={() => saveInspectionTemplate.mutate("draft")}
             borderColor="#FF613E"
             className="sm:w-[216px] w-full font-bold !text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
             buttonType="outlined"
