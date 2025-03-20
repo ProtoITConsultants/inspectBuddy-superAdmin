@@ -27,7 +27,9 @@ import { ARROW_RIGHT_ICON } from "../../../assets/icons/ArrowRight";
 
 const Root = ({ children, className }) => {
   return (
-    <div className={cn("flex flex-col gap-[24px]", className)}>{children}</div>
+    <div className={cn("flex flex-col gap-[24px] h-full", className)}>
+      {children}
+    </div>
   );
 };
 
@@ -128,7 +130,9 @@ const NewRoomCard = ({ onCancel, onSaveNewItem }) => {
 };
 
 const EditInspectionBody = ({ children }) => (
-  <div className="flex flex-col gap-[16px]">{children}</div>
+  <div className="flex flex-col gap-[16px] h-fit !max-h-[calc(100%-152px)] overflow-auto">
+    {children}
+  </div>
 );
 
 const EditActions = ({ children }) => (

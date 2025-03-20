@@ -214,6 +214,24 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Add new Room in a Template
+  addNewRoomInTemplate: async ({ templateId, roomName }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.ADD_NEW_ROOM_IN_TEMPLATE_URL,
+        {
+          templateId,
+          roomName,
+        }
+      );
+      return response.data.newRoom;
+    } catch (error) {
+      console.error("Error adding new Room in Template", error);
+      throw new Error(
+        error.response?.data?.message || "Error adding new Room in Template"
+      );
+    }
+  },
 
   // Fetch Inspections added by a user
   fetchUserAddedInspections: async ({ userId, filtersData }) => {

@@ -30,6 +30,7 @@ const FETCH_USER_ADDED_TEMPLATES_URL = ({ userId }) =>
   `/getAllTemplates?id=${encodeURIComponent(userId)}`;
 const FETCH_TEMPLATE_DETAILS_URL = ({ templateId }) =>
   `/getSpecificTemplate/${encodeURIComponent(templateId)}`;
+const ADD_NEW_ROOM_IN_TEMPLATE_URL = "/templateAddRoom";
 
 // Inspections
 const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
@@ -53,6 +54,7 @@ const USER_DETAILS_ENDPOINTS = {
   // Templates
   FETCH_USER_ADDED_TEMPLATES_URL,
   FETCH_TEMPLATE_DETAILS_URL,
+  ADD_NEW_ROOM_IN_TEMPLATE_URL,
   // Inspections
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,

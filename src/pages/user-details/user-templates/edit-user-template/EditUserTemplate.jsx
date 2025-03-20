@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { toast } from "sonner";
 import { useParams } from "react-router";
+import Button from "./../../../../components/ui/Button";
 
 const EditUserTemplate = () => {
   // Hooks
@@ -32,8 +33,19 @@ const EditUserTemplate = () => {
 
   // Functions to handle Add New Room
   const handleAddNewRoom = async (newRoomName) => {
-    console.log("New Room Name: ", newRoomName);
+    if (!newRoomName) {
+      return toast.error("Error!", {
+        description: "Please enter a room name.",
+        duration: 3000,
+      });
+    }
   };
+
+  // Function to handle Save Inspection Template
+  const handleSaveInspectionTemplate = async () => {};
+
+  // Function to handle Save Inspection Template as Draft
+  const handleSaveInspectionTemplateAsDraft = async () => {};
 
   useEffect(() => {
     if (data) {
@@ -71,13 +83,6 @@ const EditUserTemplate = () => {
           ) : null}
         </EditInspection.Header>
         <EditInspection.EditInspectionBody>
-          {addingRoom && (
-            <EditInspection.NewRoomCard
-              onCancel={() => setAddingRoom(false)}
-              onSaveNewItem={(newRoomName) => handleAddNewRoom(newRoomName)}
-            />
-          )}
-
           {templateRooms.length < 1 ? (
             <EditInspection.NoRoomsMessage />
           ) : (
@@ -89,12 +94,40 @@ const EditUserTemplate = () => {
               }
             />
           )}
+
+          {addingRoom && (
+            <EditInspection.NewRoomCard
+              onCancel={() => setAddingRoom(false)}
+              onSaveNewItem={(newRoomName) => handleAddNewRoom(newRoomName)}
+            />
+          )}
         </EditInspection.EditInspectionBody>
         <EditInspection.AddNewItemBtn
           onClick={() => setAddingRoom(true)}
           title="Add a Room"
           showButton={!addingRoom && !rearrangingRooms}
         />
+        <EditInspection.EditActions>
+          <Button
+            id="save-inspection-template"
+            label="Save Template"
+            type="button"
+            onClick={handleSaveInspectionTemplate}
+            className="sm:w-[216px] w-full font-bold"
+            buttonType="contained"
+            disabled={templateRooms.length === 0 || addingRoom}
+          />
+          <Button
+            id="save-template-draft"
+            label="Save as Draft"
+            type="button"
+            onClick={handleSaveInspectionTemplateAsDraft}
+            borderColor="#FF613E"
+            className="sm:w-[216px] w-full font-bold !text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
+            buttonType="outlined"
+            disabled={templateRooms.length === 0 || addingRoom}
+          />
+        </EditInspection.EditActions>
       </EditInspection.Root>
     </DetailPagesRoot>
   );
