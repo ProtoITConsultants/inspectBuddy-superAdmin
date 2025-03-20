@@ -27,6 +27,7 @@ import { DELETE_ICON } from "../../../assets/icons/DynamicIcons";
 import { Link, useParams } from "react-router";
 import { REARRANGE_ITEM_ICON } from "../../../assets/icons/RearrangeIcon";
 import { ARROW_RIGHT_ICON } from "../../../assets/icons/ArrowRight";
+import DeleteTemplateRoomModal from "./templates/confirmration-modals/DeleteTemplateRoomModal";
 
 const Root = ({ children, className }) => {
   return (
@@ -224,6 +225,8 @@ const ExistingRoomCard = ({ itemData, rearrangingRooms }) => {
   const { templateId } = useParams();
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
 
+  const [openDeleteRoomModal, setOpenDeleteRoomModal] = useState(false);
+
   useEffect(() => {
     if (window.innerWidth < 768) {
       setShowDeleteIcon(true);
@@ -242,79 +245,84 @@ const ExistingRoomCard = ({ itemData, rearrangingRooms }) => {
   }, []);
 
   return (
-    <div
-      className={`space-x-[12px] flex items-center ${
-        showDeleteIcon && !rearrangingRooms ? "w-[calc(100%-10px)]" : "w-full"
-      } md:transition-all md:duration-300`}
-      onMouseEnter={() => setShowDeleteIcon(true)}
-      onMouseLeave={() => setShowDeleteIcon(false)}
-      style={{
-        touchAction: "none",
-      }}
-    >
-      {rearrangingRooms ? (
-        <React.Fragment>
-          <REARRANGE_ITEM_ICON className="hover:cursor-grab" />
-          <div
-            className={`bg-[#F3F8FF] border rounded-[8px] px-[16px] py-[12px] border-[#CCE2FF] flex justify-between items-center hover:cursor-pointer flex-1 transition-all duration-300 `}
+    <>
+      {openDeleteRoomModal && (
+        <DeleteTemplateRoomModal
+          isModalOpen={openDeleteRoomModal}
+          onCloseModal={() => {
+            setOpenDeleteRoomModal(false);
+          }}
+          roomName={itemData?.name}
+          templateId={templateId}
+          roomId={itemData?._id}
+        />
+      )}
+      <div
+        className={`space-x-[12px] flex items-center ${
+          showDeleteIcon && !rearrangingRooms ? "w-[calc(100%-10px)]" : "w-full"
+        } md:transition-all md:duration-300`}
+        onMouseEnter={() => setShowDeleteIcon(true)}
+        onMouseLeave={() => setShowDeleteIcon(false)}
+        style={{
+          touchAction: "none",
+        }}
+      >
+        {rearrangingRooms ? (
+          <React.Fragment>
+            <REARRANGE_ITEM_ICON className="hover:cursor-grab" />
+            <div
+              className={`bg-[#F3F8FF] border rounded-[8px] px-[16px] py-[12px] border-[#CCE2FF] flex justify-between items-center hover:cursor-pointer flex-1 transition-all duration-300 `}
+            >
+              <p className="text-darkBlue font-medium text-[16px]">
+                {itemData?.name}
+              </p>
+
+              <div className="flex items-center gap-x-[60px]">
+                <p className="text-[#6C727F] text-[14px] font-medium">
+                  {itemData?.elementCount}&nbsp;
+                  {itemData?.elementCount > 1 ? "Elements" : "Element"}
+                </p>
+                <ARROW_RIGHT_ICON />
+              </div>
+            </div>
+          </React.Fragment>
+        ) : (
+          <Link
+            to={`room/${itemData?._id}`}
+            state={{
+              elementsData: itemData?.elements,
+              roomName: itemData?.name,
+              roomId: itemData?.roomId,
+            }}
+            className={`border rounded-[8px] px-[16px] py-[12px] flex justify-between items-center hover:cursor-pointer flex-1 transition-all duration-300 ${
+              itemData.isCompleted
+                ? "bg-[#E8F3E4] border-[#55c35392] "
+                : "border-[#CCE2FF] bg-[#F3F8FF]"
+            }`}
           >
             <p className="text-darkBlue font-medium text-[16px]">
               {itemData?.name}
             </p>
-
-            <div className="flex items-center gap-x-[60px]">
+            <div className="flex items-center md:gap-x-[60px] gap-x-[32px]">
               <p className="text-[#6C727F] text-[14px] font-medium">
                 {itemData?.elementCount}&nbsp;
                 {itemData?.elementCount > 1 ? "Elements" : "Element"}
               </p>
               <ARROW_RIGHT_ICON />
             </div>
-          </div>
-        </React.Fragment>
-      ) : (
-        <Link
-          to={`room/${itemData?._id}`}
-          state={{
-            elementsData: itemData?.elements,
-            roomName: itemData?.name,
-            roomId: itemData?.roomId,
-          }}
-          className={`border rounded-[8px] px-[16px] py-[12px] flex justify-between items-center hover:cursor-pointer flex-1 transition-all duration-300 ${
-            itemData.isCompleted
-              ? "bg-[#E8F3E4] border-[#55c35392] "
-              : "border-[#CCE2FF] bg-[#F3F8FF]"
-          }`}
-        >
-          <p className="text-darkBlue font-medium text-[16px]">
-            {itemData?.name}
-          </p>
-          <div className="flex items-center md:gap-x-[60px] gap-x-[32px]">
-            <p className="text-[#6C727F] text-[14px] font-medium">
-              {itemData?.elementCount}&nbsp;
-              {itemData?.elementCount > 1 ? "Elements" : "Element"}
-            </p>
-            <ARROW_RIGHT_ICON />
-          </div>
-        </Link>
-      )}
+          </Link>
+        )}
 
-      {showDeleteIcon && !rearrangingRooms && (
-        <div
-          className="transition-all duration-300 opacity-100 hover:cursor-pointer"
-          onClick={() => {
-            const deleteRoomData = {
-              templateId: templateId,
-              roomId: itemData?._id,
-              roomName: itemData?.name,
-            };
-
-            console.log("deleteRoomData", deleteRoomData);
-          }}
-        >
-          <DELETE_ICON className="text-[#FF613E]" />
-        </div>
-      )}
-    </div>
+        {showDeleteIcon && !rearrangingRooms && (
+          <div
+            className="transition-all duration-300 opacity-100 hover:cursor-pointer"
+            onClick={() => setOpenDeleteRoomModal(true)}
+          >
+            <DELETE_ICON className="text-[#FF613E]" />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -235,7 +235,7 @@ export const userDetailsAPIs = {
   // Delete Room from a Template
   deleteRoomFromTemplate: async ({ templateId, roomIdArray }) => {
     try {
-      const response = await axiosInstance.delete(
+      const response = await axiosInstance.patch(
         USER_DETAILS_ENDPOINTS.DELETE_ROOM_FROM_TEMPLATE_URL,
         {
           templateId: templateId,

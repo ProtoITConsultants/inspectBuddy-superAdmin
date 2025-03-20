@@ -6,6 +6,7 @@ import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router";
 import Button from "./../../../../components/ui/Button";
+import { useTemplateStore } from "../../../../store/templateStore";
 
 const EditUserTemplate = () => {
   // Hooks
@@ -15,10 +16,12 @@ const EditUserTemplate = () => {
   // Local States
   const [addingRoom, setAddingRoom] = useState(false);
   const [rearrangingRooms, setRearrangingRooms] = useState(false);
-  const [templateRooms, setTemplateRooms] = useState([]);
+
+  const templateRooms = useTemplateStore((state) => state.templateRooms);
+  const setTemplateRooms = useTemplateStore((state) => state.setTemplateRooms);
 
   const { isPending, error, isError, data } = useQuery({
-    queryKey: ["templateroomsData"],
+    queryKey: ["templateroomsData", templateId],
     queryFn: () =>
       userDetailsAPIs.fetchTemplateDetails({ templateId: templateId }),
   });
@@ -97,7 +100,12 @@ const EditUserTemplate = () => {
     if (data) {
       setTemplateRooms(data);
     }
-  }, [data]);
+
+    // Cleanup
+    return () => {
+      setTemplateRooms([]);
+    };
+  }, [data, setTemplateRooms]);
 
   if (isPending) {
     return <div>Loading...</div>;
