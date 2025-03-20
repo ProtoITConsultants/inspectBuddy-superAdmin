@@ -41,7 +41,7 @@ const ViewUserTemplate = () => {
         updatedOn="Dec 11, 2024"
       />
       <ViewTemplate.RoomsRoot>
-        {templateData?.rooms.map((room) => (
+        {templateData?.map((room) => (
           <ViewTemplate.RoomCard
             key={room._id}
             roomName={room.name}
