@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   closestCorners,
   DndContext,
@@ -55,6 +54,7 @@ const Root = ({ children, elementsData, setElementsData }) => {
         setElementsData(newRoomsData);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [elementsData, setElementsData]
   );
 
