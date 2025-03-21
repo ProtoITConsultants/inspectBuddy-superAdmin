@@ -22,7 +22,8 @@ import { INFO_ICON } from "../../../../assets/icons/InfoIcon";
 import Button from "../../../../components/ui/Button";
 import { ADD_ICON } from "../../../../assets/icons/AddIcon";
 import { useForm } from "@mantine/form";
-import { QUESTIONS_ICONS_LIST } from "../../../../constants/questionsIcons";
+import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
+import { IconChevronDown } from "@tabler/icons-react";
 
 const Root = ({ children, elementsData, setElementsData }) => {
   const getRoomElementPosition = (id) => {
@@ -206,11 +207,11 @@ const ElementDetail = ({ elementId, elementQuestions }) => {
               Add an Image
             </button>
           </div>
+          <Checkbox
+            label="Make it Required"
+            {...elementForm.getInputProps("elementImageIsRequired")}
+          />
         </div>
-        <Checkbox
-          label="Make it Required"
-          {...elementForm.getInputProps("elementImageIsRequired")}
-        />
 
         <TextInput
           label="Notes"
@@ -241,26 +242,26 @@ const ElementDetail = ({ elementId, elementQuestions }) => {
             ) : (
               elementForm.values.elementQuestions.map((option, index) => (
                 <div key={index}>
-                  {/* {option?.type === "radio" ? (
-                  <TemplateElementRadioQuestion
-                    questionNumber={index + 1}
-                    question={option?.text}
-                    isRequired={option?.answerRequired}
-                    options={option?.options}
-                  />
-                ) : option?.type === "textArea" ? (
-                  <TemplateElementTextAreaQuestion
-                    question={option?.text}
-                    questionNumber={index + 1}
-                    isRequired={option?.answerRequired}
-                  />
-                ) : option?.type === "dropDown" ? (
-                  <TemplateElementDropDownQuestion
-                    questionNumber={index + 1}
-                    question={option?.text}
-                    isRequired={option?.answerRequired}
-                  />
-                ) : null} */}
+                  {option?.type === "radio" ? (
+                    <RadioQuestion
+                      questionNumber={index + 1}
+                      question={option?.text}
+                      isRequired={option?.answerRequired}
+                      options={option?.options}
+                    />
+                  ) : option?.type === "textArea" ? (
+                    <TextAreaQuestion
+                      question={option?.text}
+                      questionNumber={index + 1}
+                      isRequired={option?.answerRequired}
+                    />
+                  ) : option?.type === "dropDown" ? (
+                    <DropDownQuestion
+                      questionNumber={index + 1}
+                      question={option?.text}
+                      isRequired={option?.answerRequired}
+                    />
+                  ) : null}
                 </div>
               ))
             )}
@@ -335,6 +336,39 @@ const RadioQuestion = ({ question, options, questionNumber, isRequired }) => (
     </div>
   </div>
 );
+
+const TextAreaQuestion = ({ question, questionNumber, isRequired }) => {
+  return (
+    <div className="flex flex-col gap-[8px]">
+      <p className="text-[14px] font-medium">
+        {questionNumber}. {question}
+        {isRequired && " *"}
+      </p>
+      <div className="w-full h-[48px] flex items-center bg-[#eeeeee] border border-[#dedede] rounded-[8px] p-[12px_16px] opacity-60">
+        <p className="text-[14px] text-darkBlue font-medium opacity-50">
+          Answer
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const DropDownQuestion = ({ question, questionNumber, isRequired }) => {
+  return (
+    <div className="flex flex-col gap-[8px]">
+      <p className="text-[14px] font-medium">
+        {questionNumber}. {question}
+        {isRequired && " *"}
+      </p>
+      <div className="w-full h-[48px] flex items-center justify-between bg-[#eeeeee] border border-[#dedede] rounded-[8px] p-[12px_16px] opacity-60">
+        <p className="text-[14px] text-darkBlue font-medium opacity-50">
+          Select Answer
+        </p>
+        <IconChevronDown className="text-[#9EA3AE]" />
+      </div>
+    </div>
+  );
+};
 
 const SortableItemsList = {
   Root,
