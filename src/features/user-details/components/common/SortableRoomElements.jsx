@@ -294,7 +294,7 @@ const ElementDetail = ({ elementId, elementQuestions }) => {
   );
 };
 
-// Element Questions
+// Element Questions According to type
 const RadioQuestion = ({ question, options, questionNumber, isRequired }) => (
   <div className="flex flex-col gap-[8px]">
     <p className="text-[14px] font-medium text-darkBlue">

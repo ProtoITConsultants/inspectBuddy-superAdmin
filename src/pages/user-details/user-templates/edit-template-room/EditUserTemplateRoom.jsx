@@ -133,7 +133,7 @@ const EditUserTemplateRoom = () => {
               className="w-full font-medium"
             />
             <EditRoomDetails.TemplateRoomImageInput
-              isChecked={form.values.roomImageRequired}
+              isChecked={form.values.roomImageRequired || false}
               onChange={() =>
                 form.setFieldValue(
                   "roomImageRequired",
@@ -192,7 +192,6 @@ const EditUserTemplateRoom = () => {
             showButton={!addingElement && !rearrangingElements}
           />
         </EditRoomDetails.FormSection>
-        {/* Save Template Button */}
         <Button
           id="save-inspection-template-room"
           label="Save Room"
