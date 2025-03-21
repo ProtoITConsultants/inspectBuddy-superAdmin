@@ -16,7 +16,7 @@ import { Accordion, Checkbox, TextInput, Tooltip } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
 import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
 import { REARRANGE_ITEM_ICON } from "../../../../assets/icons/RearrangeIcon";
-import { useTemplateStore } from "../../../../store/templateStore";
+// import { useTemplateStore } from "../../../../store/templateStore";
 import { DEFAULT_ELEMENT_IMAGE } from "../../../../assets/icons/DefaultElementImage";
 import { INFO_ICON } from "../../../../assets/icons/InfoIcon";
 import Button from "../../../../components/ui/Button";
@@ -24,6 +24,7 @@ import { ADD_ICON } from "../../../../assets/icons/AddIcon";
 import { useForm } from "@mantine/form";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import { IconChevronDown } from "@tabler/icons-react";
+import { CSS } from "@dnd-kit/utilities";
 
 const Root = ({ children, elementsData, setElementsData }) => {
   const getRoomElementPosition = (id) => {
@@ -74,9 +75,9 @@ const Root = ({ children, elementsData, setElementsData }) => {
   );
 };
 
-const RoomElement = ({ elementId, element, rearrangingElements, children }) => {
+const RoomElement = ({ id, element, rearrangingElements, children }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ elementId });
+    useSortable({ id });
 
   const style = {
     transform: rearrangingElements
@@ -122,7 +123,7 @@ const RoomElement = ({ elementId, element, rearrangingElements, children }) => {
         <div
           className={`flex-1 !border !border-[#CCE2FF] !rounded-[8px] !overflow-hidden`}
         >
-          <Accordion.Item value={String(elementId)}>
+          <Accordion.Item value={String(id)}>
             <Accordion.Control
               className={`!text-[16px] !text-dark-blue !font-medium`}
               onClick={() => {
@@ -140,7 +141,7 @@ const RoomElement = ({ elementId, element, rearrangingElements, children }) => {
                 </p>
               </div>
             </Accordion.Control>
-            <Accordion.Panel id={elementId}>{children}</Accordion.Panel>
+            <Accordion.Panel id={id}>{children}</Accordion.Panel>
           </Accordion.Item>
         </div>
         {showDeleteIcon && !rearrangingElements && (
@@ -156,38 +157,28 @@ const RoomElement = ({ elementId, element, rearrangingElements, children }) => {
   );
 };
 
-const ElementDetail = ({ elementId, elementQuestions }) => {
-  // hooks
-  //   const { templateId, roomId, userId } = useParams();
-
+const ElementDetail = ({ elementQuestions, imageRequired }) => {
   // form
   const elementForm = useForm({
     initialValues: {
       elementNotes: "",
       elementImage: "",
-      elementImageIsRequired: false,
+      elementImageIsRequired: imageRequired || false,
       elementQuestions: [],
     },
   });
 
-  // Global States
-  const savedQuestions = useTemplateStore((state) => state.savedQuestions);
-  const setSavedQuestions = useTemplateStore(
-    (state) => state.setSavedQuestions
-  );
-
   // local states
-
-  // state to save the questions of the element locally
 
   //  Use Effect to update the element questions state
   const formRef = useRef(elementForm);
   useEffect(() => {
     formRef.current.setFieldValue("elementQuestions", elementQuestions);
+    formRef.current.setFieldValue("elementImageIsRequired", imageRequired);
 
     // clean up
     return () => {};
-  }, [elementQuestions]);
+  }, [elementQuestions, imageRequired]);
 
   return (
     <React.Fragment>
@@ -209,6 +200,7 @@ const ElementDetail = ({ elementId, elementQuestions }) => {
           </div>
           <Checkbox
             label="Make it Required"
+            checked={elementForm.values.elementImageIsRequired}
             {...elementForm.getInputProps("elementImageIsRequired")}
           />
         </div>
