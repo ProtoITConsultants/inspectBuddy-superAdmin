@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   closestCorners,
   DndContext,
@@ -13,7 +14,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { Accordion, Checkbox, TextInput, Tooltip } from "@mantine/core";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
 import { REARRANGE_ITEM_ICON } from "../../../../assets/icons/RearrangeIcon";
 // import { useTemplateStore } from "../../../../store/templateStore";
@@ -27,27 +34,29 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { CSS } from "@dnd-kit/utilities";
 
 const Root = ({ children, elementsData, setElementsData }) => {
-  const getRoomElementPosition = (id) => {
-    return elementsData?.findIndex((element) => element._id === id);
-  };
+  const getRoomElementPosition = useMemo(
+    () => (id) => elementsData?.findIndex((element) => element._id === id),
+    [elementsData] // Only re-compute if elementsData changes
+  );
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
 
-  const handleDragEnd = ({ active, over }) => {
-    if (!over) {
-      return;
-    }
+  const handleDragEnd = useCallback(
+    ({ active, over }) => {
+      if (!over) return;
 
-    if (active.id !== over.id) {
-      const newRoomsData = arrayMove(
-        elementsData,
-        getRoomElementPosition(active.id),
-        getRoomElementPosition(over.id)
-      );
+      if (active.id !== over.id) {
+        const newRoomsData = arrayMove(
+          elementsData,
+          getRoomElementPosition(active.id),
+          getRoomElementPosition(over.id)
+        );
 
-      setElementsData(newRoomsData);
-    }
-  };
+        setElementsData(newRoomsData);
+      }
+    },
+    [elementsData, setElementsData]
+  );
 
   return (
     <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
@@ -75,18 +84,26 @@ const Root = ({ children, elementsData, setElementsData }) => {
   );
 };
 
-const RoomElement = ({ id, element, rearrangingElements, children }) => {
+const RoomElement = React.memo(function RoomElement({
+  id,
+  element,
+  rearrangingElements,
+  children,
+}) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
-  const style = {
-    transform: rearrangingElements
-      ? CSS.Transform.toString(transform)
-      : undefined,
-    transition: rearrangingElements ? transition : undefined,
-    width: "100%",
-    touchAction: "none",
-  };
+  const style = useMemo(
+    () => ({
+      transform: rearrangingElements
+        ? CSS.Transform.toString(transform)
+        : undefined,
+      transition: rearrangingElements ? transition : undefined,
+      width: "100%",
+      touchAction: "none",
+    }),
+    [rearrangingElements, transform, transition]
+  );
 
   const [accordionOpen, setAccordionOpen] = useState(false);
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
@@ -95,10 +112,21 @@ const RoomElement = ({ id, element, rearrangingElements, children }) => {
 
   // show Delete icon will be true if the window with if less tban 768px
   useEffect(() => {
-    if (window.innerWidth < 768) {
-      setShowDeleteIcon(true);
-    }
-  }, [showDeleteConfirmationModal]);
+    const updateShowDeleteIcon = () => {
+      if (window.innerWidth < 768) {
+        setShowDeleteIcon(true);
+      }
+    };
+
+    updateShowDeleteIcon();
+
+    window.addEventListener("resize", updateShowDeleteIcon);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", updateShowDeleteIcon);
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -113,9 +141,15 @@ const RoomElement = ({ id, element, rearrangingElements, children }) => {
             : "!w-full"
         } ${!rearrangingElements ? "md:transition-all md:duration-300" : ""}`}
         onMouseEnter={() => {
-          !accordionOpen && setShowDeleteIcon(true);
+          if (!accordionOpen && !showDeleteIcon) {
+            setShowDeleteIcon(true);
+          }
         }}
-        onMouseLeave={() => setShowDeleteIcon(false)}
+        onMouseLeave={() => {
+          if (showDeleteIcon) {
+            setShowDeleteIcon(false);
+          }
+        }}
       >
         {rearrangingElements && (
           <REARRANGE_ITEM_ICON className="hover:cursor-grab" />
@@ -155,7 +189,7 @@ const RoomElement = ({ id, element, rearrangingElements, children }) => {
       </div>
     </React.Fragment>
   );
-};
+});
 
 const ElementDetail = ({ elementQuestions, imageRequired }) => {
   // form
