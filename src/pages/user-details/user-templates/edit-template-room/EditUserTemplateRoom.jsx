@@ -71,14 +71,26 @@ const EditUserTemplateRoom = () => {
   const rearrangeRoomElements = useMutation({
     mutationFn: () => {
       setRearrangingElements(false);
+      const elementIds = form.values.roomElements.map((element) => element._id);
 
-      //   const elementIds = selectedRoom.elementsData.map(
-      //     (element) => element._id
-      //   );
       return userDetailsAPIs.rearrangeRoomElementsInTemplate({
         templateId,
         roomId,
-        elementIds: [],
+        elementIds: elementIds,
+      });
+    },
+
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: "Room Elements rearranged successfully.",
+        duration: 3000,
+      });
+    },
+
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't rearrange Room Elements.",
+        duration: 3000,
       });
     },
   });
@@ -93,10 +105,38 @@ const EditUserTemplateRoom = () => {
         elementName,
       });
     },
+
+    onSuccess: (data) => {
+      // update the room elements
+      const updatedRoomElements = [
+        ...form.values.roomElements,
+        data.newElement,
+      ];
+
+      formRef.current.setValues({
+        roomElements: updatedRoomElements,
+      });
+
+      toast.success("Success!", {
+        description: "Room Element added successfully.",
+        duration: 3000,
+      });
+    },
+
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't add new Room Element.",
+        duration: 3000,
+      });
+    },
   });
 
   // Save Room Details - Mutation
-  const saveRoomDetails = useMutation({});
+  const saveRoomDetails = useMutation({
+    mutationFn: () => {
+      return console.log("Form Values:", form.values);
+    },
+  });
 
   if (isError) {
     navigate(-1);
@@ -166,13 +206,14 @@ const EditUserTemplateRoom = () => {
               {form.values.roomElements.map((element) => (
                 <SortableItemsList.RoomElement
                   key={element._id}
-                  elementId={element._id}
+                  id={element._id}
                   element={element}
                   rearrangingElements={rearrangingElements}
                 >
                   <SortableItemsList.ElementDetail
                     elementId={element._id}
                     elementQuestions={element.checklist}
+                    imageRequired={element.imageRequired}
                   />
                 </SortableItemsList.RoomElement>
               ))}
