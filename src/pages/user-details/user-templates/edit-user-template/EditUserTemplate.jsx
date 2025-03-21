@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
-import EditInspection from "../../../../features/user-details/components/EditInspectionDetails";
+import EditInspection from "../../../../features/user-details/components/common/EditInspectionDetails";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { toast } from "sonner";
