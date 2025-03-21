@@ -250,6 +250,71 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Fetch Room's Details in a Template
+  fetchTemplateRoomDetails: async ({ templateId, roomId, userId }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.FETCH_TEMPLATE_ROOM_DETAILS_URL({
+          userId,
+        }),
+        {
+          templateId,
+          roomId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Room's Details in Template", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error fetching Room's Details in Template"
+      );
+    }
+  },
+  //Rearrange Room Elements in a Template
+  rearrangeRoomElementsInTemplate: async ({
+    templateId,
+    roomId,
+    elementIds,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.REARRANGE_ROOM_ELEMENTS_IN_TEMPLATE_URL,
+        {
+          templateId,
+          roomId,
+          elementIds,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error rearranging Room Elements in Template", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error rearranging Room Elements in Template"
+      );
+    }
+  },
+  // Add New Room in a Template
+  addNewRoomElementInTemplate: async ({ templateId, roomId, elementName }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.ADD_NEW_ROOM_ELEMENT_IN_TEMPLATE_URL,
+        {
+          templateId,
+          roomId,
+          elementName,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error adding new Room Element in Template", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error adding new Room Element in Template"
+      );
+    }
+  },
 
   // Update Rooms Order in a Template
   updateRoomOrderInTemplate: async ({ templateId, roomIds }) => {

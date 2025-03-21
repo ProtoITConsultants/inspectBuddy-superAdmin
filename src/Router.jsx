@@ -22,6 +22,7 @@ import ViewUserProperty from "./pages/user-details/user-properties/view-user-pro
 import EditUserProperty from "./pages/user-details/user-properties/edit-user-property/EditUserProperty";
 import ViewUserTemplate from "./pages/user-details/user-templates/view-user-template/ViewUserTemplate";
 import EditUserTemplate from "./pages/user-details/user-templates/edit-user-template/EditUserTemplate";
+import EditUserTemplateRoom from "./pages/user-details/user-templates/edit-template-room/EditUserTemplateRoom";
 
 export const router = createBrowserRouter([
   {
@@ -143,6 +144,10 @@ export const router = createBrowserRouter([
           {
             path: ":templateId/edit-details",
             element: <EditUserTemplate />,
+          },
+          {
+            path: ":templateId/edit-details/room/:roomId",
+            element: <EditUserTemplateRoom />,
           },
         ],
       },

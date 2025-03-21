@@ -210,3 +210,8 @@
   height: 48px !important;
   font-family: "Plus Jakarta Sans" !important;
 }
+
+/* Room Elements Accordion Styles */
+#room-element-items-accordion .mantine-Accordion-content {
+  padding: 0px !important;
+}
