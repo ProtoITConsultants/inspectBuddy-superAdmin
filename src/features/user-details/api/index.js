@@ -335,6 +335,38 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Add Selected Questions (from Saved Questions) Questions to a Room Element in a Template
+  addSelectedQuestionsToElement: async ({
+    templateId,
+    roomId,
+    elementId,
+    questions,
+    userId,
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.ADD_SELECTED_QUESTIONS_TO_ELEMENT_URL({
+          userId,
+        }),
+        {
+          templateId,
+          roomId,
+          elementId,
+          questions,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error adding Selected Questions to Room Element in Template",
+        error
+      );
+      throw new Error(
+        error.response?.data?.message ||
+          "Error adding Selected Questions to Room Element in Template"
+      );
+    }
+  },
 
   // Update Rooms Order in a Template
   updateRoomOrderInTemplate: async ({ templateId, roomIds }) => {

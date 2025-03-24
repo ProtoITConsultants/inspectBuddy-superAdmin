@@ -157,6 +157,7 @@ const RoomElement = React.memo(function RoomElement({
           }}
         />
       )}
+
       <div
         ref={rearrangingElements ? setNodeRef : null}
         {...(rearrangingElements ? attributes : {})}
@@ -218,7 +219,9 @@ const RoomElement = React.memo(function RoomElement({
   );
 });
 
-const ElementDetail = ({ elementQuestions, imageRequired }) => {
+const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
+  const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+
   // form
   const elementForm = useForm({
     initialValues: {
@@ -243,6 +246,13 @@ const ElementDetail = ({ elementQuestions, imageRequired }) => {
 
   return (
     <React.Fragment>
+      {showAddQuestionModal && (
+        <InspectionModals.AddQuestion
+          isModalOpen={showAddQuestionModal}
+          onCloseModal={() => setShowAddQuestionModal(false)}
+          currentElementId={elementId}
+        />
+      )}
       <div
         className={`p-[12px_16px] flex flex-col gap-[16px] border-t border-[#cce2ff]`}
       >
@@ -323,7 +333,7 @@ const ElementDetail = ({ elementQuestions, imageRequired }) => {
               <button
                 className={`flex items-center gap-[4px] text-primary !font-semibold`}
                 type="button"
-                onClick={() => {}}
+                onClick={() => setShowAddQuestionModal(true)}
               >
                 <ADD_ICON className="!w-[16px] !h-[16px]" />
                 <span className="text-[14px]">Add new Question</span>
