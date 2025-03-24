@@ -31,11 +31,22 @@ import { useForm } from "@mantine/form";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import { IconChevronDown } from "@tabler/icons-react";
 import { CSS } from "@dnd-kit/utilities";
+import InspectionModals from "./InspectionModals";
+import { useTemplateStore } from "../../../../store/templateStore";
 
-const Root = ({ children, elementsData, setElementsData }) => {
+const Root = ({ children }) => {
+  // Global States
+  const selectedTemplateRoomElements = useTemplateStore(
+    (state) => state.selectedTemplateRoomElements
+  );
+  const setSelectedTemplateRoomElements = useTemplateStore(
+    (state) => state.setSelectedTemplateRoomElements
+  );
+
   const getRoomElementPosition = useMemo(
-    () => (id) => elementsData?.findIndex((element) => element._id === id),
-    [elementsData] // Only re-compute if elementsData changes
+    () => (id) =>
+      selectedTemplateRoomElements?.findIndex((element) => element._id === id),
+    [selectedTemplateRoomElements] // Only re-compute if elementsData changes
   );
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
@@ -46,22 +57,25 @@ const Root = ({ children, elementsData, setElementsData }) => {
 
       if (active.id !== over.id) {
         const newRoomsData = arrayMove(
-          elementsData,
+          selectedTemplateRoomElements,
           getRoomElementPosition(active.id),
           getRoomElementPosition(over.id)
         );
 
-        setElementsData(newRoomsData);
+        setSelectedTemplateRoomElements(newRoomsData);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [elementsData, setElementsData]
+    [
+      selectedTemplateRoomElements,
+      getRoomElementPosition,
+      setSelectedTemplateRoomElements,
+    ]
   );
 
   return (
     <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
       <SortableContext
-        items={elementsData?.map((element) => element._id)}
+        items={selectedTemplateRoomElements?.map((element) => element._id)}
         strategy={verticalListSortingStrategy}
         sensors={sensors}
       >
@@ -130,6 +144,19 @@ const RoomElement = React.memo(function RoomElement({
 
   return (
     <React.Fragment>
+      {showDeleteConfirmationModal && (
+        <InspectionModals.DeleteElement
+          isModalOpen={showDeleteConfirmationModal}
+          onCloseModal={() => setShowDeleteConfirmationModal(false)}
+          elementData={{
+            _id: element._id,
+            name: element.name,
+          }}
+          onDeleteSuccess={() => {
+            setShowDeleteConfirmationModal(false);
+          }}
+        />
+      )}
       <div
         ref={rearrangingElements ? setNodeRef : null}
         {...(rearrangingElements ? attributes : {})}

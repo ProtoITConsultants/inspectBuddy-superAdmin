@@ -19,6 +19,9 @@ const EditUserTemplateRoom = () => {
   const navigate = useNavigate();
 
   // Global States
+  const selectedTemplateRoomElements = useTemplateStore(
+    (state) => state.selectedTemplateRoomElements
+  );
   const setSelectedTemplateRoomElements = useTemplateStore(
     (state) => state.setSelectedTemplateRoomElements
   );
@@ -35,7 +38,6 @@ const EditUserTemplateRoom = () => {
     initialValues: {
       roomName: "",
       roomImageRequired: false,
-      roomElements: [],
     },
 
     validate: {
@@ -59,7 +61,6 @@ const EditUserTemplateRoom = () => {
     formRef.current.setValues({
       roomName: data?.room?.name || "",
       roomImageRequired: data?.room?.imageRequired,
-      roomElements: data?.room?.elements || [],
     });
 
     setSavedQuestions(data?.questions || []);
@@ -71,7 +72,9 @@ const EditUserTemplateRoom = () => {
   const rearrangeRoomElements = useMutation({
     mutationFn: () => {
       setRearrangingElements(false);
-      const elementIds = form.values.roomElements.map((element) => element._id);
+      const elementIds = selectedTemplateRoomElements.map(
+        (element) => element._id
+      );
 
       return userDetailsAPIs.rearrangeRoomElementsInTemplate({
         templateId,
@@ -109,13 +112,11 @@ const EditUserTemplateRoom = () => {
     onSuccess: (data) => {
       // update the room elements
       const updatedRoomElements = [
-        ...form.values.roomElements,
+        ...selectedTemplateRoomElements,
         data.newElement,
       ];
 
-      formRef.current.setValues({
-        roomElements: updatedRoomElements,
-      });
+      setSelectedTemplateRoomElements(updatedRoomElements);
 
       toast.success("Success!", {
         description: "Room Element added successfully.",
@@ -197,13 +198,8 @@ const EditUserTemplateRoom = () => {
             handleSaveRearrangedElement={rearrangeRoomElements.mutate}
           />
           <EditRoomDetails.FormSectionBody>
-            <SortableItemsList.Root
-              elementsData={form.values.roomElements}
-              setElementsData={(updatedElements) =>
-                form.setFieldValue("roomElements", updatedElements)
-              }
-            >
-              {form.values.roomElements.map((element) => (
+            <SortableItemsList.Root>
+              {selectedTemplateRoomElements?.map((element) => (
                 <SortableItemsList.RoomElement
                   key={element._id}
                   id={element._id}

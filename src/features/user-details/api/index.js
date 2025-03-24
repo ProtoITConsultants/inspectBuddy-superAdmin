@@ -315,6 +315,26 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // Delete Room Element from a Template
+  deleteElementFromTemplate: async ({ templateId, roomId, elementIdArray }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.DELETE_ROOM_ELEMENT_FROM_TEMPLATE_URL,
+        {
+          templateId,
+          roomId,
+          elementIdArray,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting Room Element from Template", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error deleting Room Element from Template"
+      );
+    }
+  },
 
   // Update Rooms Order in a Template
   updateRoomOrderInTemplate: async ({ templateId, roomIds }) => {
