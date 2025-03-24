@@ -227,6 +227,7 @@ const EditUserTemplateRoom = () => {
             title="Add New Element"
             onClick={() => setAddingElement(true)}
             showButton={!addingElement && !rearrangingElements}
+            className="mx-auto"
           />
         </EditRoomDetails.FormSection>
         <Button
