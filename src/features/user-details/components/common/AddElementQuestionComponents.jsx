@@ -1,0 +1,135 @@
+import { Checkbox, Radio, RadioGroup } from "@mantine/core";
+import { VIEW_QUESTION_DETAILS_ICON } from "./../../../../assets/icons/ViewQuestionDetails";
+import AddNewItemButton from "./AddNewItemButton";
+
+// Add Question Modals Root
+const Root = ({ children, className }) => {
+  return (
+    <div
+      className={`${
+        className ? className : null
+      } flex flex-col gap-[16px] h-full`}
+    >
+      {children}
+    </div>
+  );
+};
+// Add Question Modals Header
+const Header = ({ title }) => {
+  return (
+    <h2 className="font-bold md:text-[24px] text-[20px] text-dark-blue">
+      {title}
+    </h2>
+  );
+};
+
+// Saved Questions List
+const SavedQuestionsList = ({
+  questions,
+  heading,
+  onAddNewQuestionBtnClick,
+  setSelectedQuestions,
+  onPreviewQuestionDetail,
+}) => {
+  return (
+    <div className="flex flex-col gap-[16px]">
+      <p className="font-medium text-dark-blue text-[16px]">{heading}</p>
+
+      {/* Show this text if there are no saved Question */}
+      {questions.length === 0 && (
+        <p className="text-[14px] text-gray-dark">
+          No saved questions found! Click on the button below to create new
+          question.
+        </p>
+      )}
+
+      <div className="flex flex-col gap-[16px] max-h-[110px] h-full overflow-auto">
+        {questions?.map((question, index) => (
+          <div className="flex justify-between items-center" key={question._id}>
+            <Checkbox
+              label={index + 1 + "." + " " + question.text}
+              disabled={question.disabled}
+              checked={question.disabled}
+              onChange={() => {
+                // add question to selected questions array
+                setSelectedQuestions((prev) => [...prev, question]);
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => onPreviewQuestionDetail(question)}
+            >
+              <VIEW_QUESTION_DETAILS_ICON />
+            </button>
+          </div>
+        ))}
+      </div>
+      <AddNewItemButton
+        title="Create New Question"
+        showButton={true}
+        onClick={onAddNewQuestionBtnClick}
+        className="!text-[14px] !font-medium"
+      />
+    </div>
+  );
+};
+
+// Modal Actions for Add Question
+const Actions = ({ children }) => (
+  <div className="flex items-center justify-center mt-[16px] md:gap-[24px] gap-[12px] flex-wrap">
+    {children}
+  </div>
+);
+
+// Create New Question Modal Elements
+const AnswerTypeSelector = ({ label, typeOptions, onSelect }) => {
+  return (
+    <div className="space-y-[8px]">
+      <p className="text-darkBlue font-medium text-[14px]">{label}</p>
+      <RadioGroup onChange={onSelect}>
+        <div className="flex md:flex-row flex-col gap-[16px]">
+          {typeOptions.map((type) => (
+            <Radio label={type.label} value={type.value} key={type.label} />
+          ))}
+        </div>
+      </RadioGroup>
+    </div>
+  );
+};
+
+const NewQuestionOptionsList = ({
+  children,
+  title,
+  minimumText,
+  showAddButton,
+  setShowAddButton,
+}) => (
+  <div className="space-y-[8px]">
+    <p className="text-darkBlue font-medium text-[14px]">
+      {title}&nbsp;
+      <span className="text-[#7A8094]">({minimumText})</span>
+    </p>
+    <div
+      className="grid grid-cols-2 gap-x-[20px] gap-y-[8px] max-h-[105px] overflow-auto"
+      id="newQuestionOptionsList"
+    >
+      {children}
+    </div>
+    <AddNewItemButton
+      title="Add Option"
+      showButton={showAddButton}
+      onClick={() => setShowAddButton(false)}
+    />
+  </div>
+);
+
+const ElementQuestionModal = {
+  Root,
+  Header,
+  SavedQuestionsList,
+  Actions,
+  AnswerTypeSelector,
+  NewQuestionOptionsList,
+};
+
+export default ElementQuestionModal;

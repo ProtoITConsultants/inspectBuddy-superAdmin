@@ -6,9 +6,11 @@ import { ModalRoot } from "../../../../components/ui/Modal";
 import Button from "../../../../components/ui/Button";
 import { useParams } from "react-router";
 import { useTemplateStore } from "../../../../store/templateStore";
-import { Checkbox, Stepper } from "@mantine/core";
-import { VIEW_QUESTION_DETAILS_ICON } from "../../../../assets/icons/ViewQuestionDetails";
-import AddNewItemButton from "./AddNewItemButton";
+import { Checkbox, Divider, Stepper, TextInput } from "@mantine/core";
+import { ARROW_RIGHT_ICON } from "./../../../../assets/icons/ArrowRightIcon";
+import { useForm } from "@mantine/form";
+import ElementQuestionCard from "./ElementQuestionCard";
+import ElementQuestionModal from "./AddElementQuestionComponents";
 
 const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   // Hooks
@@ -99,85 +101,6 @@ const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   );
 };
 
-// Add Question Modals Root
-const QuestionModalRoot = ({ children, className }) => {
-  return (
-    <div
-      className={`${
-        className ? className : null
-      } flex flex-col gap-[16px] h-full`}
-    >
-      {children}
-    </div>
-  );
-};
-// Add Question Modals Header
-const QuestionModalHeader = ({ title }) => {
-  return (
-    <h2 className="font-bold md:text-[24px] text-[20px] text-dark-blue">
-      {title}
-    </h2>
-  );
-};
-
-// Saved Questions List
-const SavedQuestionsList = ({
-  questions,
-  heading,
-  onAddNewQuestionBtnClick,
-  setSelectedQuestions,
-  onPreviewQuestionDetail,
-}) => {
-  return (
-    <div className="flex flex-col gap-[16px]">
-      <p className="font-medium text-dark-blue text-[16px]">{heading}</p>
-
-      {/* Show this text if there are no saved Question */}
-      {questions.length === 0 && (
-        <p className="text-[14px] text-gray-dark">
-          No saved questions found! Click on the button below to create new
-          question.
-        </p>
-      )}
-
-      <div className="flex flex-col gap-[16px] max-h-[110px] h-full overflow-auto">
-        {questions?.map((question, index) => (
-          <div className="flex justify-between items-center" key={question._id}>
-            <Checkbox
-              label={index + 1 + "." + " " + question.text}
-              disabled={question.disabled}
-              checked={question.disabled}
-              onChange={() => {
-                // add question to selected questions array
-                setSelectedQuestions((prev) => [...prev, question]);
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => onPreviewQuestionDetail(question)}
-            >
-              <VIEW_QUESTION_DETAILS_ICON />
-            </button>
-          </div>
-        ))}
-      </div>
-      <AddNewItemButton
-        title="Create New Question"
-        showButton={true}
-        onClick={onAddNewQuestionBtnClick}
-        className="!text-[14px] !font-medium"
-      />
-    </div>
-  );
-};
-
-// Modal Actions for Add Question
-const AddQuestionModalActions = ({ children }) => (
-  <div className="flex items-center justify-center mt-[16px] md:gap-[24px] gap-[12px] flex-wrap">
-    {children}
-  </div>
-);
-
 const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
   // Hooks
   const { userId, templateId, roomId } = useParams();
@@ -204,6 +127,30 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
 
   // State to contain the to be previewed question
   const [questionToPreview, setQuestionToPreview] = useState({});
+
+  // state to save the selectedIcon for the option
+  const [iconOptionIndex, setIconOptionIndex] = useState();
+  // const [selectedIcon, setSelectedIcon] = useState("");
+
+  const [showAddOptionsButton, setShowAddOptionsButton] = useState(true);
+  const newQuestionForm = useForm({
+    initialValues: {
+      text: "",
+      options: [],
+      type: "",
+      shouldSave: false,
+      answerRequired: false,
+    },
+
+    validate: {
+      text: (value) => (value.length > 0 ? null : "Question is required!"),
+      options: (value, values) =>
+        values.type !== "textArea" && value.length === 0
+          ? "Options are required for checkbox!"
+          : null,
+      type: (value) => (value.length > 0 ? null : "Type is required!"),
+    },
+  });
 
   // Mutations
   const addSelectedQuestionsToElement = useMutation({
@@ -261,6 +208,8 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     },
   });
 
+  const createNewQuestion = useMutation({});
+
   // UseEffect to filter the already added questions
   useEffect(() => {
     if (active === 0) {
@@ -301,7 +250,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
   return (
     <ModalRoot
       id="add-template-question-modal"
-      openModal={true}
+      openModal={isModalOpen}
       onClose={() => {
         onCloseModal();
         setIsAddingQuestion(false);
@@ -321,9 +270,9 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
         onStepClick={setActive}
       >
         <Stepper.Step id="saved-questions">
-          <QuestionModalRoot>
-            <QuestionModalHeader title="Add questions to checklist" />
-            <SavedQuestionsList
+          <ElementQuestionModal.Root>
+            <ElementQuestionModal.Header title="Add questions to checklist" />
+            <ElementQuestionModal.SavedQuestionsList
               questions={existingQuestions}
               heading="Please Select Questions from the list that you want to add to checklist?"
               onAddNewQuestionBtnClick={() => setActive(1)}
@@ -333,7 +282,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
                 setActive(2);
               }}
             />
-            <AddQuestionModalActions>
+            <ElementQuestionModal.Actions>
               <Button
                 id="add-selected-questions"
                 type="button"
@@ -351,11 +300,135 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
                 borderColor="#CCE2FF"
                 onClick={() => onCloseModal()}
               />
-            </AddQuestionModalActions>
-          </QuestionModalRoot>
+            </ElementQuestionModal.Actions>
+          </ElementQuestionModal.Root>
         </Stepper.Step>
         <Stepper.Step id="create-new-question">
-          Create New Question
+          <ElementQuestionModal.Root>
+            <Button
+              id="goBack-to-existing-questions"
+              onClick={() => setActive(0)}
+              type="button"
+              buttonType="iconButton"
+              icon={
+                <ARROW_RIGHT_ICON className="transform rotate-180 w-[20px] h-[20px]" />
+              }
+              label="Go Back"
+              className="!w-fit !font-semibold !h-fit !text-[18px]"
+            />
+            <Divider className="w-full !border-t-[1.5px]" color="#E4F0FF" />
+            <TextInput
+              label="New Question"
+              placeholder="Enter New Question"
+              {...newQuestionForm.getInputProps("text")}
+              className="w-full font-medium"
+            />
+            <Checkbox
+              label="Save this question."
+              {...newQuestionForm.getInputProps("shouldSave")}
+              checked={newQuestionForm.values.shouldSave}
+            />
+            <ElementQuestionModal.AnswerTypeSelector
+              label="Answer Type"
+              typeOptions={[
+                { label: "Options", value: "radio" },
+                { label: "Text Field", value: "textArea" },
+                { label: "Drop Down", value: "dropDown" },
+              ]}
+              onSelect={(answerType) => {
+                newQuestionForm.setFieldValue("type", answerType);
+              }}
+            />
+
+            {(newQuestionForm.values.type === "radio" ||
+              newQuestionForm.values.type === "dropDown") && (
+              <ElementQuestionModal.NewQuestionOptionsList
+                title="Options"
+                minimumText="Add minimum 2 options"
+                showAddButton={showAddOptionsButton}
+                setShowAddButton={setShowAddOptionsButton}
+              >
+                {!showAddOptionsButton && (
+                  <ElementQuestionCard.NewOption
+                    onSaveNewOption={(newOptionValue) => {
+                      setShowAddOptionsButton(true);
+                      newQuestionForm.setFieldValue("options", [
+                        ...newQuestionForm.values.options,
+                        {
+                          option: newOptionValue.text,
+                          iconId: "",
+                        },
+                      ]);
+                    }}
+                    onCancelNewOption={() => {
+                      setShowAddOptionsButton(true);
+                    }}
+                  />
+                )}
+
+                {newQuestionForm.values.options.map((option, index) => (
+                  <ElementQuestionCard.ExistingOption
+                    key={index}
+                    optionNumber={index}
+                    optionData={option}
+                    onOpenIconModal={() => {
+                      setActive(2);
+                      setIconOptionIndex(index);
+                    }}
+                    onDeleteOption={() => {
+                      const newOptions = newQuestionForm.values.options.filter(
+                        (opt, i) => i !== index
+                      );
+                      newQuestionForm.setFieldValue("options", newOptions);
+                    }}
+                  />
+                ))}
+              </ElementQuestionModal.NewQuestionOptionsList>
+            )}
+
+            <Checkbox
+              label="Answer is required"
+              {...newQuestionForm.getInputProps("isRequired")}
+              checked={newQuestionForm.values.isRequired}
+            />
+
+            <ElementQuestionModal.Actions>
+              <Button
+                id="add-new-questions"
+                type="button"
+                onClick={createNewQuestion.mutate}
+                buttonType="contained"
+                label="Add New Question"
+                className="sm:w-[208px] w-full"
+              />
+              <Button
+                id="cancel-add-new-questions"
+                label="Cancel"
+                className="!text-primary sm:w-[208px] w-full hover:!bg-[#FF613E] hover:!border-[#FF613E]"
+                type="button"
+                buttonType="outlined"
+                borderColor="#CCE2FF"
+                onClick={() => onCloseModal()}
+              />
+            </ElementQuestionModal.Actions>
+          </ElementQuestionModal.Root>
+        </Stepper.Step>
+        <Stepper.Step id="question-icon-modal">
+          <ElementQuestionModal.Root>
+            <Button
+              id="goBack-to-existing-questions"
+              onClick={() => setActive(1)}
+              type="button"
+              buttonType="iconButton"
+              icon={
+                <ARROW_RIGHT_ICON className="transform rotate-180 w-[20px] h-[20px]" />
+              }
+              label="Go Back"
+              className="!w-fit !font-semibold !h-fit !text-[18px]"
+            />
+            <Divider className="w-full !border-t-[1.5px]" color="#E4F0FF" />
+            QuestionIcon
+          </ElementQuestionModal.Root>
         </Stepper.Step>
         <Stepper.Step id="preview-question">Preview Question</Stepper.Step>
       </Stepper>
