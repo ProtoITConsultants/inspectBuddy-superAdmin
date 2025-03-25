@@ -11,6 +11,7 @@ import { ARROW_RIGHT_ICON } from "./../../../../assets/icons/ArrowRightIcon";
 import { useForm } from "@mantine/form";
 import ElementQuestionCard from "./ElementQuestionCard";
 import ElementQuestionModal from "./AddElementQuestionComponents";
+import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 
 const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   // Hooks
@@ -130,7 +131,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
 
   // state to save the selectedIcon for the option
   const [iconOptionIndex, setIconOptionIndex] = useState();
-  // const [selectedIcon, setSelectedIcon] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState("");
 
   const [showAddOptionsButton, setShowAddOptionsButton] = useState(true);
   const newQuestionForm = useForm({
@@ -246,6 +247,29 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     // Clean up function
     return () => {};
   }, [selectedTemplateRoomElements, savedQuestions, active, currentElementId]);
+
+  // Handle Save Option Icon
+  const handleSaveOptionIcon = () => {
+    const selectedIconId = QUESTIONS_ICONS_LIST.find(
+      (icon) => icon.icon === selectedIcon
+    ).id;
+
+    const newOptions = newQuestionForm.values.options.map((option, index) => {
+      if (index === iconOptionIndex) {
+        return {
+          ...option,
+          iconId: selectedIconId,
+        };
+      }
+      return option;
+    });
+
+    // Update the newQuestionData with the new options
+    newQuestionForm.setFieldValue("options", newOptions);
+
+    setActive(1);
+    setSelectedIcon("");
+  };
 
   return (
     <ModalRoot
@@ -427,7 +451,29 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
               className="!w-fit !font-semibold !h-fit !text-[18px]"
             />
             <Divider className="w-full !border-t-[1.5px]" color="#E4F0FF" />
-            QuestionIcon
+            <ElementQuestionModal.OptionIconsList
+              selectedIcon={selectedIcon}
+              onIconSelect={(icon) => setSelectedIcon(icon)}
+            />
+            <ElementQuestionModal.Actions>
+              <Button
+                id="add-icon-to-question"
+                type="button"
+                onClick={handleSaveOptionIcon}
+                buttonType="contained"
+                label="Save"
+                className="sm:w-[208px] w-full"
+              />
+              <Button
+                id="cancel-add-icon-to-question"
+                label="Cancel"
+                className="!text-primary sm:w-[208px] w-full hover:!bg-[#FF613E] hover:!border-[#FF613E]"
+                type="button"
+                buttonType="outlined"
+                borderColor="#CCE2FF"
+                onClick={() => setActive(1)}
+              />
+            </ElementQuestionModal.Actions>
           </ElementQuestionModal.Root>
         </Stepper.Step>
         <Stepper.Step id="preview-question">Preview Question</Stepper.Step>

@@ -1,6 +1,7 @@
 import { Checkbox, Radio, RadioGroup } from "@mantine/core";
 import { VIEW_QUESTION_DETAILS_ICON } from "./../../../../assets/icons/ViewQuestionDetails";
 import AddNewItemButton from "./AddNewItemButton";
+import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 
 // Add Question Modals Root
 const Root = ({ children, className }) => {
@@ -123,6 +124,25 @@ const NewQuestionOptionsList = ({
   </div>
 );
 
+const OptionIconsList = ({ selectedIcon, onIconSelect }) => (
+  <div className="flex flex-col gap-[12px]">
+    <p className="text-[16px] font-medium text-dark-blue">Select Icons</p>
+    <div className="flex items-center gap-[8px] flex-wrap mt-[12px]">
+      {QUESTIONS_ICONS_LIST.map(({ id, icon }) => (
+        <button
+          key={id}
+          className={`hover:bg-[#DFECFF] p-[4px] h-[35px] w-[35px] flex items-center justify-center ${
+            selectedIcon === icon ? "bg-[#DFECFF]" : "bg-white"
+          }`}
+          onClick={() => onIconSelect(icon)}
+        >
+          {icon}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
 const ElementQuestionModal = {
   Root,
   Header,
@@ -130,6 +150,7 @@ const ElementQuestionModal = {
   Actions,
   AnswerTypeSelector,
   NewQuestionOptionsList,
+  OptionIconsList,
 };
 
 export default ElementQuestionModal;
