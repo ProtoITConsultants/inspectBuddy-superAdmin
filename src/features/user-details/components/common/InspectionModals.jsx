@@ -559,7 +559,13 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
           <ElementQuestionModal.Root>
             <Button
               id="goBack-to-existing-questions"
-              onClick={() => setActive(1)}
+              onClick={() => {
+                if (isQuestionBeingEdited) {
+                  setActive(3);
+                } else {
+                  setActive(1);
+                }
+              }}
               type="button"
               buttonType="iconButton"
               icon={
