@@ -6,13 +6,21 @@ import { ModalRoot } from "../../../../components/ui/Modal";
 import Button from "../../../../components/ui/Button";
 import { useParams } from "react-router";
 import { useTemplateStore } from "../../../../store/templateStore";
-import { Checkbox, Divider, Stepper, TextInput } from "@mantine/core";
+import {
+  Checkbox,
+  Divider,
+  Group,
+  Stepper,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { ARROW_RIGHT_ICON } from "./../../../../assets/icons/ArrowRightIcon";
 import { useForm } from "@mantine/form";
 import ElementQuestionCard from "./ElementQuestionCard";
 import ElementQuestionModal from "./AddElementQuestionComponents";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import { userTemplatesAPIs } from "../../api/template";
+import PreviewQuestion from "./PreviewQuestionElements";
 
 const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   // Hooks
@@ -137,7 +145,28 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
   const [iconOptionIndex, setIconOptionIndex] = useState();
   const [selectedIcon, setSelectedIcon] = useState("");
 
+  // State to check if the previewed question is being edited or not
+  const [isQuestionBeingEdited, setIsQuestionBeingEdited] = useState(false);
+
   const [showAddOptionsButton, setShowAddOptionsButton] = useState(true);
+
+  // Question To Preview Form
+  const questionToPreviewForm = useForm({
+    initialValues: {
+      text: "",
+      options: [],
+      type: "",
+      shouldSave: false,
+      answerRequired: false,
+      isDefault: false,
+      _id: "",
+    },
+
+    text: (value) => (value.length > 0 ? null : "Question is required!"),
+    type: (value) => (value ? null : "Type is required!"),
+  });
+
+  // New Question Form
   const newQuestionForm = useForm({
     initialValues: {
       text: "",
@@ -252,6 +281,8 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     },
   });
 
+  const updatePreviewedQuestion = useMutation({});
+
   // UseEffect to filter the already added questions
   useEffect(() => {
     if (active === 0) {
@@ -312,27 +343,32 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     setSelectedIcon("");
   };
 
-  // handle Create New Question
-  const handleCreateNewQuestion = () => {
+  // Validate New/Previewed Question Data
+  const validateQuestionData = () => {
+    const form = isQuestionBeingEdited
+      ? questionToPreviewForm
+      : newQuestionForm;
+
     // Validation of the options
     // If we do it inside Form, we don't get the updated state of form
     // So, check fails for the first time, when we change type of question
-    if (
-      newQuestionForm.values.type !== "textArea" &&
-      newQuestionForm.values.options.length < 2
-    ) {
+    if (form.values.type !== "textArea" && form.values.options.length < 2) {
       console.log("There is an error");
-      newQuestionForm.setFieldError("options", "At least 2 options required!");
+      form.setFieldError("options", "At least 2 options required!");
 
       return console.log("At least 2 options required!");
     }
 
     // Validate the form
-    newQuestionForm.validate();
+    form.validate();
 
     // Cancel API call if form is invalid
-    if (!newQuestionForm.isValid()) {
+    if (!form.isValid()) {
       return console.log("Form is invalid");
+    }
+
+    if (isQuestionBeingEdited) {
+      return updatePreviewedQuestion.mutate();
     }
 
     //  Create New Question
@@ -371,7 +407,16 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
               setSelectedQuestions={setSelectedQuestions}
               onPreviewQuestionDetail={(question) => {
                 setQuestionToPreview(question);
-                setActive(2);
+                questionToPreviewForm.setValues({
+                  _id: question._id,
+                  text: question.text,
+                  options: question.options,
+                  type: question.type,
+                  shouldSave: question.shouldSave,
+                  answerRequired: question.answerRequired,
+                  isDefault: question.isDefault,
+                });
+                setActive(3);
               }}
             />
             <ElementQuestionModal.Actions>
@@ -410,7 +455,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
             />
             <Divider className="w-full !border-t-[1.5px]" color="#E4F0FF" />
             <TextInput
-              label="New Question"
+              label="Question"
               placeholder="Enter New Question"
               {...newQuestionForm.getInputProps("text")}
               className="w-full font-medium"
@@ -490,7 +535,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
               <Button
                 id="add-new-questions"
                 type="button"
-                onClick={handleCreateNewQuestion}
+                onClick={validateQuestionData}
                 buttonType="contained"
                 label="Add New Question"
                 className="sm:w-[208px] w-full"
@@ -549,7 +594,166 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
             </ElementQuestionModal.Actions>
           </ElementQuestionModal.Root>
         </Stepper.Step>
-        <Stepper.Step id="preview-question">Preview Question</Stepper.Step>
+        <Stepper.Step id="preview-question">
+          <ElementQuestionModal.Root>
+            <Button
+              id="goBack-to-existing-questions"
+              onClick={() => {
+                setActive(0);
+                setIsQuestionBeingEdited(false);
+              }}
+              type="button"
+              buttonType="iconButton"
+              icon={
+                <ARROW_RIGHT_ICON className="transform rotate-180 w-[20px] h-[20px]" />
+              }
+              label="Go Back"
+              className="!w-fit !font-semibold !h-fit !text-[18px]"
+            />
+            <Divider className="w-full !border-t-[1.5px]" color="#E4F0FF" />
+            <PreviewQuestion.Root>
+              {!isQuestionBeingEdited ? (
+                <Group className="!flex-col !gap-[8px] !items-start">
+                  <Text className="!text-[14px] text-dark-blue !font-medium">
+                    Question
+                  </Text>
+                  <div className="w-full text-[14px] font-medium p-[12px_16px] rounded-[8px] border border-[#cce2ff]">
+                    {questionToPreview.text}
+                  </div>
+                </Group>
+              ) : (
+                <TextInput
+                  className="w-full"
+                  label="Question"
+                  placeholder="Question..."
+                  {...questionToPreviewForm.getInputProps("text")}
+                  disabled={!isQuestionBeingEdited}
+                />
+              )}
+
+              {isQuestionBeingEdited && (
+                <ElementQuestionModal.AnswerTypeSelector
+                  label="Answer Type"
+                  typeOptions={[
+                    { label: "Options", value: "radio" },
+                    { label: "Text Field", value: "textArea" },
+                    { label: "Drop Down", value: "dropDown" },
+                  ]}
+                  onSelect={(answerType) => {
+                    questionToPreviewForm.setFieldValue("type", answerType);
+                  }}
+                  error={questionToPreviewForm.errors.type}
+                  value={questionToPreviewForm.values.type}
+                />
+              )}
+
+              {questionToPreview.type === "radio" ||
+              questionToPreview.type === "dropDown" ? (
+                !isQuestionBeingEdited ? (
+                  <PreviewQuestion.OptionsList>
+                    {questionToPreview.options.map((option, index) => (
+                      <PreviewQuestion.OptionCard
+                        key={index}
+                        optionNumber={index}
+                        optionData={option}
+                      />
+                    ))}
+                  </PreviewQuestion.OptionsList>
+                ) : (
+                  <ElementQuestionModal.NewQuestionOptionsList
+                    title="Options"
+                    minimumText="Add minimum 2 options"
+                    showAddButton={showAddOptionsButton}
+                    setShowAddButton={setShowAddOptionsButton}
+                    error={questionToPreviewForm.errors.options}
+                  >
+                    {!showAddOptionsButton && (
+                      <ElementQuestionCard.NewOption
+                        onSaveNewOption={(newOptionValue) => {
+                          setShowAddOptionsButton(true);
+                          questionToPreviewForm.setFieldValue("options", [
+                            ...questionToPreviewForm.values.options,
+                            {
+                              option: newOptionValue.text,
+                              iconId: "",
+                            },
+                          ]);
+                        }}
+                        onCancelNewOption={() => {
+                          setShowAddOptionsButton(true);
+                        }}
+                      />
+                    )}
+
+                    {questionToPreviewForm.values.options.map(
+                      (option, index) => (
+                        <ElementQuestionCard.ExistingOption
+                          key={index}
+                          optionNumber={index}
+                          optionData={option}
+                          onOpenIconModal={() => {
+                            setActive(2);
+                            setIconOptionIndex(index);
+                          }}
+                          onDeleteOption={() => {
+                            const newOptions =
+                              questionToPreviewForm.values.options.filter(
+                                (opt, i) => i !== index
+                              );
+                            questionToPreviewForm.setFieldValue(
+                              "options",
+                              newOptions
+                            );
+                          }}
+                        />
+                      )
+                    )}
+                  </ElementQuestionModal.NewQuestionOptionsList>
+                )
+              ) : (
+                <TextInput
+                  disabled
+                  className="w-full"
+                  label="Answer"
+                  placeholder="Answer..."
+                />
+              )}
+
+              <Checkbox
+                label="Answer is required"
+                {...questionToPreviewForm.getInputProps("answerRequired")}
+                checked={questionToPreviewForm.values.answerRequired}
+                disabled={!isQuestionBeingEdited}
+              />
+
+              <ElementQuestionModal.Actions>
+                <Button
+                  id="edit-previewed-question"
+                  type="button"
+                  onClick={() => {
+                    isQuestionBeingEdited
+                      ? validateQuestionData()
+                      : setIsQuestionBeingEdited(true);
+                  }}
+                  buttonType="contained"
+                  label={
+                    isQuestionBeingEdited ? "Update Question" : "Edit Question"
+                  }
+                  className="sm:w-[208px] w-full"
+                />
+                <Button
+                  id="goBack-to-existing-questions-list"
+                  label="Go Back"
+                  className="!text-primary sm:w-[208px] w-full hover:!bg-[#FF613E] hover:!border-[#FF613E]"
+                  type="button"
+                  buttonType="outlined"
+                  borderColor="#CCE2FF"
+                  onClick={() => setActive(0)}
+                />
+              </ElementQuestionModal.Actions>
+            </PreviewQuestion.Root>
+          </ElementQuestionModal.Root>
+        </Stepper.Step>
       </Stepper>
     </ModalRoot>
   );
