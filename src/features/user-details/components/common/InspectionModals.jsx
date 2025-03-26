@@ -771,6 +771,9 @@ const DeleteQuestion = ({
   currentElementId,
   questionsList,
 }) => {
+  // Hooks
+  const { templateId, roomId } = useParams();
+
   // Global States
   const selectedTemplateRoomElements = useTemplateStore(
     (state) => state.selectedTemplateRoomElements
@@ -787,16 +790,47 @@ const DeleteQuestion = ({
   const deleteQuestion = useMutation({
     mutationFn: () => {
       setIsDeleting(true);
-      return userDetailsAPIs.deleteElementFromTemplate({
-        templateId: selectedTemplateRoomElements.templateId,
-        roomId: selectedTemplateRoomElements.roomId,
-        elementIdArray: [currentElementId],
+
+      // Find the Ids of the questions to be deleted
+      const checklistIds = questionsToDelete.map((question) => question._id);
+
+      return userTemplatesAPIs.deleteQuestionsFromElement({
+        templateId: templateId,
+        roomId: roomId,
+        elementId: currentElementId,
+        checklistItemIdArray: checklistIds,
       });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
+      // Updated CheckList Questions
+      const updatedChecklist = questionsList.filter((question) => {
+        return !questionsToDelete.includes(question);
+      });
+
+      // Updated Template Room Elements
+      const updatedTemplateRoomElements = selectedTemplateRoomElements.map(
+        (roomElement) => {
+          if (roomElement._id === currentElementId) {
+            return {
+              ...roomElement,
+              checklist: updatedChecklist,
+            };
+          }
+          return roomElement;
+        }
+      );
+
+      setSelectedTemplateRoomElements(updatedTemplateRoomElements);
+
+      // Reset Local States
+      setQuestionsToDelete([]);
       setIsDeleting(false);
-      setSelectedTemplateRoomElements(data);
+
       onCloseModal();
+      toast.success("Success!", {
+        description: "Questions deleted successfully.",
+        duration: 3000,
+      });
     },
     onError: (error) => {
       toast.error("Error!", {
