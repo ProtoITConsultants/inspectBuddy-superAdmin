@@ -42,6 +42,8 @@ const ADD_NEW_ROOM_ELEMENT_IN_TEMPLATE_URL = "/templateAddElement";
 const DELETE_ROOM_ELEMENT_FROM_TEMPLATE_URL = "/templateDeleteElement";
 const ADD_SELECTED_QUESTIONS_TO_ELEMENT_URL = ({ userId }) =>
   `/templateAddChecklistItem?id=${encodeURIComponent(userId)}`;
+const CREATE_NEW_QUESTION_IN_ELEMENT_URL = ({ userId }) =>
+  `/templateAddChecklistItem?id=${encodeURIComponent(userId)}`;
 
 // Inspections
 const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
@@ -75,6 +77,7 @@ const USER_DETAILS_ENDPOINTS = {
   ADD_NEW_ROOM_ELEMENT_IN_TEMPLATE_URL,
   DELETE_ROOM_ELEMENT_FROM_TEMPLATE_URL,
   ADD_SELECTED_QUESTIONS_TO_ELEMENT_URL,
+  CREATE_NEW_QUESTION_IN_ELEMENT_URL,
   // Inspections
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,

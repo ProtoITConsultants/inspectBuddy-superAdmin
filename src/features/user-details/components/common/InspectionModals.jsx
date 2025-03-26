@@ -12,6 +12,7 @@ import { useForm } from "@mantine/form";
 import ElementQuestionCard from "./ElementQuestionCard";
 import ElementQuestionModal from "./AddElementQuestionComponents";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
+import { userTemplatesAPIs } from "../../api/template";
 
 const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   // Hooks
@@ -108,6 +109,9 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
 
   // Global States
   const savedQuestions = useTemplateStore((state) => state.savedQuestions);
+  const setSavedQuestions = useTemplateStore(
+    (state) => state.setSavedQuestions
+  );
   const selectedTemplateRoomElements = useTemplateStore(
     (state) => state.selectedTemplateRoomElements
   );
@@ -209,7 +213,58 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     },
   });
 
-  const createNewQuestion = useMutation({});
+  const createNewQuestion = useMutation({
+    mutationFn: () => {
+      // Validate the form
+      newQuestionForm.validate();
+
+      // Cancel API call if form is invalid
+      if (!newQuestionForm.isValid()) {
+        return console.log("Form is invalid");
+      }
+
+      // Call API
+      return userTemplatesAPIs.createNewQuestion({
+        templateId: templateId,
+        roomId: roomId,
+        userId: userId,
+        elementId: currentElementId,
+        questions: [newQuestionForm.values],
+      });
+    },
+    onSuccess: (data) => {
+      const shouldSaveQuestion = newQuestionForm.values.shouldSave;
+
+      if (shouldSaveQuestion) {
+        setSavedQuestions(data.newSavedQuestions[0]);
+      }
+
+      const updatedElements = selectedTemplateRoomElements.map((element) => {
+        if (element._id === currentElementId) {
+          return {
+            ...element,
+            checklist: [...element.checklist, ...data.newChecklistItems],
+          };
+        }
+        return element;
+      });
+
+      setSelectedTemplateRoomElements(updatedElements);
+
+      newQuestionForm.reset();
+      toast.success("Success!", {
+        description: "Questions added successfully.",
+        duration: 3000,
+      });
+      onCloseModal();
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't create new Question.",
+        duration: 3000,
+      });
+    },
+  });
 
   // UseEffect to filter the already added questions
   useEffect(() => {
@@ -432,7 +487,10 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
                 type="button"
                 buttonType="outlined"
                 borderColor="#CCE2FF"
-                onClick={() => onCloseModal()}
+                onClick={() => {
+                  setActive(0);
+                  newQuestionForm.reset();
+                }}
               />
             </ElementQuestionModal.Actions>
           </ElementQuestionModal.Root>
