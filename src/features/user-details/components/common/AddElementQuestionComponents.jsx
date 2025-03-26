@@ -83,7 +83,7 @@ const Actions = ({ children }) => (
 );
 
 // Create New Question Modal Elements
-const AnswerTypeSelector = ({ label, typeOptions, onSelect }) => {
+const AnswerTypeSelector = ({ label, typeOptions, onSelect, error }) => {
   return (
     <div className="space-y-[8px]">
       <p className="text-darkBlue font-medium text-[14px]">{label}</p>
@@ -93,6 +93,11 @@ const AnswerTypeSelector = ({ label, typeOptions, onSelect }) => {
             <Radio label={type.label} value={type.value} key={type.label} />
           ))}
         </div>
+        {error && (
+          <p className="text-[#fa5252] text-[12px] font-medium mt-[5px]">
+            {error}
+          </p>
+        )}
       </RadioGroup>
     </div>
   );
@@ -104,25 +109,35 @@ const NewQuestionOptionsList = ({
   minimumText,
   showAddButton,
   setShowAddButton,
-}) => (
-  <div className="space-y-[8px]">
-    <p className="text-darkBlue font-medium text-[14px]">
-      {title}&nbsp;
-      <span className="text-[#7A8094]">({minimumText})</span>
-    </p>
-    <div
-      className="grid grid-cols-2 gap-x-[20px] gap-y-[8px] max-h-[105px] overflow-auto"
-      id="newQuestionOptionsList"
-    >
-      {children}
+  error,
+}) => {
+  console.log("error", error);
+
+  return (
+    <div className="space-y-[8px]">
+      <p className="text-darkBlue font-medium text-[14px]">
+        {title}&nbsp;
+        <span className="text-[#7A8094]">({minimumText})</span>
+      </p>
+      <div
+        className="grid grid-cols-2 gap-x-[20px] gap-y-[8px] max-h-[105px] overflow-auto"
+        id="newQuestionOptionsList"
+      >
+        {children}
+      </div>
+      <AddNewItemButton
+        title="Add Option"
+        showButton={showAddButton}
+        onClick={() => setShowAddButton(false)}
+      />
+      {error && (
+        <p className="text-[#fa5252] text-[12px] font-medium mt-[5px]">
+          {error}
+        </p>
+      )}
     </div>
-    <AddNewItemButton
-      title="Add Option"
-      showButton={showAddButton}
-      onClick={() => setShowAddButton(false)}
-    />
-  </div>
-);
+  );
+};
 
 const OptionIconsList = ({ selectedIcon, onIconSelect }) => (
   <div className="flex flex-col gap-[12px]">

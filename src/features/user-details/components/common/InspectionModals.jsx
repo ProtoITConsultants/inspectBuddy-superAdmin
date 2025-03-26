@@ -149,11 +149,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
 
     validate: {
       text: (value) => (value.length > 0 ? null : "Question is required!"),
-      options: (value, values) =>
-        values.type !== "textArea" && value.length === 0
-          ? "Options are required for checkbox!"
-          : null,
-      type: (value) => (value.length > 0 ? null : "Type is required!"),
+      type: (value) => (value ? null : "Type is required!"),
     },
   });
 
@@ -214,26 +210,15 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
   });
 
   const createNewQuestion = useMutation({
-    mutationFn: () => {
-      setIsAddingQuestion(true);
-
-      // Validate the form
-      newQuestionForm.validate();
-
-      // Cancel API call if form is invalid
-      if (!newQuestionForm.isValid()) {
-        return console.log("Form is invalid");
-      }
-
-      // Call API
-      return userTemplatesAPIs.createNewQuestion({
+    mutationFn: () =>
+      userTemplatesAPIs.createNewQuestion({
         templateId: templateId,
         roomId: roomId,
         userId: userId,
         elementId: currentElementId,
         questions: [newQuestionForm.values],
-      });
-    },
+      }),
+
     onSuccess: (data) => {
       const shouldSaveQuestion = newQuestionForm.values.shouldSave;
 
@@ -252,7 +237,6 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
       });
 
       setSelectedTemplateRoomElements(updatedElements);
-      setIsAddingQuestion(false);
       newQuestionForm.reset();
       toast.success("Success!", {
         description: "Questions added successfully.",
@@ -261,7 +245,6 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
       onCloseModal();
     },
     onError: (error) => {
-      setIsAddingQuestion(false);
       toast.error("Error!", {
         description: error.message || "Couldn't create new Question.",
         duration: 3000,
@@ -329,6 +312,33 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     setSelectedIcon("");
   };
 
+  // handle Create New Question
+  const handleCreateNewQuestion = () => {
+    // Validation of the options
+    // If we do it inside Form, we don't get the updated state of form
+    // So, check fails for the first time, when we change type of question
+    if (
+      newQuestionForm.values.type !== "textArea" &&
+      newQuestionForm.values.options.length < 2
+    ) {
+      console.log("There is an error");
+      newQuestionForm.setFieldError("options", "At least 2 options required!");
+
+      return console.log("At least 2 options required!");
+    }
+
+    // Validate the form
+    newQuestionForm.validate();
+
+    // Cancel API call if form is invalid
+    if (!newQuestionForm.isValid()) {
+      return console.log("Form is invalid");
+    }
+
+    //  Create New Question
+    createNewQuestion.mutate();
+  };
+
   return (
     <ModalRoot
       id="add-template-question-modal"
@@ -337,7 +347,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
         onCloseModal();
         setIsAddingQuestion(false);
       }}
-      loadingOverlay={isAddingQuestion}
+      loadingOverlay={isAddingQuestion || createNewQuestion.isPending}
     >
       <Stepper
         styles={{
@@ -420,6 +430,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
               onSelect={(answerType) => {
                 newQuestionForm.setFieldValue("type", answerType);
               }}
+              error={newQuestionForm.errors.type}
             />
 
             {(newQuestionForm.values.type === "radio" ||
@@ -429,6 +440,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
                 minimumText="Add minimum 2 options"
                 showAddButton={showAddOptionsButton}
                 setShowAddButton={setShowAddOptionsButton}
+                error={newQuestionForm.errors.options}
               >
                 {!showAddOptionsButton && (
                   <ElementQuestionCard.NewOption
@@ -478,7 +490,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
               <Button
                 id="add-new-questions"
                 type="button"
-                onClick={createNewQuestion.mutate}
+                onClick={handleCreateNewQuestion}
                 buttonType="contained"
                 label="Add New Question"
                 className="sm:w-[208px] w-full"
