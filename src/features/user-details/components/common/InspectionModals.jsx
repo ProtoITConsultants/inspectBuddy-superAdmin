@@ -215,6 +215,8 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
 
   const createNewQuestion = useMutation({
     mutationFn: () => {
+      setIsAddingQuestion(true);
+
       // Validate the form
       newQuestionForm.validate();
 
@@ -250,7 +252,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
       });
 
       setSelectedTemplateRoomElements(updatedElements);
-
+      setIsAddingQuestion(false);
       newQuestionForm.reset();
       toast.success("Success!", {
         description: "Questions added successfully.",
@@ -259,6 +261,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
       onCloseModal();
     },
     onError: (error) => {
+      setIsAddingQuestion(false);
       toast.error("Error!", {
         description: error.message || "Couldn't create new Question.",
         duration: 3000,
