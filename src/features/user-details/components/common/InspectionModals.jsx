@@ -765,9 +765,110 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
   );
 };
 
+const DeleteQuestion = ({
+  isModalOpen,
+  onCloseModal,
+  currentElementId,
+  questionsList,
+}) => {
+  // Global States
+  const selectedTemplateRoomElements = useTemplateStore(
+    (state) => state.selectedTemplateRoomElements
+  );
+  const setSelectedTemplateRoomElements = useTemplateStore(
+    (state) => state.setSelectedTemplateRoomElements
+  );
+
+  // Local States
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [questionsToDelete, setQuestionsToDelete] = useState([]);
+
+  // Mutations
+  const deleteQuestion = useMutation({
+    mutationFn: () => {
+      setIsDeleting(true);
+      return userDetailsAPIs.deleteElementFromTemplate({
+        templateId: selectedTemplateRoomElements.templateId,
+        roomId: selectedTemplateRoomElements.roomId,
+        elementIdArray: [currentElementId],
+      });
+    },
+    onSuccess: (data) => {
+      setIsDeleting(false);
+      setSelectedTemplateRoomElements(data);
+      onCloseModal();
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't delete element.",
+        duration: 3000,
+      });
+      setIsDeleting(false);
+    },
+  });
+
+  return (
+    <ModalRoot
+      id="delete-template-roomElement-modal"
+      openModal={isModalOpen}
+      onClose={() => {
+        setIsDeleting(false);
+        onCloseModal();
+      }}
+      loadingOverlay={isDeleting}
+    >
+      <h2 className="text-darkBlue font-bold text-[24px]">
+        Delete Question from a Room Element
+      </h2>
+      <div className="mt-[8px] mb-[16px] flex flex-col gap-[16px] max-h-[250px]">
+        <p className="text-darkBlue font-medium text-[16px]">
+          Please Select Questions from the list that you want to remove from
+          checklist?
+        </p>
+        <div className="flex flex-col gap-[16px] h-full overflow-auto">
+          {questionsList?.map((question, index) => (
+            <Checkbox
+              key={index}
+              color="blue"
+              label={question?.text}
+              onChange={() => {
+                setQuestionsToDelete((prev) => [...prev, question]);
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <Group className="!w-full md:!flex-row !flex-col !justify-center">
+        <Button
+          id="delete-template-roomElement-questions"
+          type="button"
+          label="Delete Questions"
+          buttonType="contained"
+          buttonColor="#FF4D4F"
+          className="sm:w-[216px] w-full font-bold !bg-[#FF4D4F] !text-white"
+          onClick={deleteQuestion.mutate}
+        />
+        <Button
+          type="button"
+          label="Cancel"
+          buttonType="outlined"
+          borderColor="#CCE2FF"
+          className="sm:w-[216px] w-full font-bold !text-[#2A85FF]"
+          onClick={() => {
+            setQuestionsToDelete([]);
+            onCloseModal();
+          }}
+        />
+      </Group>
+    </ModalRoot>
+  );
+};
+
 const InspectionModals = {
   DeleteElement,
   AddQuestion,
+  DeleteQuestion,
 };
 
 export default InspectionModals;

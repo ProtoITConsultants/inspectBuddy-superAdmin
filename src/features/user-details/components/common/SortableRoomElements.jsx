@@ -221,6 +221,7 @@ const RoomElement = React.memo(function RoomElement({
 
 const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+  const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
 
   // form
   const elementForm = useForm({
@@ -251,6 +252,15 @@ const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
           isModalOpen={showAddQuestionModal}
           onCloseModal={() => setShowAddQuestionModal(false)}
           currentElementId={elementId}
+        />
+      )}
+
+      {setShowDeleteQuestionModal && (
+        <InspectionModals.DeleteQuestion
+          isModalOpen={showDeleteQuestionModal}
+          onCloseModal={() => setShowDeleteQuestionModal(false)}
+          currentElementId={elementId}
+          questionsList={elementQuestions}
         />
       )}
       <div
@@ -343,7 +353,7 @@ const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
                 buttonType="iconButton"
                 label="Remove Question"
                 type="button"
-                onClick={() => {}}
+                onClick={() => setShowDeleteQuestionModal(true)}
                 icon={
                   <DELETE_ICON className="text-[#FF613E] !w-[16px] !h-[16px]" />
                 }
