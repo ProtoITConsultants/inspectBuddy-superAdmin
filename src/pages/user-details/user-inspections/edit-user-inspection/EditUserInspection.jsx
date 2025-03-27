@@ -81,7 +81,16 @@ const EditUserInspection = () => {
         roomName: newRoomName,
       }),
     onSuccess: (data) => {
-      setInspectionRooms([...inspectionRooms, data]);
+      //  Add Element Count in newly added room
+      const newRoomData = {
+        elementCount: 0,
+        ...data,
+      };
+
+      // Update State
+      setInspectionRooms([...inspectionRooms, newRoomData]);
+
+      // Show Success Toast
       toast.success("Success!", {
         description: "Room added successfully.",
         duration: 3000,
