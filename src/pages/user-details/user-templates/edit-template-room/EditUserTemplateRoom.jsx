@@ -43,9 +43,7 @@ const EditUserTemplateRoom = () => {
 
     validate: {
       roomName: (value) =>
-        value.length >= 4
-          ? null
-          : "Template Name must be at least 4 characters.",
+        value.length >= 4 ? null : "Room's Name must be at least 4 characters.",
     },
   });
 
