@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router";
 import { useInspectionStore } from "../../../../store/inspectionStore";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { userInspectionsAPIs } from "../../../../features/user-details/api/user-inspections";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -47,7 +47,7 @@ const EditUserInspection = () => {
     return () => {};
   }, [data, setInspectionRooms]);
 
-  // Mutations
+  // Update Room Order - Mutation
   const updateRoomOrder = useMutation({
     mutationFn: () => {
       setRearrangingRooms(false);
@@ -73,6 +73,7 @@ const EditUserInspection = () => {
     },
   });
 
+  //  Add New Room - Mutation
   const createNewRoom = useMutation({
     mutationFn: (newRoomName) =>
       userInspectionsAPIs.addNewRoomInInspection({
@@ -95,6 +96,7 @@ const EditUserInspection = () => {
     },
   });
 
+  //  Save Inspection Draft - Mutation
   const saveInspectionDraft = useMutation({
     mutationFn: () => {
       setTimeout(() => {
@@ -120,6 +122,7 @@ const EditUserInspection = () => {
     },
   });
 
+  // Delete Room - Mutation
   const deleteRoom = useMutation({
     mutationFn: () =>
       userInspectionsAPIs.deleteRoomFromInspection({
@@ -127,21 +130,22 @@ const EditUserInspection = () => {
         roomIdArray: [roomToBeDelete._id],
       }),
 
-    onSuccess: (roomId) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["inspectionroomsData", inspectionId],
       });
 
       const updatedRooms = inspectionRooms.filter(
-        (room) => room._id !== roomId
+        (room) => room._id !== roomToBeDelete._id
       );
       setInspectionRooms(updatedRooms);
-      setOpenDeleteRoomModal(false);
 
       toast.success("Success!", {
         description: "Room deleted successfully.",
         duration: 3000,
       });
+
+      setOpenDeleteRoomModal(false);
     },
 
     onError: (error) => {
@@ -166,112 +170,114 @@ const EditUserInspection = () => {
   }
 
   return (
-    <DetailPagesRoot>
-      <EditInspection.Root>
-        <EditInspection.Header heading="Rooms">
-          {rearrangingRooms ? (
-            <EditInspection.SaveActionBtn
-              onSave={updateRoomOrder.mutate}
-              onCancel={() => setRearrangingRooms(false)}
-            />
-          ) : data?.rooms?.length > 1 ? (
-            <EditInspection.RearrangeElementsBtn
-              onClick={() => {
-                setRearrangingRooms(true);
-                setAddingRoom(false);
-              }}
-            />
-          ) : null}
-        </EditInspection.Header>
-        <EditInspection.EditInspectionBody>
-          {inspectionRooms.length < 1 ? (
-            <EditInspection.NoRoomsMessage />
-          ) : (
-            <EditInspection.SortableRoomsList
-              roomsData={inspectionRooms}
-              onDragEnd={(updatedRoomsList) =>
-                setInspectionRooms(updatedRoomsList)
-              }
-            >
-              {openDeleteRoomModal && (
-                <DeleteTemplateRoomModal
-                  isModalOpen={openDeleteRoomModal}
-                  onCloseModal={() => {
-                    setOpenDeleteRoomModal(false);
-                  }}
-                  roomName={roomToBeDelete?.name}
-                  onDeleteRoom={deleteRoom.mutate}
-                  isDeletingRoom={deleteRoom.isPending}
-                />
-              )}
-              {inspectionRooms.map((room) => (
-                <EditInspection.SortableRoomCard
-                  key={room?._id}
-                  id={room?._id}
-                  itemData={room}
-                  rearrangingRooms={rearrangingRooms}
-                >
-                  <EditInspection.ExistingRoomCard
+    <React.Fragment>
+      {openDeleteRoomModal && (
+        <DeleteTemplateRoomModal
+          isModalOpen={openDeleteRoomModal}
+          onCloseModal={() => {
+            setOpenDeleteRoomModal(false);
+          }}
+          roomName={roomToBeDelete?.name}
+          onDeleteRoom={deleteRoom.mutate}
+          isDeletingRoom={deleteRoom.isPending}
+        />
+      )}
+      <DetailPagesRoot>
+        <EditInspection.Root>
+          <EditInspection.Header heading="Rooms">
+            {rearrangingRooms ? (
+              <EditInspection.SaveActionBtn
+                onSave={updateRoomOrder.mutate}
+                onCancel={() => setRearrangingRooms(false)}
+              />
+            ) : data?.rooms?.length > 1 ? (
+              <EditInspection.RearrangeElementsBtn
+                onClick={() => {
+                  setRearrangingRooms(true);
+                  setAddingRoom(false);
+                }}
+              />
+            ) : null}
+          </EditInspection.Header>
+          <EditInspection.EditInspectionBody>
+            {inspectionRooms.length < 1 ? (
+              <EditInspection.NoRoomsMessage />
+            ) : (
+              <EditInspection.SortableRoomsList
+                roomsData={inspectionRooms}
+                onDragEnd={(updatedRoomsList) =>
+                  setInspectionRooms(updatedRoomsList)
+                }
+              >
+                {inspectionRooms.map((room) => (
+                  <EditInspection.SortableRoomCard
+                    key={room?._id}
+                    id={room?._id}
                     itemData={room}
                     rearrangingRooms={rearrangingRooms}
-                    onClickDeleteRoom={() => {
-                      setRoomToBeDelete({
-                        name: room?.name,
-                        _id: room?._id,
-                      });
-                      setOpenDeleteRoomModal(true);
-                    }}
-                  />
-                </EditInspection.SortableRoomCard>
-              ))}
-            </EditInspection.SortableRoomsList>
-          )}
+                  >
+                    <EditInspection.ExistingRoomCard
+                      itemData={room}
+                      rearrangingRooms={rearrangingRooms}
+                      onClickDeleteRoom={() => {
+                        setRoomToBeDelete({
+                          name: room?.name,
+                          _id: room?._id,
+                        });
+                        setOpenDeleteRoomModal(true);
+                      }}
+                    />
+                  </EditInspection.SortableRoomCard>
+                ))}
+              </EditInspection.SortableRoomsList>
+            )}
 
-          {createNewRoom.isPending && (
-            <Skeleton width="100%" height={48} radius={8} />
-          )}
+            {createNewRoom.isPending && (
+              <Skeleton width="100%" height={48} radius={8} />
+            )}
 
-          {addingRoom && (
-            <EditInspection.NewRoomCard
-              onCancel={() => setAddingRoom(false)}
-              onSaveNewItem={(newRoomName) => {
-                setAddingRoom(false);
-                createNewRoom.mutate(newRoomName);
-              }}
-            />
-          )}
-        </EditInspection.EditInspectionBody>
-        <EditInspection.AddNewItemBtn
-          onClick={() => setAddingRoom(true)}
-          title="Add a Room"
-          showButton={!addingRoom && !rearrangingRooms}
-        />
-        <EditInspection.EditActions>
-          <Link
-            to={`/user-details/${userId}/inspections/finalize-inspection/${inspectionId}`}
-            id="continue-to-finalize-inspection"
-            className={`px-6 py-3 h-12 rounded-lg flex items-center justify-center sm:w-[216px] w-full font-bold text-white ${
-              inspectionRooms.length === 0 ||
-              inspectionRooms.some((room) => !room.isCompleted)
-                ? "pointer-events-none cursor-not-allowed bg-[#CBCBCB]"
-                : "bg-primary"
-            }`}
-          >
-            Continue
-          </Link>
-          <Button
-            id="save-template-draft"
-            label="Save as Draft"
-            type="button"
-            onClick={saveInspectionDraft.mutate}
-            borderColor="#FF613E"
-            className="sm:w-[216px] w-full font-bold !text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
-            buttonType="outlined"
-            disabled={inspectionRooms.length === 0 || addingRoom}
+            {addingRoom && (
+              <EditInspection.NewRoomCard
+                onCancel={() => setAddingRoom(false)}
+                onSaveNewItem={(newRoomName) => {
+                  setAddingRoom(false);
+                  createNewRoom.mutate(newRoomName);
+                }}
+              />
+            )}
+          </EditInspection.EditInspectionBody>
+          <EditInspection.AddNewItemBtn
+            onClick={() => setAddingRoom(true)}
+            title="Add a Room"
+            showButton={!addingRoom && !rearrangingRooms}
           />
-        </EditInspection.EditActions>
-      </EditInspection.Root>
-    </DetailPagesRoot>
+          <EditInspection.EditActions>
+            <Link
+              to={`/user-details/${userId}/inspections/finalize-inspection/${inspectionId}`}
+              id="continue-to-finalize-inspection"
+              className={`px-6 py-3 h-12 rounded-lg flex items-center justify-center sm:w-[216px] w-full font-bold text-white ${
+                inspectionRooms.length === 0 ||
+                inspectionRooms.some((room) => !room.isCompleted)
+                  ? "pointer-events-none cursor-not-allowed bg-[#CBCBCB]"
+                  : "bg-primary"
+              }`}
+            >
+              Continue
+            </Link>
+            <Button
+              id="save-template-draft"
+              label="Save as Draft"
+              type="button"
+              onClick={saveInspectionDraft.mutate}
+              borderColor="#FF613E"
+              className="sm:w-[216px] w-full font-bold !text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
+              buttonType="outlined"
+              disabled={inspectionRooms.length === 0 || addingRoom}
+            />
+          </EditInspection.EditActions>
+        </EditInspection.Root>
+      </DetailPagesRoot>
+    </React.Fragment>
   );
 };
 
