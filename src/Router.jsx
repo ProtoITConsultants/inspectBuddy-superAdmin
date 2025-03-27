@@ -24,6 +24,7 @@ import ViewUserTemplate from "./pages/user-details/user-templates/view-user-temp
 import EditUserTemplate from "./pages/user-details/user-templates/edit-user-template/EditUserTemplate";
 import EditUserTemplateRoom from "./pages/user-details/user-templates/edit-template-room/EditUserTemplateRoom";
 import ViewInspectionDetails from "./pages/user-details/user-inspections/view-inspection-details/ViewInspectionDetails";
+import EditUserInspection from "./pages/user-details/user-inspections/edit-user-inspection/EditUserInspection";
 
 export const router = createBrowserRouter([
   {
@@ -141,6 +142,10 @@ export const router = createBrowserRouter([
           {
             path: ":inspectionId",
             element: <ViewInspectionDetails />,
+          },
+          {
+            path: ":inspectionId/edit-details",
+            element: <EditUserInspection />,
           },
         ],
       },
