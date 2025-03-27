@@ -27,4 +27,16 @@ export const convertDateFormate = {
 
     return formatedDate;
   },
+
+  inspectionDetails: (date) => {
+    const newDate = new Date(date);
+    const formatedDate = Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour12: true,
+    }).format(newDate);
+
+    return formatedDate;
+  },
 };

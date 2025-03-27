@@ -17,15 +17,15 @@ const ROUTES = [
     title: "Edit Property",
   },
   {
-    path: "/user-details/:userId/inspection-details/:inspectionId",
-    title: "View Inspection",
+    path: "/user-details/:userId/inspections/details/:inspectionId",
+    title: "Inspection Details",
   },
   {
-    path: "/user-details/:userId/inspection-details/:inspectionId/edit-inspection",
+    path: "/user-details/:userId/inspections/details/:inspectionId/edit-details",
     title: "Edit Inspection",
   },
   {
-    path: "/user-details/:userId/inspection-details/:inspectionId/edit-inspection/:roomId",
+    path: "/user-details/:userId/inspections/details/:inspectionId/edit-details/:roomId",
     title: "Edit Room",
   },
   {

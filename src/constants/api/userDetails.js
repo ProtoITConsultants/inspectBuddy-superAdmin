@@ -51,6 +51,8 @@ const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
   `/getInspections?id=${encodeURIComponent(userId)}`;
 const FETCH_USER_INSPECTION_STATS_URL = ({ userId }) =>
   `/getUserInspectionAndPropertyData?id=${encodeURIComponent(userId)}`;
+const FETCH_INSPECTION_DETAILS_URL = ({ inspectionId }) =>
+  `/getSpecificInspection/${encodeURIComponent(inspectionId)}`;
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -83,6 +85,7 @@ const USER_DETAILS_ENDPOINTS = {
   // Inspections
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,
+  FETCH_INSPECTION_DETAILS_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;
