@@ -1,62 +1,13 @@
-import { useState } from "react";
 import { ModalRoot } from "../../../../../components/ui/Modal";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { userDetailsAPIs } from "../../../api";
 import Button from "../../../../../components/ui/Button";
-// import { toast } from "sonner";
-// import { useTemplateStore } from "../../../../../store/templateStore";
 
 const DeleteTemplateRoomModal = ({
   isModalOpen,
   onCloseModal,
   roomName,
-  // templateId,
-  // roomId,
   onDeleteRoom,
   isDeletingRoom,
 }) => {
-  // hooks
-  // const queryClient = useQueryClient();
-
-  // Global States
-  // const templateRooms = useTemplateStore((state) => state.templateRooms);
-  // const setTemplateRooms = useTemplateStore((state) => state.setTemplateRooms);
-
-  // const deleteRoom = useMutation({
-  //   mutationFn: () => {
-  //     setIsDeleting(true);
-  //     return userDetailsAPIs.deleteRoomFromTemplate({
-  //       templateId,
-  //       roomIdArray: [roomId],
-  //     });
-  //   },
-
-  //   onSuccess: () => {
-  //     // Invalidate the cache
-  //     queryClient.invalidateQueries({
-  //       queryKey: ["templateroomsData", templateId],
-  //     });
-
-  //     // updated Room List
-  //     const updatedRooms = templateRooms.filter((room) => room._id !== roomId);
-  //     setTemplateRooms(updatedRooms);
-
-  //     onCloseModal();
-  //     setIsDeleting(false);
-  //     toast.success("Success!", {
-  //       description: "Room deleted successfully.",
-  //       duration: 3000,
-  //     });
-  //   },
-  //   onError: (error) => {
-  //     toast.error("Error!", {
-  //       description: error.message || `Couldn't delete room.`,
-  //       duration: 3000,
-  //     });
-  //     setIsDeleting(false);
-  //   },
-  // });
-
   return (
     <ModalRoot
       id="delete-template-room-modal"
