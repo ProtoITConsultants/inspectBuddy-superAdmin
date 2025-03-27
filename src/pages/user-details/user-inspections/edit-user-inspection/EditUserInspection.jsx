@@ -2,22 +2,28 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useInspectionStore } from "../../../../store/inspectionStore";
 import { useEffect, useState } from "react";
 import { userInspectionsAPIs } from "../../../../features/user-details/api/user-inspections";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { InspectionRoomsSkeleton } from "../../../../features/user-details/components/common/Skeletons";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import EditInspection from "../../../../features/user-details/components/common/EditInspectionDetails";
 import Button from "../../../../components/ui/Button";
 import { Skeleton } from "@mantine/core";
+import DeleteTemplateRoomModal from "../../../../features/user-details/components/templates/confirmration-modals/DeleteTemplateRoomModal";
 
 const EditUserInspection = () => {
   // Hooks
   const { userId, inspectionId } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // Local States
   const [addingRoom, setAddingRoom] = useState(false);
   const [rearrangingRooms, setRearrangingRooms] = useState(false);
+
+  //  Delete Room States
+  const [openDeleteRoomModal, setOpenDeleteRoomModal] = useState(false);
+  const [roomToBeDelete, setRoomToBeDelete] = useState({});
 
   // Global States
   const inspectionRooms = useInspectionStore((state) => state.inspectionRooms);
@@ -114,6 +120,38 @@ const EditUserInspection = () => {
     },
   });
 
+  const deleteRoom = useMutation({
+    mutationFn: () =>
+      userInspectionsAPIs.deleteRoomFromInspection({
+        inspectionId: inspectionId,
+        roomIdArray: [roomToBeDelete._id],
+      }),
+
+    onSuccess: (roomId) => {
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionroomsData", inspectionId],
+      });
+
+      const updatedRooms = inspectionRooms.filter(
+        (room) => room._id !== roomId
+      );
+      setInspectionRooms(updatedRooms);
+      setOpenDeleteRoomModal(false);
+
+      toast.success("Success!", {
+        description: "Room deleted successfully.",
+        duration: 3000,
+      });
+    },
+
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || `Couldn't delete Room.`,
+        duration: 3000,
+      });
+    },
+  });
+
   // States of Fetch Inspection Details Query
   if (isPending || updateRoomOrder.isPending || saveInspectionDraft.isPending) {
     return <InspectionRoomsSkeleton />;
@@ -150,12 +188,43 @@ const EditUserInspection = () => {
             <EditInspection.NoRoomsMessage />
           ) : (
             <EditInspection.SortableRoomsList
-              rearrangingRooms={rearrangingRooms}
               roomsData={inspectionRooms}
               onDragEnd={(updatedRoomsList) =>
                 setInspectionRooms(updatedRoomsList)
               }
-            />
+            >
+              {openDeleteRoomModal && (
+                <DeleteTemplateRoomModal
+                  isModalOpen={openDeleteRoomModal}
+                  onCloseModal={() => {
+                    setOpenDeleteRoomModal(false);
+                  }}
+                  roomName={roomToBeDelete?.name}
+                  onDeleteRoom={deleteRoom.mutate}
+                  isDeletingRoom={deleteRoom.isPending}
+                />
+              )}
+              {inspectionRooms.map((room) => (
+                <EditInspection.SortableRoomCard
+                  key={room?._id}
+                  id={room?._id}
+                  itemData={room}
+                  rearrangingRooms={rearrangingRooms}
+                >
+                  <EditInspection.ExistingRoomCard
+                    itemData={room}
+                    rearrangingRooms={rearrangingRooms}
+                    onClickDeleteRoom={() => {
+                      setRoomToBeDelete({
+                        name: room?.name,
+                        _id: room?._id,
+                      });
+                      setOpenDeleteRoomModal(true);
+                    }}
+                  />
+                </EditInspection.SortableRoomCard>
+              ))}
+            </EditInspection.SortableRoomsList>
           )}
 
           {createNewRoom.isPending && (
