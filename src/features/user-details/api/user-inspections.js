@@ -28,7 +28,6 @@ export const userInspectionsAPIs = {
           roomName,
         }
       );
-      console.log(response.data);
       return response.data.newRoom;
     } catch (error) {
       console.error("Error adding new Room in Inspection", error);
