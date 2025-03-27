@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router";
 import Button from "./../../../../components/ui/Button";
 import { useTemplateStore } from "../../../../store/templateStore";
+import { InspectionRoomsSkeleton } from "../../../../features/user-details/components/common/Skeletons";
 
 const EditUserTemplate = () => {
   // Hooks
@@ -108,7 +109,7 @@ const EditUserTemplate = () => {
   }, [data, setTemplateRooms]);
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <InspectionRoomsSkeleton />;
   }
 
   if (isError) {
