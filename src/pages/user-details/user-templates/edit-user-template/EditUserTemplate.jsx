@@ -9,6 +9,7 @@ import Button from "./../../../../components/ui/Button";
 import { useTemplateStore } from "../../../../store/templateStore";
 import { InspectionRoomsSkeleton } from "../../../../features/user-details/components/common/Skeletons";
 import DeleteTemplateRoomModal from "../../../../features/user-details/components/templates/confirmration-modals/DeleteTemplateRoomModal";
+import { Skeleton } from "@mantine/core";
 
 const EditUserTemplate = () => {
   // Hooks
@@ -125,12 +126,14 @@ const EditUserTemplate = () => {
         roomIdArray: [roomToBeDelete._id],
       }),
 
-    onSuccess: (roomId) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["templateroomsData", templateId],
       });
 
-      const updatedRooms = templateRooms.filter((room) => room._id !== roomId);
+      const updatedRooms = templateRooms.filter(
+        (room) => room._id !== roomToBeDelete._id
+      );
       setTemplateRooms(updatedRooms);
 
       toast.success("Success!", {
@@ -225,10 +228,17 @@ const EditUserTemplate = () => {
               </EditInspection.SortableRoomsList>
             )}
 
+            {handleAddNewRoom.isPending && (
+              <Skeleton width="100%" height={48} radius={8} />
+            )}
+
             {addingRoom && (
               <EditInspection.NewRoomCard
                 onCancel={() => setAddingRoom(false)}
-                onSaveNewItem={handleAddNewRoom.mutate}
+                onSaveNewItem={(newRoomName) => {
+                  setAddingRoom(false);
+                  handleAddNewRoom.mutate(newRoomName);
+                }}
               />
             )}
           </EditInspection.EditInspectionBody>
