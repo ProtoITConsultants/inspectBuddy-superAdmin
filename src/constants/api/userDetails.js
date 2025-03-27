@@ -53,6 +53,9 @@ const FETCH_USER_INSPECTION_STATS_URL = ({ userId }) =>
   `/getUserInspectionAndPropertyData?id=${encodeURIComponent(userId)}`;
 const FETCH_INSPECTION_DETAILS_URL = ({ inspectionId }) =>
   `/getSpecificInspection/${encodeURIComponent(inspectionId)}`;
+const ADD_NEW_ROOM_IN_INSPECTION_URL = "/InspectionAddNewRoom";
+const DELETE_ROOM_FROM_INSPECTION_URL = "/InspectionDeleteRoom";
+const REARRANGE_ROOMS_IN_INSPECTION_URL = "/reArrangeRooms";
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -86,6 +89,9 @@ const USER_DETAILS_ENDPOINTS = {
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,
   FETCH_INSPECTION_DETAILS_URL,
+  ADD_NEW_ROOM_IN_INSPECTION_URL,
+  DELETE_ROOM_FROM_INSPECTION_URL,
+  REARRANGE_ROOMS_IN_INSPECTION_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;
