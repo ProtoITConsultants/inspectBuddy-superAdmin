@@ -12,6 +12,7 @@ import Button from "../../../../components/ui/Button";
 import AddRoomItem from "../../../../features/user-details/components/common/AddRoomItem";
 import { useTemplateStore } from "../../../../store/templateStore";
 import SortableItemsList from "../../../../features/user-details/components/common/SortableRoomElements";
+import { RoomDetailsSkeleton } from "../../../../features/user-details/components/common/Skeletons";
 
 const EditUserTemplateRoom = () => {
   // hooks
@@ -148,7 +149,7 @@ const EditUserTemplateRoom = () => {
   }
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <RoomDetailsSkeleton />;
   }
 
   return (
