@@ -106,6 +106,11 @@ const NewRoomCard = ({ onCancel, onSaveNewItem }) => {
           value={newItemName}
           placeholder="Add Room Name"
           autoFocus
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && newItemName.length > 2) {
+              onSaveNewItem(newItemName);
+            }
+          }}
         />
         <button
           className="border-none outline-none focus:outline-none"
