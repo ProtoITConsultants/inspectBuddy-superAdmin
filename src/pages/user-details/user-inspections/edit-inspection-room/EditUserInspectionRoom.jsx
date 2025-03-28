@@ -91,7 +91,34 @@ const EditUserInspectionRoom = () => {
   const saveInspectionRoomAsDraft = useMutation({});
 
   // Rearrange Room elements - Mutation
-  const rearrangeRoomElements = useMutation({});
+  const rearrangeRoomElements = useMutation({
+    mutationFn: () => {
+      setRearrangingElements(false);
+      const elementIds = selectedInspectionRoomElements?.map(
+        (element) => element._id
+      );
+
+      return userInspectionsAPIs.rearrangeRoomElements({
+        inspectionId,
+        roomId,
+        elementIds: elementIds,
+      });
+    },
+
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: "Room Elements rearranged successfully.",
+        duration: 3000,
+      });
+    },
+
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't rearrange Room Elements.",
+        duration: 3000,
+      });
+    },
+  });
 
   // Create New Room Element - Mutation
   const createNewRoomElement = useMutation({
@@ -142,7 +169,7 @@ const EditUserInspectionRoom = () => {
       );
 
       // Updated Template Room Elements
-      const updatedTemplateRoomElements = selectedInspectionRoomElements.map(
+      const updatedTemplateRoomElements = selectedInspectionRoomElements?.map(
         (roomElement) => {
           if (roomElement._id === questionsToDeleteData.elementId) {
             return {
@@ -191,7 +218,7 @@ const EditUserInspectionRoom = () => {
         setSavedQuestions(data.newSavedQuestions[0]);
       }
 
-      const updatedElements = selectedInspectionRoomElements.map((element) => {
+      const updatedElements = selectedInspectionRoomElements?.map((element) => {
         if (element._id === addQuestionData.elementId) {
           return {
             ...element,
@@ -229,6 +256,10 @@ const EditUserInspectionRoom = () => {
   if (isPending) {
     return <RoomDetailsSkeleton />;
   }
+
+  // console.log("Room Elements", selectedInspectionRoomElements);
+
+  // console.log("Data", data);
 
   return (
     <React.Fragment>
@@ -300,7 +331,7 @@ const EditUserInspectionRoom = () => {
             <EditRoomDetails.FormSectionHeader
               sectionHeading="Room Elements"
               toolTipLabel="Room Elements Tooltip!"
-              hasRearrangeBtn={selectedInspectionRoomElements.length > 1}
+              hasRearrangeBtn={selectedInspectionRoomElements?.length > 1}
               rearrangeElements={rearrangingElements}
               onClickRearrange={() => {
                 setRearrangingElements(true);
@@ -310,7 +341,10 @@ const EditUserInspectionRoom = () => {
               handleSaveRearrangedElement={rearrangeRoomElements.mutate}
             />
             <EditRoomDetails.FormSectionBody>
-              <SortableItemsList.Root>
+              <SortableItemsList.Root
+                items={selectedInspectionRoomElements}
+                onRearrangeItems={setSelectedInspectionRoomElements}
+              >
                 {selectedInspectionRoomElements?.map((element) => (
                   <SortableItemsList.RoomElement
                     key={element._id}

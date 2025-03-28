@@ -94,6 +94,26 @@ export const userInspectionsAPIs = {
       );
     }
   },
+  // Rearrange Room Elements in a Inspection
+  rearrangeRoomElements: async ({ inspectionId, roomId, elementIds }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.REARRANGE_ROOM_ELEMENTS_IN_INSPECTION_URL,
+        {
+          inspectionId,
+          roomId,
+          elementIds,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error rearranging Room Elements in Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error rearranging Room Elements in Inspection"
+      );
+    }
+  },
   // Add Element to a Room in a Inspection
   createNewRoomElement: async ({ inspectionId, roomId, elementName }) => {
     try {

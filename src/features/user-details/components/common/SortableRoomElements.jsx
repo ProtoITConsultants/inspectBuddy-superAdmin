@@ -36,19 +36,15 @@ import { useTemplateStore } from "../../../../store/templateStore";
 import { cn } from "../../../../utils/cn";
 import ElementQuestion from "../inspections/details/ElementQuestion";
 
-const Root = ({ children }) => {
+const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
   const selectedTemplateRoomElements = useTemplateStore(
     (state) => state.selectedTemplateRoomElements
   );
-  const setSelectedTemplateRoomElements = useTemplateStore(
-    (state) => state.setSelectedTemplateRoomElements
-  );
 
   const getRoomElementPosition = useMemo(
-    () => (id) =>
-      selectedTemplateRoomElements?.findIndex((element) => element._id === id),
-    [selectedTemplateRoomElements] // Only re-compute if elementsData changes
+    () => (id) => items?.findIndex((element) => element?._id === id),
+    [items]
   );
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
@@ -59,25 +55,21 @@ const Root = ({ children }) => {
 
       if (active.id !== over.id) {
         const newRoomsData = arrayMove(
-          selectedTemplateRoomElements,
+          items,
           getRoomElementPosition(active.id),
           getRoomElementPosition(over.id)
         );
 
-        setSelectedTemplateRoomElements(newRoomsData);
+        onRearrangeItems(newRoomsData);
       }
     },
-    [
-      selectedTemplateRoomElements,
-      getRoomElementPosition,
-      setSelectedTemplateRoomElements,
-    ]
+    [items, getRoomElementPosition, onRearrangeItems]
   );
 
   return (
     <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
       <SortableContext
-        items={selectedTemplateRoomElements?.map((element) => element._id)}
+        items={items.map((element) => element._id)}
         strategy={verticalListSortingStrategy}
         sensors={sensors}
       >
@@ -88,7 +80,6 @@ const Root = ({ children }) => {
             chevron:
               "!text-[#6c727f] !text-[15px] templateRoomElementAccordian",
           }}
-          //   chevron={<IconChevronRight />}
           transitionDuration={500}
           className="w-full space-y-[16px]"
           variant="filled"
