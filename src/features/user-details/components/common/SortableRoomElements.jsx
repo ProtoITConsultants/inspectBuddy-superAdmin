@@ -396,17 +396,38 @@ const ElementDetail = ({
                       />
                     )
                   ) : option?.type === "textArea" ? (
-                    <TextAreaQuestion
-                      question={option?.text}
-                      questionNumber={index + 1}
-                      isRequired={option?.answerRequired}
-                    />
+                    !makeInputsDisabled ? (
+                      <TextAreaQuestion
+                        question={option?.text}
+                        questionNumber={index + 1}
+                        isRequired={option?.answerRequired}
+                      />
+                    ) : (
+                      <ElementQuestion.TextArea
+                        label={`${index + 1}. ${option?.text}`}
+                        isRequired={option?.answerRequired}
+                        valueRef={elementForm.getInputProps(
+                          `elementQuestions[${index}].answer`
+                        )}
+                      />
+                    )
                   ) : option?.type === "dropDown" ? (
-                    <DropDownQuestion
-                      questionNumber={index + 1}
-                      question={option?.text}
-                      isRequired={option?.answerRequired}
-                    />
+                    !makeInputsDisabled ? (
+                      <DropDownQuestion
+                        questionNumber={index + 1}
+                        question={option?.text}
+                        isRequired={option?.answerRequired}
+                      />
+                    ) : (
+                      <ElementQuestion.DropDown
+                        label={`${index + 1}. ${option?.text}`}
+                        isRequired={option?.answerRequired}
+                        options={option?.options}
+                        valueRef={elementForm.getInputProps(
+                          `elementQuestions[${index}].answer`
+                        )}
+                      />
+                    )
                   ) : null}
                 </div>
               ))
