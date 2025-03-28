@@ -166,13 +166,6 @@ export const userInspectionsAPIs = {
     questions,
     userId,
   }) => {
-    console.log({
-      inspectionId: inspectionId,
-      roomId: roomId,
-      elementId: elementId,
-      questions: questions,
-      userId: userId,
-    });
     try {
       const response = await axiosInstance.post(
         USER_DETAILS_ENDPOINTS.ADD_QUESTION_TO_ROOM_ELEMENT_IN_INSPECTION_URL({
