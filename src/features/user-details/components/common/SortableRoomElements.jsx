@@ -255,7 +255,7 @@ const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
         />
       )}
 
-      {setShowDeleteQuestionModal && (
+      {showDeleteQuestionModal && (
         <InspectionModals.DeleteQuestion
           isModalOpen={showDeleteQuestionModal}
           onCloseModal={() => setShowDeleteQuestionModal(false)}
