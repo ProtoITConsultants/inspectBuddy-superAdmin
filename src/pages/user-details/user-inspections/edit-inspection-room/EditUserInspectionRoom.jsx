@@ -15,6 +15,10 @@ import AddRoomItem from "../../../../features/user-details/components/common/Add
 import AddNewItemButton from "../../../../features/user-details/components/common/AddNewItemButton";
 import SortableItemsList from "../../../../features/user-details/components/common/SortableRoomElements";
 import InspectionModals from "../../../../features/user-details/components/common/InspectionModals";
+import {
+  useCreateNewRoomElement,
+  useRearrangeRoomElements,
+} from "../../../../features/user-details/hooks/inspectionMutations";
 
 const EditUserInspectionRoom = () => {
   // hooks
@@ -36,12 +40,27 @@ const EditUserInspectionRoom = () => {
   const [rearrangingElements, setRearrangingElements] = useState(false);
   const [addingElement, setAddingElement] = useState(false);
 
-  const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
-  const [questionsToDeleteData, setQuestionsToDeleteData] = useState({});
-
   // Add Question Data
   const [addQuestionData, setAddQuestionData] = useState({});
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+
+  const updateRoomOrder = useRearrangeRoomElements({
+    inspectionId: inspectionId,
+    roomId: roomId,
+    elementIds: selectedInspectionRoomElements?.map((element) => element._id),
+    setRearrangingElements: setRearrangingElements,
+  });
+
+  const createNewRoomElement = useCreateNewRoomElement({
+    inspectionId: inspectionId,
+    roomId: roomId,
+    updatedRoomElements: (data) => {
+      setSelectedInspectionRoomElements([
+        ...selectedInspectionRoomElements,
+        data.newElement,
+      ]);
+    },
+  });
 
   // Form to store room details
   const form = useForm({
@@ -89,116 +108,6 @@ const EditUserInspectionRoom = () => {
 
   // Save Inspection Room as Draft - Mutation
   const saveInspectionRoomAsDraft = useMutation({});
-
-  // Rearrange Room elements - Mutation
-  const rearrangeRoomElements = useMutation({
-    mutationFn: () => {
-      setRearrangingElements(false);
-      const elementIds = selectedInspectionRoomElements?.map(
-        (element) => element._id
-      );
-
-      return userInspectionsAPIs.rearrangeRoomElements({
-        inspectionId,
-        roomId,
-        elementIds: elementIds,
-      });
-    },
-
-    onSuccess: () => {
-      toast.success("Success!", {
-        description: "Room Elements rearranged successfully.",
-        duration: 3000,
-      });
-    },
-
-    onError: (error) => {
-      toast.error("Error!", {
-        description: error.message || "Couldn't rearrange Room Elements.",
-        duration: 3000,
-      });
-    },
-  });
-
-  // Create New Room Element - Mutation
-  const createNewRoomElement = useMutation({
-    mutationFn: (elementName) =>
-      userInspectionsAPIs.createNewRoomElement({
-        inspectionId,
-        roomId,
-        elementName,
-      }),
-
-    onSuccess: (data) => {
-      setSelectedInspectionRoomElements([
-        ...selectedInspectionRoomElements,
-        data.newElement,
-      ]);
-
-      toast.success("Success!", {
-        description: "Room Element added successfully.",
-        duration: 3000,
-      });
-    },
-
-    onError: (error) => {
-      toast.error("Error!", {
-        description: error.message || "Couldn't create add room element.",
-        duration: 3000,
-      });
-    },
-  });
-
-  // Delete Room Element's Questions - Mutation
-  const deleteRoomElementQuestions = useMutation({
-    mutationFn: () =>
-      userInspectionsAPIs.deleteQuestionsFromElement({
-        inspectionId: inspectionId,
-        roomId: roomId,
-        elementId: questionsToDeleteData.elementId,
-        checklistIdArray: questionsToDeleteData.selectedQuestionsIds,
-      }),
-    onSuccess: () => {
-      // Updated CheckList Questions
-      const updatedChecklist = questionsToDeleteData.elementQuestions.filter(
-        (question) => {
-          return !questionsToDeleteData.selectedQuestionsIds.includes(
-            question._id
-          );
-        }
-      );
-
-      // Updated Template Room Elements
-      const updatedTemplateRoomElements = selectedInspectionRoomElements?.map(
-        (roomElement) => {
-          if (roomElement._id === questionsToDeleteData.elementId) {
-            return {
-              ...roomElement,
-              checklist: updatedChecklist,
-            };
-          }
-          return roomElement;
-        }
-      );
-
-      setSelectedInspectionRoomElements(updatedTemplateRoomElements);
-
-      // Reset Local States
-      setQuestionsToDeleteData({});
-      toast.success("Success!", {
-        description: "Questions deleted successfully.",
-        duration: 3000,
-      });
-
-      setShowDeleteQuestionModal(false);
-    },
-    onError: (error) => {
-      toast.error("Error!", {
-        description: error.message || "Couldn't delete element.",
-        duration: 3000,
-      });
-    },
-  });
 
   // Add Question to Room Element - Mutation
   const addQuestionToRoomElement = useMutation({
@@ -257,37 +166,8 @@ const EditUserInspectionRoom = () => {
     return <RoomDetailsSkeleton />;
   }
 
-  // console.log("Room Elements", selectedInspectionRoomElements);
-
-  // console.log("Data", data);
-
   return (
     <React.Fragment>
-      {showDeleteQuestionModal && (
-        <InspectionModals.DeleteQuestion
-          isModalOpen={showDeleteQuestionModal}
-          onCloseModal={() => {
-            setShowDeleteQuestionModal(false);
-            setQuestionsToDeleteData({});
-          }}
-          currentElementId={questionsToDeleteData?.elementId}
-          questionsList={questionsToDeleteData?.elementQuestions}
-          onConfirmDelete={deleteRoomElementQuestions.mutate}
-          onQuestionSelect={(newSelectedQuestionId) => {
-            const updatedData = [
-              ...(questionsToDeleteData.selectedQuestions || []),
-              newSelectedQuestionId,
-            ];
-
-            setQuestionsToDeleteData({
-              ...questionsToDeleteData,
-              selectedQuestionsIds: updatedData,
-            });
-          }}
-          LoadingOverlay={deleteRoomElementQuestions.isPending}
-        />
-      )}
-
       {showAddQuestionModal && (
         <InspectionModals.AddQuestion
           isModalOpen={showAddQuestionModal}
@@ -338,7 +218,7 @@ const EditUserInspectionRoom = () => {
                 setAddingElement(false);
               }}
               handleCancelNewElementSave={() => setRearrangingElements(false)}
-              handleSaveRearrangedElement={rearrangeRoomElements.mutate}
+              handleSaveRearrangedElement={updateRoomOrder.mutate}
             />
             <EditRoomDetails.FormSectionBody>
               <SortableItemsList.Root
@@ -358,19 +238,20 @@ const EditUserInspectionRoom = () => {
                       elementQuestions={element.checklist}
                       imageRequired={element.imageRequired}
                       makeInputsDisabled={false}
-                      onClickDeletQuestions={() => {
-                        setQuestionsToDeleteData({
-                          elementId: element._id,
-                          elementQuestions: element.checklist,
-                        });
-                        setShowDeleteQuestionModal(true);
-                      }}
+                      // onClickDeletQuestions={() => {
+                      //   setQuestionsToDeleteData({
+                      //     elementId: element._id,
+                      //     elementQuestions: element.checklist,
+                      //   });
+                      //   setShowDeleteQuestionModal(true);
+                      // }}
                       onClickAddNewQuestion={() => {
                         setShowAddQuestionModal(true);
                         setAddQuestionData({
                           elementId: element._id,
                         });
                       }}
+                      elementCategory="inspection"
                     />
                   </SortableItemsList.RoomElement>
                 ))}

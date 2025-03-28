@@ -23,6 +23,7 @@ import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import PreviewQuestion from "./PreviewQuestionElements";
 import { useInspectionStore } from "../../../../store/inspectionStore";
 import { userInspectionsAPIs } from "../../api/user-inspections";
+import { useDeleteRoomElementQuestions } from "../../hooks/inspectionMutations";
 
 const DeleteElement = ({
   isModalOpen,
@@ -824,87 +825,87 @@ const AddQuestion = ({
 const DeleteQuestion = ({
   isModalOpen,
   onCloseModal,
+  currentElementId,
   questionsList,
-  onConfirmDelete,
-  onQuestionSelect,
-  LoadingOverlay,
+  elementCategory,
 }) => {
   // Hooks
-  // const { templateId, roomId } = useParams();
+  const { templateId, roomId, inspectionId } = useParams();
 
   // Global States
-  // const selectedTemplateRoomElements = useTemplateStore(
-  //   (state) => state.selectedTemplateRoomElements
-  // );
-  // const setSelectedTemplateRoomElements = useTemplateStore(
-  //   (state) => state.setSelectedTemplateRoomElements
-  // );
+  const selectedTemplateRoomElements = useTemplateStore(
+    (state) => state.selectedTemplateRoomElements
+  );
+  const setSelectedTemplateRoomElements = useTemplateStore(
+    (state) => state.setSelectedTemplateRoomElements
+  );
 
-  // Local States
-  // const [isDeleting, setIsDeleting] = useState(false);
-  // const [questionsToDelete, setQuestionsToDelete] = useState([]);
+  const selectedInspectionRoomElements = useInspectionStore(
+    (state) => state.selectedInspectionRoomElements
+  );
+  const setSelectedInspectionRoomElements = useInspectionStore(
+    (state) => state.setSelectedInspectionRoomElements
+  );
 
-  // Mutations
-  // const deleteQuestion = useMutation({
-  //   mutationFn: () => {
-  //     setIsDeleting(true);
+  const [questionsToDeleteIds, setQuestionsToDeleteIds] = useState([]);
 
-  //     // Find the Ids of the questions to be deleted
-  //     const checklistIds = questionsToDelete.map((question) => question._id);
+  // Hook to Delete Questions from Elements
+  const deleteElementQuestion = useDeleteRoomElementQuestions({
+    id: elementCategory === "inspection" ? inspectionId : templateId,
+    roomId: roomId,
+    elementId: currentElementId,
+    checklistIdArray: questionsToDeleteIds,
+    setShowDeleteQuestionModal: false,
+    updatedRoomElements: () => {
+      // Updated CheckList Questions
+      const updatedChecklist = questionsList.filter((question) => {
+        return !questionsToDeleteIds.includes(question._id);
+      });
+      if (elementCategory === "inspection") {
+        // Updated Template Room Elements
+        const updatedTemplateRoomElements = selectedInspectionRoomElements.map(
+          (roomElement) => {
+            if (roomElement._id === currentElementId) {
+              return {
+                ...roomElement,
+                checklist: updatedChecklist,
+              };
+            }
+            return roomElement;
+          }
+        );
 
-  //     return userTemplatesAPIs.deleteQuestionsFromElement({
-  //       templateId: templateId,
-  //       roomId: roomId,
-  //       elementId: currentElementId,
-  //       checklistItemIdArray: checklistIds,
-  //     });
-  //   },
-  //   onSuccess: () => {
-  //     // Updated CheckList Questions
-  //     const updatedChecklist = questionsList.filter((question) => {
-  //       return !questionsToDelete.includes(question);
-  //     });
+        setSelectedInspectionRoomElements(updatedTemplateRoomElements);
+      } else {
+        // Updated Template Room Elements
+        const updatedTemplateRoomElements = selectedTemplateRoomElements.map(
+          (roomElement) => {
+            if (roomElement._id === currentElementId) {
+              return {
+                ...roomElement,
+                checklist: updatedChecklist,
+              };
+            }
+            return roomElement;
+          }
+        );
 
-  //     // Updated Template Room Elements
-  //     const updatedTemplateRoomElements = selectedTemplateRoomElements.map(
-  //       (roomElement) => {
-  //         if (roomElement._id === currentElementId) {
-  //           return {
-  //             ...roomElement,
-  //             checklist: updatedChecklist,
-  //           };
-  //         }
-  //         return roomElement;
-  //       }
-  //     );
+        setSelectedTemplateRoomElements(updatedTemplateRoomElements);
+      }
 
-  //     setSelectedTemplateRoomElements(updatedTemplateRoomElements);
-
-  //     // Reset Local States
-  //     setQuestionsToDelete([]);
-  //     setIsDeleting(false);
-
-  //     onCloseModal();
-  //     toast.success("Success!", {
-  //       description: "Questions deleted successfully.",
-  //       duration: 3000,
-  //     });
-  //   },
-  //   onError: (error) => {
-  //     toast.error("Error!", {
-  //       description: error.message || "Couldn't delete element.",
-  //       duration: 3000,
-  //     });
-  //     setIsDeleting(false);
-  //   },
-  // });
+      //  Reset Local States
+      setQuestionsToDeleteIds([]);
+      onCloseModal();
+    },
+    elementCategory: elementCategory,
+  });
 
   return (
     <ModalRoot
       id="delete-template-roomElement-modal"
       openModal={isModalOpen}
       onClose={() => onCloseModal()}
-      loadingOverlay={LoadingOverlay}
+      loadingOverlay={deleteElementQuestion.isPending}
     >
       <h2 className="text-darkBlue font-bold text-[24px]">
         Delete Question from a Room Element
@@ -920,7 +921,9 @@ const DeleteQuestion = ({
               key={index}
               color="blue"
               label={question?.text}
-              onChange={() => onQuestionSelect(question._id)}
+              onChange={() =>
+                setQuestionsToDeleteIds((prev) => [...prev, question._id])
+              }
             />
           ))}
         </div>
@@ -934,7 +937,7 @@ const DeleteQuestion = ({
           buttonType="contained"
           buttonColor="#FF4D4F"
           className="sm:w-[216px] w-full font-bold !bg-[#FF4D4F] !text-white"
-          onClick={onConfirmDelete}
+          onClick={deleteElementQuestion.mutate}
         />
         <Button
           type="button"
