@@ -34,6 +34,7 @@ import { CSS } from "@dnd-kit/utilities";
 import InspectionModals from "./InspectionModals";
 import { useTemplateStore } from "../../../../store/templateStore";
 import { cn } from "../../../../utils/cn";
+import ElementQuestion from "../inspections/details/ElementQuestion";
 
 const Root = ({ children }) => {
   // Global States
@@ -256,6 +257,18 @@ const ElementDetail = ({
     console.log("Element Image", e);
   };
 
+  // Handle Change Question Answer
+  const handleChangeAnswer = (questionData) => {
+    const { questionId, answer } = questionData;
+
+    const updatedElementQuestions = elementForm.values.elementQuestions.map(
+      (question) =>
+        question._id === questionId ? { ...question, answer: answer } : question
+    );
+
+    elementForm.setFieldValue("elementQuestions", updatedElementQuestions);
+  };
+
   return (
     <React.Fragment>
       {showAddQuestionModal && (
@@ -361,12 +374,27 @@ const ElementDetail = ({
               elementForm.values.elementQuestions.map((option, index) => (
                 <div key={index}>
                   {option?.type === "radio" ? (
-                    <RadioQuestion
-                      questionNumber={index + 1}
-                      question={option?.text}
-                      isRequired={option?.answerRequired}
-                      options={option?.options}
-                    />
+                    !makeInputsDisabled ? (
+                      <ElementQuestion.Radio
+                        label={`${index + 1}. ${option?.text}`}
+                        isRequired={option?.answerRequired}
+                        options={option?.options}
+                        value={option?.answer}
+                        onChange={(value) =>
+                          handleChangeAnswer({
+                            questionId: option?._id,
+                            answer: value,
+                          })
+                        }
+                      />
+                    ) : (
+                      <RadioQuestion
+                        questionNumber={index + 1}
+                        question={option?.text}
+                        isRequired={option?.answerRequired}
+                        options={option?.options}
+                      />
+                    )
                   ) : option?.type === "textArea" ? (
                     <TextAreaQuestion
                       question={option?.text}
