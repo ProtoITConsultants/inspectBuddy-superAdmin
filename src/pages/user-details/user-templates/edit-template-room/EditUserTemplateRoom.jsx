@@ -197,13 +197,17 @@ const EditUserTemplateRoom = () => {
             handleSaveRearrangedElement={rearrangeRoomElements.mutate}
           />
           <EditRoomDetails.FormSectionBody>
-            <SortableItemsList.Root>
+            <SortableItemsList.Root
+              items={selectedTemplateRoomElements}
+              onRearrangeItems={setSelectedTemplateRoomElements}
+            >
               {selectedTemplateRoomElements?.map((element) => (
                 <SortableItemsList.RoomElement
                   key={element._id}
                   id={element._id}
                   element={element}
                   rearrangingElements={rearrangingElements}
+                  elementCategory="template"
                 >
                   <SortableItemsList.ElementDetail
                     elementId={element._id}
