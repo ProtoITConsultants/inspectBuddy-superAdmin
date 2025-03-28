@@ -217,7 +217,10 @@ const EditUserTemplateRoom = () => {
             {addingElement && (
               <AddRoomItem
                 onCancel={() => setAddingElement(false)}
-                onSaveNewItem={createNewRoomElement.mutate}
+                onSaveNewItem={(elementName) => {
+                  setAddingElement(false);
+                  createNewRoomElement.mutate(elementName);
+                }}
                 placeholder={"Enter Element Name"}
               />
             )}
