@@ -10,7 +10,7 @@ import DetailPagesRoot from "../../../../features/user-details/components/Detail
 import EditRoomDetails from "../../../../features/user-details/components/common/EditRoomDetails";
 import { toast } from "sonner";
 import Button from "../../../../components/ui/Button";
-import { Text, TextInput } from "@mantine/core";
+import { Skeleton, Text, TextInput } from "@mantine/core";
 import AddRoomItem from "../../../../features/user-details/components/common/AddRoomItem";
 import AddNewItemButton from "../../../../features/user-details/components/common/AddNewItemButton";
 import SortableItemsList from "../../../../features/user-details/components/common/SortableRoomElements";
@@ -94,7 +94,33 @@ const EditUserInspectionRoom = () => {
   const rearrangeRoomElements = useMutation({});
 
   // Create New Room Element - Mutation
-  const createNewRoomElement = useMutation({});
+  const createNewRoomElement = useMutation({
+    mutationFn: (elementName) =>
+      userInspectionsAPIs.createNewRoomElement({
+        inspectionId,
+        roomId,
+        elementName,
+      }),
+
+    onSuccess: (data) => {
+      setSelectedInspectionRoomElements([
+        ...selectedInspectionRoomElements,
+        data.newElement,
+      ]);
+
+      toast.success("Success!", {
+        description: "Room Element added successfully.",
+        duration: 3000,
+      });
+    },
+
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't create add room element.",
+        duration: 3000,
+      });
+    },
+  });
 
   // Delete Room Element's Questions - Mutation
   const deleteRoomElementQuestions = useMutation({
@@ -317,9 +343,16 @@ const EditUserInspectionRoom = () => {
               {addingElement && (
                 <AddRoomItem
                   onCancel={() => setAddingElement(false)}
-                  onSaveNewItem={createNewRoomElement.mutate}
+                  onSaveNewItem={(elementName) => {
+                    setAddingElement(false);
+                    createNewRoomElement.mutate(elementName);
+                  }}
                   placeholder={"Enter Element Name"}
                 />
+              )}
+
+              {createNewRoomElement.isPending && (
+                <Skeleton width="100%" height={48} radius={8} />
               )}
             </EditRoomDetails.FormSectionBody>
             <AddNewItemButton

@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { toast } from "sonner";
 import EditRoomDetails from "../../../../features/user-details/components/common/EditRoomDetails";
-import { TextInput } from "@mantine/core";
+import { Skeleton, TextInput } from "@mantine/core";
 import AddNewItemButton from "../../../../features/user-details/components/common/AddNewItemButton";
 import Button from "../../../../components/ui/Button";
 import AddRoomItem from "../../../../features/user-details/components/common/AddRoomItem";
@@ -220,6 +220,10 @@ const EditUserTemplateRoom = () => {
                 onSaveNewItem={createNewRoomElement.mutate}
                 placeholder={"Enter Element Name"}
               />
+            )}
+
+            {createNewRoomElement.isPending && (
+              <Skeleton width="100%" height={48} radius={8} />
             )}
           </EditRoomDetails.FormSectionBody>
           <AddNewItemButton

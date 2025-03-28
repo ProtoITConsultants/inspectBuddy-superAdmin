@@ -95,11 +95,7 @@ export const userInspectionsAPIs = {
     }
   },
   // Add Element to a Room in a Inspection
-  addElementToRoomInInspection: async ({
-    inspectionId,
-    roomId,
-    elementName,
-  }) => {
+  createNewRoomElement: async ({ inspectionId, roomId, elementName }) => {
     try {
       const response = await axiosInstance.post(
         USER_DETAILS_ENDPOINTS.ADD_ELEMENT_TO_ROOM_IN_INSPECTION_URL,
@@ -109,7 +105,7 @@ export const userInspectionsAPIs = {
           elementName,
         }
       );
-      return response.data.newElement;
+      return response.data;
     } catch (error) {
       console.error("Error adding Element to Room in Inspection", error);
       throw new Error(
