@@ -12,7 +12,7 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Accordion, Checkbox, TextInput, Tooltip } from "@mantine/core";
+import { Accordion, Checkbox, Textarea, Tooltip } from "@mantine/core";
 import React, {
   useCallback,
   useEffect,
@@ -33,6 +33,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { CSS } from "@dnd-kit/utilities";
 import InspectionModals from "./InspectionModals";
 import { useTemplateStore } from "../../../../store/templateStore";
+import { cn } from "../../../../utils/cn";
 
 const Root = ({ children }) => {
   // Global States
@@ -219,7 +220,12 @@ const RoomElement = React.memo(function RoomElement({
   );
 });
 
-const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
+const ElementDetail = ({
+  elementQuestions,
+  imageRequired,
+  elementId,
+  makeInputsDisabled,
+}) => {
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
 
@@ -245,6 +251,11 @@ const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
     return () => {};
   }, [elementQuestions, imageRequired]);
 
+  // Handle Image Change
+  const handleImageChange = (e) => {
+    console.log("Element Image", e);
+  };
+
   return (
     <React.Fragment>
       {showAddQuestionModal && (
@@ -268,29 +279,63 @@ const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
       >
         <div className="flex flex-col gap-[8px]">
           <p className="text-[14px] font-semibold text-darkBlue">
-            Element Image
+            Element Image{imageRequired && ` *`}
           </p>
           <div className="flex items-center gap-[16px]">
-            <DEFAULT_ELEMENT_IMAGE />
-            <button
-              className="bg-[#CBCBCB] font-bold px-[24px] py-[12px] md:text-[16px] text-[14px] text-white hover:cursor-not-allowed rounded-[8px]"
-              disabled
-            >
-              Add an Image
-            </button>
+            {elementForm.values.elementImage ? (
+              <img
+                src={elementForm.values.elementImage}
+                alt="element-img"
+                className="w-[100px] h-[100px] rounded-sm object-cover"
+              />
+            ) : (
+              <DEFAULT_ELEMENT_IMAGE />
+            )}
+
+            {!makeInputsDisabled ? (
+              <React.Fragment>
+                <input
+                  type="file"
+                  accept="/image/*"
+                  hidden
+                  id={`${elementId}-img`}
+                  onChange={(e) => handleImageChange(e)}
+                />
+                <label
+                  htmlFor={`${elementId}-img`}
+                  className="bg-primary font-bold px-[24px] py-[12px] md:text-[16px] text-[14px] text-white cursor-pointer rounded-[8px]"
+                >
+                  {elementForm.values.elementImage
+                    ? "Change Image"
+                    : "Add an Image"}
+                </label>
+              </React.Fragment>
+            ) : (
+              <div
+                className={cn(
+                  "font-bold px-[24px] py-[12px] md:text-[16px] text-[14px] text-white hover:cursor-not-allowed rounded-[8px] bg-[#CBCBCB]"
+                )}
+              >
+                Add an Image
+              </div>
+            )}
           </div>
-          <Checkbox
-            label="Make it Required"
-            checked={elementForm.values.elementImageIsRequired}
-            {...elementForm.getInputProps("elementImageIsRequired")}
-          />
+          {makeInputsDisabled && (
+            <Checkbox
+              label="Make it Required"
+              checked={elementForm.values.elementImageIsRequired}
+              {...elementForm.getInputProps("elementImageIsRequired")}
+            />
+          )}
         </div>
 
-        <TextInput
+        <Textarea
           label="Notes"
           placeholder="Write a note"
-          disabled
+          disabled={makeInputsDisabled}
+          {...elementForm.getInputProps("elementNotes")}
           className="w-full font-medium"
+          autosize
         />
         <div className="flex flex-col gap-[8px]">
           <div className="flex items-center gap-[4px]">
@@ -368,47 +413,53 @@ const ElementDetail = ({ elementQuestions, imageRequired, elementId }) => {
 };
 
 // Element Questions According to type
-const RadioQuestion = ({ question, options, questionNumber, isRequired }) => (
-  <div className="flex flex-col gap-[8px]">
-    <p className="text-[14px] font-medium text-darkBlue">
-      {questionNumber}. {question}
-      {isRequired && " *"}
-    </p>
-    <div className="bg-[#EEEEEE] flex p-[4px] rounded-[8px] h-[65px] w-fit opacity-60 hover:cursor-not-allowed">
-      {options.map((option) => (
-        <div
-          key={option._id}
-          className="md:w-[183px] sm:w-[120px] w-fit flex justify-center items-center"
-        >
+const RadioQuestion = ({ question, options, questionNumber, isRequired }) => {
+  return (
+    <div className="flex flex-col gap-[8px]">
+      <p className="text-[14px] font-medium text-darkBlue">
+        {questionNumber}. {question}
+        {isRequired && " *"}
+      </p>
+      <div className="bg-[#EEEEEE] flex p-[4px] rounded-[8px] h-[65px] w-fit opacity-60 hover:cursor-not-allowed">
+        {options.map((option) => (
           <div
-            className={`p-[8px] flex flex-col items-center justify-center gap-[4px] h-full text-gray-dark rounded-[8px] w-full sm:p-0 px-[30px] py-[9px]`}
+            key={option._id}
+            className="md:w-[183px] sm:w-[120px] w-fit flex justify-center items-center"
           >
-            {option.iconId ? (
-              <div className="w-[20px] h-[20px] flex justify-center items-center">
-                {
-                  QUESTIONS_ICONS_LIST.find(
-                    (icon) => icon?.id === Number(option.iconId)
-                  )?.icon
-                }
-              </div>
-            ) : (
-              <div
-                className={`border rounded-full w-[20px] h-[20px] flex justify-center items-center border-gray-dark`}
-              >
-                <p className="text-[12px] font-medium leading-none">
-                  {option?.option?.trim().split(" ")[0].charAt(0).toUpperCase()}
-                </p>
-              </div>
-            )}
-            <span className="m-0 p-0 text-[12px] font-medium leading-none">
-              {option.option}
-            </span>
+            <div
+              className={`p-[8px] flex flex-col items-center justify-center gap-[4px] h-full text-gray-dark rounded-[8px] w-full sm:p-0 px-[30px] py-[9px]`}
+            >
+              {option.iconId ? (
+                <div className="w-[20px] h-[20px] flex justify-center items-center">
+                  {
+                    QUESTIONS_ICONS_LIST.find(
+                      (icon) => icon?.id === Number(option.iconId)
+                    )?.icon
+                  }
+                </div>
+              ) : (
+                <div
+                  className={`border rounded-full w-[20px] h-[20px] flex justify-center items-center border-gray-dark`}
+                >
+                  <p className="text-[12px] font-medium leading-none">
+                    {option?.option
+                      ?.trim()
+                      .split(" ")[0]
+                      .charAt(0)
+                      .toUpperCase()}
+                  </p>
+                </div>
+              )}
+              <span className="m-0 p-0 text-[12px] font-medium leading-none">
+                {option.option}
+              </span>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const TextAreaQuestion = ({ question, questionNumber, isRequired }) => {
   return (
