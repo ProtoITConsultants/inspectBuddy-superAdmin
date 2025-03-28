@@ -94,4 +94,110 @@ export const userInspectionsAPIs = {
       );
     }
   },
+  // Add Element to a Room in a Inspection
+  addElementToRoomInInspection: async ({
+    inspectionId,
+    roomId,
+    elementName,
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.ADD_ELEMENT_TO_ROOM_IN_INSPECTION_URL,
+        {
+          inspectionId,
+          roomId,
+          elementName,
+        }
+      );
+      return response.data.newElement;
+    } catch (error) {
+      console.error("Error adding Element to Room in Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error adding Element to Room in Inspection"
+      );
+    }
+  },
+  // Delete Room Element from a Inspection
+  deleteRoomElementFromInspection: async ({
+    inspectionId,
+    roomId,
+    elementId,
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.DELETE_ROOM_ELEMENT_FROM_INSPECTION_URL,
+        {
+          inspectionId,
+          roomId,
+          elementId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting Room Element from Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error deleting Room Element from Inspection"
+      );
+    }
+  },
+  // Add Question to a Room Element in a Inspection
+  addQuestionToRoomElementInInspection: async ({
+    inspectionId,
+    roomId,
+    elementId,
+    question,
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.ADD_QUESTION_TO_ROOM_ELEMENT_IN_INSPECTION_URL,
+        {
+          inspectionId,
+          roomId,
+          elementId,
+          question,
+        }
+      );
+      return response.data.newQuestion;
+    } catch (error) {
+      console.error(
+        "Error adding Question to Room Element in Inspection",
+        error
+      );
+      throw new Error(
+        error.response?.data?.message ||
+          "Error adding Question to Room Element in Inspection"
+      );
+    }
+  },
+  // Delete Question from a Room Element in a Inspection
+  deleteQuestionsFromElement: async ({
+    inspectionId,
+    roomId,
+    elementId,
+    checklistIdArray,
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.DELETE_QUESTIONS_FROM_INSPECTION_ELEMENT_URL,
+        {
+          inspectionId,
+          roomId,
+          elementId,
+          checklistIdArray,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error deleting Selected Questions from Room Element in Inspection",
+        error
+      );
+      throw new Error(
+        error.response?.data?.message ||
+          "Error deleting Selected Questions from Room Element in Inspection"
+      );
+    }
+  },
 };

@@ -226,9 +226,10 @@ const ElementDetail = ({
   imageRequired,
   elementId,
   makeInputsDisabled,
+  onClickDeletQuestions,
 }) => {
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
-  const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
+  // const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
 
   // form
   const elementForm = useForm({
@@ -279,14 +280,14 @@ const ElementDetail = ({
         />
       )}
 
-      {showDeleteQuestionModal && (
+      {/* {showDeleteQuestionModal && (
         <InspectionModals.DeleteQuestion
           isModalOpen={showDeleteQuestionModal}
           onCloseModal={() => setShowDeleteQuestionModal(false)}
           currentElementId={elementId}
           questionsList={elementQuestions}
         />
-      )}
+      )} */}
       <div
         className={`p-[12px_16px] flex flex-col gap-[16px] border-t border-[#cce2ff]`}
       >
@@ -447,7 +448,7 @@ const ElementDetail = ({
                 buttonType="iconButton"
                 label="Remove Question"
                 type="button"
-                onClick={() => setShowDeleteQuestionModal(true)}
+                onClick={onClickDeletQuestions}
                 icon={
                   <DELETE_ICON className="text-[#FF613E] !w-[16px] !h-[16px]" />
                 }

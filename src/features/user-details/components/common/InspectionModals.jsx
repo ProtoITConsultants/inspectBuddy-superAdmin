@@ -768,88 +768,87 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
 const DeleteQuestion = ({
   isModalOpen,
   onCloseModal,
-  currentElementId,
   questionsList,
+  onConfirmDelete,
+  onQuestionSelect,
+  LoadingOverlay,
 }) => {
   // Hooks
-  const { templateId, roomId } = useParams();
+  // const { templateId, roomId } = useParams();
 
   // Global States
-  const selectedTemplateRoomElements = useTemplateStore(
-    (state) => state.selectedTemplateRoomElements
-  );
-  const setSelectedTemplateRoomElements = useTemplateStore(
-    (state) => state.setSelectedTemplateRoomElements
-  );
+  // const selectedTemplateRoomElements = useTemplateStore(
+  //   (state) => state.selectedTemplateRoomElements
+  // );
+  // const setSelectedTemplateRoomElements = useTemplateStore(
+  //   (state) => state.setSelectedTemplateRoomElements
+  // );
 
   // Local States
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [questionsToDelete, setQuestionsToDelete] = useState([]);
+  // const [isDeleting, setIsDeleting] = useState(false);
+  // const [questionsToDelete, setQuestionsToDelete] = useState([]);
 
   // Mutations
-  const deleteQuestion = useMutation({
-    mutationFn: () => {
-      setIsDeleting(true);
+  // const deleteQuestion = useMutation({
+  //   mutationFn: () => {
+  //     setIsDeleting(true);
 
-      // Find the Ids of the questions to be deleted
-      const checklistIds = questionsToDelete.map((question) => question._id);
+  //     // Find the Ids of the questions to be deleted
+  //     const checklistIds = questionsToDelete.map((question) => question._id);
 
-      return userTemplatesAPIs.deleteQuestionsFromElement({
-        templateId: templateId,
-        roomId: roomId,
-        elementId: currentElementId,
-        checklistItemIdArray: checklistIds,
-      });
-    },
-    onSuccess: () => {
-      // Updated CheckList Questions
-      const updatedChecklist = questionsList.filter((question) => {
-        return !questionsToDelete.includes(question);
-      });
+  //     return userTemplatesAPIs.deleteQuestionsFromElement({
+  //       templateId: templateId,
+  //       roomId: roomId,
+  //       elementId: currentElementId,
+  //       checklistItemIdArray: checklistIds,
+  //     });
+  //   },
+  //   onSuccess: () => {
+  //     // Updated CheckList Questions
+  //     const updatedChecklist = questionsList.filter((question) => {
+  //       return !questionsToDelete.includes(question);
+  //     });
 
-      // Updated Template Room Elements
-      const updatedTemplateRoomElements = selectedTemplateRoomElements.map(
-        (roomElement) => {
-          if (roomElement._id === currentElementId) {
-            return {
-              ...roomElement,
-              checklist: updatedChecklist,
-            };
-          }
-          return roomElement;
-        }
-      );
+  //     // Updated Template Room Elements
+  //     const updatedTemplateRoomElements = selectedTemplateRoomElements.map(
+  //       (roomElement) => {
+  //         if (roomElement._id === currentElementId) {
+  //           return {
+  //             ...roomElement,
+  //             checklist: updatedChecklist,
+  //           };
+  //         }
+  //         return roomElement;
+  //       }
+  //     );
 
-      setSelectedTemplateRoomElements(updatedTemplateRoomElements);
+  //     setSelectedTemplateRoomElements(updatedTemplateRoomElements);
 
-      // Reset Local States
-      setQuestionsToDelete([]);
-      setIsDeleting(false);
+  //     // Reset Local States
+  //     setQuestionsToDelete([]);
+  //     setIsDeleting(false);
 
-      onCloseModal();
-      toast.success("Success!", {
-        description: "Questions deleted successfully.",
-        duration: 3000,
-      });
-    },
-    onError: (error) => {
-      toast.error("Error!", {
-        description: error.message || "Couldn't delete element.",
-        duration: 3000,
-      });
-      setIsDeleting(false);
-    },
-  });
+  //     onCloseModal();
+  //     toast.success("Success!", {
+  //       description: "Questions deleted successfully.",
+  //       duration: 3000,
+  //     });
+  //   },
+  //   onError: (error) => {
+  //     toast.error("Error!", {
+  //       description: error.message || "Couldn't delete element.",
+  //       duration: 3000,
+  //     });
+  //     setIsDeleting(false);
+  //   },
+  // });
 
   return (
     <ModalRoot
       id="delete-template-roomElement-modal"
       openModal={isModalOpen}
-      onClose={() => {
-        setIsDeleting(false);
-        onCloseModal();
-      }}
-      loadingOverlay={isDeleting}
+      onClose={() => onCloseModal()}
+      loadingOverlay={LoadingOverlay}
     >
       <h2 className="text-darkBlue font-bold text-[24px]">
         Delete Question from a Room Element
@@ -865,9 +864,7 @@ const DeleteQuestion = ({
               key={index}
               color="blue"
               label={question?.text}
-              onChange={() => {
-                setQuestionsToDelete((prev) => [...prev, question]);
-              }}
+              onChange={() => onQuestionSelect(question._id)}
             />
           ))}
         </div>
@@ -881,7 +878,7 @@ const DeleteQuestion = ({
           buttonType="contained"
           buttonColor="#FF4D4F"
           className="sm:w-[216px] w-full font-bold !bg-[#FF4D4F] !text-white"
-          onClick={deleteQuestion.mutate}
+          onClick={onConfirmDelete}
         />
         <Button
           type="button"
@@ -889,10 +886,7 @@ const DeleteQuestion = ({
           buttonType="outlined"
           borderColor="#CCE2FF"
           className="sm:w-[216px] w-full font-bold !text-[#2A85FF]"
-          onClick={() => {
-            setQuestionsToDelete([]);
-            onCloseModal();
-          }}
+          onClick={() => onCloseModal()}
         />
       </Group>
     </ModalRoot>
