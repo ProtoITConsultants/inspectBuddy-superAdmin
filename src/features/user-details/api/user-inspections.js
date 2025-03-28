@@ -72,4 +72,26 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Fetch Specific Room's Details
+  fetchSpecificRoomDetails: async ({ inspectionId, roomId, userId }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.FETCH_INSPECTION_ROOM_DETAILS_URL({
+          userId,
+        }),
+        {
+          inspectionId,
+          roomId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Room's Details in Template", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error fetching Room's Details in Template"
+      );
+    }
+  },
 };
