@@ -14,7 +14,6 @@ import { Skeleton, Text, TextInput } from "@mantine/core";
 import AddRoomItem from "../../../../features/user-details/components/common/AddRoomItem";
 import AddNewItemButton from "../../../../features/user-details/components/common/AddNewItemButton";
 import SortableItemsList from "../../../../features/user-details/components/common/SortableRoomElements";
-import InspectionModals from "../../../../features/user-details/components/common/InspectionModals";
 import {
   useCreateNewRoomElement,
   useRearrangeRoomElements,
@@ -39,10 +38,6 @@ const EditUserInspectionRoom = () => {
   // local states
   const [rearrangingElements, setRearrangingElements] = useState(false);
   const [addingElement, setAddingElement] = useState(false);
-
-  // Add Question Data
-  const [addQuestionData, setAddQuestionData] = useState({});
-  const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
 
   const updateRoomOrder = useRearrangeRoomElements({
     inspectionId: inspectionId,
@@ -109,49 +104,6 @@ const EditUserInspectionRoom = () => {
   // Save Inspection Room as Draft - Mutation
   const saveInspectionRoomAsDraft = useMutation({});
 
-  // Add Question to Room Element - Mutation
-  const addQuestionToRoomElement = useMutation({
-    mutationFn: (newQuestion) =>
-      userInspectionsAPIs.addQuestionToRoomElementInInspection({
-        inspectionId: inspectionId,
-        roomId: roomId,
-        userId: userId,
-        elementId: addQuestionData.elementId,
-        questions: [newQuestion],
-      }),
-
-    onSuccess: (data, newQuestion) => {
-      const shouldSaveQuestion = newQuestion.shouldSave;
-
-      if (shouldSaveQuestion) {
-        setSavedQuestions(data.newSavedQuestions[0]);
-      }
-
-      const updatedElements = selectedInspectionRoomElements?.map((element) => {
-        if (element._id === addQuestionData.elementId) {
-          return {
-            ...element,
-            checklist: [...element.checklist, ...data.newChecklistItems],
-          };
-        }
-        return element;
-      });
-
-      setSelectedInspectionRoomElements(updatedElements);
-      toast.success("Success!", {
-        description: "Questions added successfully.",
-        duration: 3000,
-      });
-      setShowAddQuestionModal(false);
-    },
-    onError: (error) => {
-      toast.error("Error!", {
-        description: error.message || "Couldn't create new Question.",
-        duration: 3000,
-      });
-    },
-  });
-
   //  Handing error occured in data fetching
   if (isError) {
     navigate(-1);
@@ -168,7 +120,7 @@ const EditUserInspectionRoom = () => {
 
   return (
     <React.Fragment>
-      {showAddQuestionModal && (
+      {/* {showAddQuestionModal && (
         <InspectionModals.AddQuestion
           isModalOpen={showAddQuestionModal}
           onCloseModal={() => setShowAddQuestionModal(false)}
@@ -178,7 +130,7 @@ const EditUserInspectionRoom = () => {
           }}
           loadingOverlay={addQuestionToRoomElement.isPending}
         />
-      )}
+      )} */}
       <DetailPagesRoot className="!overflow-hidden !h-full">
         <EditRoomDetails.Form formHeading="Room Inspection">
           <EditRoomDetails.FormSection sectionId="room-details">
@@ -238,19 +190,6 @@ const EditUserInspectionRoom = () => {
                       elementQuestions={element.checklist}
                       imageRequired={element.imageRequired}
                       makeInputsDisabled={false}
-                      // onClickDeletQuestions={() => {
-                      //   setQuestionsToDeleteData({
-                      //     elementId: element._id,
-                      //     elementQuestions: element.checklist,
-                      //   });
-                      //   setShowDeleteQuestionModal(true);
-                      // }}
-                      onClickAddNewQuestion={() => {
-                        setShowAddQuestionModal(true);
-                        setAddQuestionData({
-                          elementId: element._id,
-                        });
-                      }}
                       elementCategory="inspection"
                     />
                   </SortableItemsList.RoomElement>

@@ -113,45 +113,44 @@ export const useDeleteRoomElementQuestions = ({
   });
 
 // // Add Question to Room Element - Mutation
-// export const useAddQuestionToRoomElement = () =>
-//   useMutation({
-//     mutationFn: (newQuestion) =>
-//       userInspectionsAPIs.addQuestionToRoomElementInInspection({
-//         inspectionId: inspectionId,
-//         roomId: roomId,
-//         userId: userId,
-//         elementId: addQuestionData.elementId,
-//         questions: [newQuestion],
-//       }),
+export const useAddQuestionToRoomElement = ({
+  id,
+  roomId,
+  userId,
+  elementId,
+  newQuestionData,
+  elementCategory,
+  updateElementQuestions,
+}) =>
+  useMutation({
+    mutationFn: () =>
+      elementCategory === "inspection"
+        ? userInspectionsAPIs.addQuestionToRoomElementInInspection({
+            inspectionId: id,
+            roomId: roomId,
+            userId: userId,
+            elementId: elementId,
+            questions: [newQuestionData],
+          })
+        : userTemplatesAPIs.createNewQuestion({
+            templateId: id,
+            roomId: roomId,
+            userId: userId,
+            elementId: elementId,
+            questions: [newQuestionData],
+          }),
 
-//     onSuccess: (data, newQuestion) => {
-//       const shouldSaveQuestion = newQuestion.shouldSave;
-
-//       if (shouldSaveQuestion) {
-//         setSavedQuestions(data.newSavedQuestions[0]);
-//       }
-
-//       const updatedElements = selectedInspectionRoomElements?.map((element) => {
-//         if (element._id === addQuestionData.elementId) {
-//           return {
-//             ...element,
-//             checklist: [...element.checklist, ...data.newChecklistItems],
-//           };
-//         }
-//         return element;
-//       });
-
-//       setSelectedInspectionRoomElements(updatedElements);
-//       toast.success("Success!", {
-//         description: "Questions added successfully.",
-//         duration: 3000,
-//       });
-//       setShowAddQuestionModal(false);
-//     },
-//     onError: (error) => {
-//       toast.error("Error!", {
-//         description: error.message || "Couldn't create new Question.",
-//         duration: 3000,
-//       });
-//     },
-//   });
+    onSuccess: (data) => {
+      updateElementQuestions(data);
+      toast.success("Success!", {
+        description: "Questions added successfully.",
+        duration: 3000,
+      });
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't create new Question.",
+        duration: 3000,
+      });
+    },
+  });

@@ -214,11 +214,9 @@ const ElementDetail = ({
   imageRequired,
   elementId,
   makeInputsDisabled,
-  // onClickDeletQuestions,
-  onClickAddNewQuestion,
   elementCategory,
 }) => {
-  // const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+  const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
 
   // form
@@ -262,13 +260,14 @@ const ElementDetail = ({
 
   return (
     <React.Fragment>
-      {/* {showAddQuestionModal && (
+      {showAddQuestionModal && (
         <InspectionModals.AddQuestion
           isModalOpen={showAddQuestionModal}
           onCloseModal={() => setShowAddQuestionModal(false)}
           currentElementId={elementId}
+          elementCategory={elementCategory}
         />
-      )} */}
+      )}
 
       {showDeleteQuestionModal && (
         <InspectionModals.DeleteQuestion
@@ -429,7 +428,7 @@ const ElementDetail = ({
               <button
                 className={`flex items-center gap-[4px] text-primary !font-semibold`}
                 type="button"
-                onClick={onClickAddNewQuestion}
+                onClick={() => setShowAddQuestionModal(true)}
               >
                 <ADD_ICON className="!w-[16px] !h-[16px]" />
                 <span className="text-[14px]">Add new Question</span>

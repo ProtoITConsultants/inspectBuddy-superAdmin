@@ -23,7 +23,10 @@ import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import PreviewQuestion from "./PreviewQuestionElements";
 import { useInspectionStore } from "../../../../store/inspectionStore";
 import { userInspectionsAPIs } from "../../api/user-inspections";
-import { useDeleteRoomElementQuestions } from "../../hooks/inspectionMutations";
+import {
+  useAddQuestionToRoomElement,
+  useDeleteRoomElementQuestions,
+} from "../../hooks/inspectionMutations";
 
 const DeleteElement = ({
   isModalOpen,
@@ -144,18 +147,16 @@ const AddQuestion = ({
   isModalOpen,
   onCloseModal,
   currentElementId,
-  createNewQuestion,
-  loadingOverlay,
-  currentRoomCategory,
+  elementCategory,
 }) => {
   // Hooks
-  const { userId, templateId, roomId } = useParams();
+  const { userId, templateId, roomId, inspectionId } = useParams();
 
   // Global States
   const savedQuestions = useTemplateStore((state) => state.savedQuestions);
-  // const setSavedQuestions = useTemplateStore(
-  //   (state) => state.setSavedQuestions
-  // );
+  const setSavedQuestions = useTemplateStore(
+    (state) => state.setSavedQuestions
+  );
   const selectedTemplateRoomElements = useTemplateStore(
     (state) => state.selectedTemplateRoomElements
   );
@@ -165,6 +166,9 @@ const AddQuestion = ({
 
   const selectedInspectionRoomElements = useInspectionStore(
     (state) => state.selectedInspectionRoomElements
+  );
+  const setSelectedInspectionRoomElements = useInspectionStore(
+    (state) => state.setSelectedInspectionRoomElements
   );
 
   // Local States
@@ -278,6 +282,49 @@ const AddQuestion = ({
     },
   });
 
+  const createNewQuestion = useAddQuestionToRoomElement({
+    id: elementCategory === "inspection" ? inspectionId : templateId,
+    roomId: roomId,
+    userId: userId,
+    elementId: currentElementId,
+    newQuestionData: newQuestionForm.values,
+    elementCategory: elementCategory,
+    updateElementQuestions: (data) => {
+      const shouldSaveQuestion = newQuestionForm.values.shouldSave;
+      if (shouldSaveQuestion) {
+        setSavedQuestions(data.newSavedQuestions[0]);
+      }
+      if (elementCategory === "inspection") {
+        const updatedElements = selectedInspectionRoomElements?.map(
+          (element) => {
+            if (element._id === currentElementId) {
+              return {
+                ...element,
+                checklist: [...element.checklist, ...data.newChecklistItems],
+              };
+            }
+            return element;
+          }
+        );
+
+        setSelectedInspectionRoomElements(updatedElements);
+      } else {
+        const updatedElements = selectedTemplateRoomElements.map((element) => {
+          if (element._id === currentElementId) {
+            return {
+              ...element,
+              checklist: [...element.checklist, ...data.newChecklistItems],
+            };
+          }
+          return element;
+        });
+
+        setSelectedTemplateRoomElements(updatedElements);
+      }
+      onCloseModal();
+    },
+  });
+
   // const createNewQuestion = useMutation({
   //   mutationFn: () =>
   //     userTemplatesAPIs.createNewQuestion({
@@ -330,7 +377,7 @@ const AddQuestion = ({
 
       let currentElement;
 
-      if (currentRoomCategory === "template") {
+      if (elementCategory !== "inspection") {
         // Find the current Element
         currentElement = selectedTemplateRoomElements?.find(
           (element) => element._id === currentElementId
@@ -373,7 +420,7 @@ const AddQuestion = ({
     active,
     currentElementId,
     selectedInspectionRoomElements,
-    currentRoomCategory,
+    elementCategory,
   ]);
 
   // Handle Save Option Icon
@@ -428,8 +475,7 @@ const AddQuestion = ({
     }
 
     //  Create New Question
-    // createNewQuestion.mutate();
-    createNewQuestion(newQuestionForm.values);
+    createNewQuestion.mutate();
   };
 
   return (
@@ -440,7 +486,7 @@ const AddQuestion = ({
         onCloseModal();
         setIsAddingQuestion(false);
       }}
-      loadingOverlay={isAddingQuestion || loadingOverlay}
+      loadingOverlay={isAddingQuestion || createNewQuestion.isPending}
     >
       <Stepper
         styles={{
