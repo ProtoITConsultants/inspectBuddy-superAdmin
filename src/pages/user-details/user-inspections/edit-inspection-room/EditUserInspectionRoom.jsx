@@ -351,6 +351,7 @@ const EditUserInspectionRoom = () => {
                     id={element._id}
                     element={element}
                     rearrangingElements={rearrangingElements}
+                    elementCategory="inspection"
                   >
                     <SortableItemsList.ElementDetail
                       elementId={element._id}

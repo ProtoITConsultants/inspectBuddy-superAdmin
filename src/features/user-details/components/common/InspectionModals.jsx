@@ -22,10 +22,16 @@ import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 // import { userTemplatesAPIs } from "../../api/template";
 import PreviewQuestion from "./PreviewQuestionElements";
 import { useInspectionStore } from "../../../../store/inspectionStore";
+import { userInspectionsAPIs } from "../../api/user-inspections";
 
-const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
+const DeleteElement = ({
+  isModalOpen,
+  onCloseModal,
+  elementData,
+  elementCategory,
+}) => {
   // Hooks
-  const { templateId, roomId } = useParams();
+  const { templateId, roomId, inspectionId } = useParams();
 
   // Global States
   const selectedTemplateRoomElements = useTemplateStore(
@@ -34,6 +40,12 @@ const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   const setSelectedTemplateRoomElements = useTemplateStore(
     (state) => state.setSelectedTemplateRoomElements
   );
+  const selectedInspectionRoomElements = useInspectionStore(
+    (state) => state.selectedInspectionRoomElements
+  );
+  const setSelectedInspectionRoomElements = useInspectionStore(
+    (state) => state.setSelectedInspectionRoomElements
+  );
 
   // Local States
   const [isDeleting, setIsDeleting] = useState(false);
@@ -41,18 +53,33 @@ const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   const deleteElement = useMutation({
     mutationFn: () => {
       setIsDeleting(true);
-      return userDetailsAPIs.deleteElementFromTemplate({
-        templateId,
-        roomId,
-        elementIdArray: [elementData._id],
-      });
+      if (elementCategory === "inspection") {
+        return userInspectionsAPIs.deleteRoomElementFromInspection({
+          inspectionId,
+          roomId,
+          elementIdArray: [elementData._id],
+        });
+      } else {
+        return userDetailsAPIs.deleteElementFromTemplate({
+          templateId,
+          roomId,
+          elementIdArray: [elementData._id],
+        });
+      }
     },
     onSuccess: () => {
       // Updated Element List
-      const updatedElements = selectedTemplateRoomElements.filter(
-        (element) => element._id !== elementData._id
-      );
-      setSelectedTemplateRoomElements(updatedElements);
+      if (elementCategory === "inspection") {
+        const updatedElements = selectedInspectionRoomElements.filter(
+          (element) => element._id !== elementData._id
+        );
+        setSelectedInspectionRoomElements(updatedElements);
+      } else {
+        const updatedElements = selectedTemplateRoomElements.filter(
+          (element) => element._id !== elementData._id
+        );
+        setSelectedTemplateRoomElements(updatedElements);
+      }
 
       onCloseModal();
       setIsDeleting(false);

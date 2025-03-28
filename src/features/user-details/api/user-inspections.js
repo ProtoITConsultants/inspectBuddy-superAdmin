@@ -138,7 +138,7 @@ export const userInspectionsAPIs = {
   deleteRoomElementFromInspection: async ({
     inspectionId,
     roomId,
-    elementId,
+    elementIdArray,
   }) => {
     try {
       const response = await axiosInstance.post(
@@ -146,7 +146,7 @@ export const userInspectionsAPIs = {
         {
           inspectionId,
           roomId,
-          elementId,
+          elementIdArray,
         }
       );
       return response.data;

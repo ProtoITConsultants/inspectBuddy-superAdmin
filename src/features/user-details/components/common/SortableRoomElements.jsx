@@ -32,16 +32,11 @@ import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import { IconChevronDown } from "@tabler/icons-react";
 import { CSS } from "@dnd-kit/utilities";
 import InspectionModals from "./InspectionModals";
-import { useTemplateStore } from "../../../../store/templateStore";
 import { cn } from "../../../../utils/cn";
 import ElementQuestion from "../inspections/details/ElementQuestion";
 
 const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
-  const selectedTemplateRoomElements = useTemplateStore(
-    (state) => state.selectedTemplateRoomElements
-  );
-
   const getRoomElementPosition = useMemo(
     () => (id) => items?.findIndex((element) => element?._id === id),
     [items]
@@ -95,6 +90,7 @@ const RoomElement = React.memo(function RoomElement({
   id,
   element,
   rearrangingElements,
+  elementCategory,
   children,
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -148,6 +144,7 @@ const RoomElement = React.memo(function RoomElement({
           onDeleteSuccess={() => {
             setShowDeleteConfirmationModal(false);
           }}
+          elementCategory={elementCategory}
         />
       )}
 
