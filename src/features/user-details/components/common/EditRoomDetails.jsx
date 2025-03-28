@@ -109,12 +109,19 @@ const TemplateRoomImageInput = ({ isChecked, onChange }) => (
   </div>
 );
 
+const FormActions = ({ children }) => (
+  <div className="flex sm:flex-row flex-col gap-[24px] justify-center items-center">
+    {children}
+  </div>
+);
+
 const EditRoomDetails = {
   Form,
   FormSection,
   FormSectionHeader,
   FormSectionBody,
   TemplateRoomImageInput,
+  FormActions,
 };
 
 export default EditRoomDetails;
