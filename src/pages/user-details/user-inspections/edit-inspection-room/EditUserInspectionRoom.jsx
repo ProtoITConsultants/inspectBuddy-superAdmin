@@ -39,6 +39,10 @@ const EditUserInspectionRoom = () => {
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
   const [questionsToDeleteData, setQuestionsToDeleteData] = useState({});
 
+  // Add Question Data
+  const [addQuestionData, setAddQuestionData] = useState({});
+  const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+
   // Form to store room details
   const form = useForm({
     initialValues: {
@@ -143,6 +147,49 @@ const EditUserInspectionRoom = () => {
     },
   });
 
+  // Add Question to Room Element - Mutation
+  const addQuestionToRoomElement = useMutation({
+    mutationFn: (newQuestion) =>
+      userInspectionsAPIs.addQuestionToRoomElementInInspection({
+        inspectionId: inspectionId,
+        roomId: roomId,
+        userId: userId,
+        elementId: addQuestionData.elementId,
+        questions: [newQuestion],
+      }),
+
+    onSuccess: (data, newQuestion) => {
+      const shouldSaveQuestion = newQuestion.shouldSave;
+
+      if (shouldSaveQuestion) {
+        setSavedQuestions(data.newSavedQuestions[0]);
+      }
+
+      const updatedElements = selectedInspectionRoomElements.map((element) => {
+        if (element._id === addQuestionData.elementId) {
+          return {
+            ...element,
+            checklist: [...element.checklist, ...data.newChecklistItems],
+          };
+        }
+        return element;
+      });
+
+      setSelectedInspectionRoomElements(updatedElements);
+      toast.success("Success!", {
+        description: "Questions added successfully.",
+        duration: 3000,
+      });
+      setShowAddQuestionModal(false);
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't create new Question.",
+        duration: 3000,
+      });
+    },
+  });
+
   //  Handing error occured in data fetching
   if (isError) {
     navigate(-1);
@@ -181,6 +228,18 @@ const EditUserInspectionRoom = () => {
             });
           }}
           LoadingOverlay={deleteRoomElementQuestions.isPending}
+        />
+      )}
+
+      {showAddQuestionModal && (
+        <InspectionModals.AddQuestion
+          isModalOpen={showAddQuestionModal}
+          onCloseModal={() => setShowAddQuestionModal(false)}
+          currentElementId={addQuestionData?.elementId}
+          createNewQuestion={(newQuestion) => {
+            addQuestionToRoomElement.mutate(newQuestion);
+          }}
+          loadingOverlay={addQuestionToRoomElement.isPending}
         />
       )}
       <DetailPagesRoot className="!overflow-hidden !h-full">
@@ -244,6 +303,12 @@ const EditUserInspectionRoom = () => {
                           elementQuestions: element.checklist,
                         });
                         setShowDeleteQuestionModal(true);
+                      }}
+                      onClickAddNewQuestion={() => {
+                        setShowAddQuestionModal(true);
+                        setAddQuestionData({
+                          elementId: element._id,
+                        });
                       }}
                     />
                   </SortableItemsList.RoomElement>

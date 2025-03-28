@@ -111,8 +111,6 @@ const NewQuestionOptionsList = ({
   setShowAddButton,
   error,
 }) => {
-  console.log("error", error);
-
   return (
     <div className="space-y-[8px]">
       <p className="text-darkBlue font-medium text-[14px]">

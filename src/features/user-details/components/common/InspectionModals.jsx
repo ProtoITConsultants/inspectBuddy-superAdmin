@@ -19,8 +19,9 @@ import { useForm } from "@mantine/form";
 import ElementQuestionCard from "./ElementQuestionCard";
 import ElementQuestionModal from "./AddElementQuestionComponents";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
-import { userTemplatesAPIs } from "../../api/template";
+// import { userTemplatesAPIs } from "../../api/template";
 import PreviewQuestion from "./PreviewQuestionElements";
+import { useInspectionStore } from "../../../../store/inspectionStore";
 
 const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   // Hooks
@@ -111,20 +112,31 @@ const DeleteElement = ({ isModalOpen, onCloseModal, elementData }) => {
   );
 };
 
-const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
+const AddQuestion = ({
+  isModalOpen,
+  onCloseModal,
+  currentElementId,
+  createNewQuestion,
+  loadingOverlay,
+  currentRoomCategory,
+}) => {
   // Hooks
   const { userId, templateId, roomId } = useParams();
 
   // Global States
   const savedQuestions = useTemplateStore((state) => state.savedQuestions);
-  const setSavedQuestions = useTemplateStore(
-    (state) => state.setSavedQuestions
-  );
+  // const setSavedQuestions = useTemplateStore(
+  //   (state) => state.setSavedQuestions
+  // );
   const selectedTemplateRoomElements = useTemplateStore(
     (state) => state.selectedTemplateRoomElements
   );
   const setSelectedTemplateRoomElements = useTemplateStore(
     (state) => state.setSelectedTemplateRoomElements
+  );
+
+  const selectedInspectionRoomElements = useInspectionStore(
+    (state) => state.selectedInspectionRoomElements
   );
 
   // Local States
@@ -238,48 +250,48 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     },
   });
 
-  const createNewQuestion = useMutation({
-    mutationFn: () =>
-      userTemplatesAPIs.createNewQuestion({
-        templateId: templateId,
-        roomId: roomId,
-        userId: userId,
-        elementId: currentElementId,
-        questions: [newQuestionForm.values],
-      }),
+  // const createNewQuestion = useMutation({
+  //   mutationFn: () =>
+  //     userTemplatesAPIs.createNewQuestion({
+  //       templateId: templateId,
+  //       roomId: roomId,
+  //       userId: userId,
+  //       elementId: currentElementId,
+  //       questions: [newQuestionForm.values],
+  //     }),
 
-    onSuccess: (data) => {
-      const shouldSaveQuestion = newQuestionForm.values.shouldSave;
+  //   onSuccess: (data) => {
+  //     const shouldSaveQuestion = newQuestionForm.values.shouldSave;
 
-      if (shouldSaveQuestion) {
-        setSavedQuestions(data.newSavedQuestions[0]);
-      }
+  //     if (shouldSaveQuestion) {
+  //       setSavedQuestions(data.newSavedQuestions[0]);
+  //     }
 
-      const updatedElements = selectedTemplateRoomElements.map((element) => {
-        if (element._id === currentElementId) {
-          return {
-            ...element,
-            checklist: [...element.checklist, ...data.newChecklistItems],
-          };
-        }
-        return element;
-      });
+  //     const updatedElements = selectedTemplateRoomElements.map((element) => {
+  //       if (element._id === currentElementId) {
+  //         return {
+  //           ...element,
+  //           checklist: [...element.checklist, ...data.newChecklistItems],
+  //         };
+  //       }
+  //       return element;
+  //     });
 
-      setSelectedTemplateRoomElements(updatedElements);
-      newQuestionForm.reset();
-      toast.success("Success!", {
-        description: "Questions added successfully.",
-        duration: 3000,
-      });
-      onCloseModal();
-    },
-    onError: (error) => {
-      toast.error("Error!", {
-        description: error.message || "Couldn't create new Question.",
-        duration: 3000,
-      });
-    },
-  });
+  //     setSelectedTemplateRoomElements(updatedElements);
+  //     newQuestionForm.reset();
+  //     toast.success("Success!", {
+  //       description: "Questions added successfully.",
+  //       duration: 3000,
+  //     });
+  //     onCloseModal();
+  //   },
+  //   onError: (error) => {
+  //     toast.error("Error!", {
+  //       description: error.message || "Couldn't create new Question.",
+  //       duration: 3000,
+  //     });
+  //   },
+  // });
 
   const updatePreviewedQuestion = useMutation({});
 
@@ -288,10 +300,19 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     if (active === 0) {
       setIsAddingQuestion(true);
 
-      // Find the current Element
-      const currentElement = selectedTemplateRoomElements?.find(
-        (element) => element._id === currentElementId
-      );
+      let currentElement;
+
+      if (currentRoomCategory === "template") {
+        // Find the current Element
+        currentElement = selectedTemplateRoomElements?.find(
+          (element) => element._id === currentElementId
+        );
+      } else {
+        // Find the current Element from Inspection
+        currentElement = selectedInspectionRoomElements?.find(
+          (element) => element._id === currentElementId
+        );
+      }
 
       if (!currentElement) return; // Skip if no element found
 
@@ -318,7 +339,14 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
 
     // Clean up function
     return () => {};
-  }, [selectedTemplateRoomElements, savedQuestions, active, currentElementId]);
+  }, [
+    selectedTemplateRoomElements,
+    savedQuestions,
+    active,
+    currentElementId,
+    selectedInspectionRoomElements,
+    currentRoomCategory,
+  ]);
 
   // Handle Save Option Icon
   const handleSaveOptionIcon = () => {
@@ -372,7 +400,8 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
     }
 
     //  Create New Question
-    createNewQuestion.mutate();
+    // createNewQuestion.mutate();
+    createNewQuestion(newQuestionForm.values);
   };
 
   return (
@@ -383,7 +412,7 @@ const AddQuestion = ({ isModalOpen, onCloseModal, currentElementId }) => {
         onCloseModal();
         setIsAddingQuestion(false);
       }}
-      loadingOverlay={isAddingQuestion || createNewQuestion.isPending}
+      loadingOverlay={isAddingQuestion || loadingOverlay}
     >
       <Stepper
         styles={{

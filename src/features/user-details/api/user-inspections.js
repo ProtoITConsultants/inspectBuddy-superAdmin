@@ -147,19 +147,29 @@ export const userInspectionsAPIs = {
     inspectionId,
     roomId,
     elementId,
-    question,
+    questions,
+    userId,
   }) => {
+    console.log({
+      inspectionId: inspectionId,
+      roomId: roomId,
+      elementId: elementId,
+      questions: questions,
+      userId: userId,
+    });
     try {
       const response = await axiosInstance.post(
-        USER_DETAILS_ENDPOINTS.ADD_QUESTION_TO_ROOM_ELEMENT_IN_INSPECTION_URL,
+        USER_DETAILS_ENDPOINTS.ADD_QUESTION_TO_ROOM_ELEMENT_IN_INSPECTION_URL({
+          userId,
+        }),
         {
           inspectionId,
           roomId,
           elementId,
-          question,
+          questions,
         }
       );
-      return response.data.newQuestion;
+      return response.data;
     } catch (error) {
       console.error(
         "Error adding Question to Room Element in Inspection",
