@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RoomDetailsSkeleton } from "../../../../features/user-details/components/common/Skeletons";
 import { useInspectionStore } from "../../../../store/inspectionStore";
 import { useTemplateStore } from "../../../../store/templateStore";
@@ -119,127 +119,114 @@ const EditUserInspectionRoom = () => {
   }
 
   return (
-    <React.Fragment>
-      {/* {showAddQuestionModal && (
-        <InspectionModals.AddQuestion
-          isModalOpen={showAddQuestionModal}
-          onCloseModal={() => setShowAddQuestionModal(false)}
-          currentElementId={addQuestionData?.elementId}
-          createNewQuestion={(newQuestion) => {
-            addQuestionToRoomElement.mutate(newQuestion);
-          }}
-          loadingOverlay={addQuestionToRoomElement.isPending}
-        />
-      )} */}
-      <DetailPagesRoot className="!overflow-hidden !h-full">
-        <EditRoomDetails.Form formHeading="Room Inspection">
-          <EditRoomDetails.FormSection sectionId="room-details">
-            <EditRoomDetails.FormSectionHeader
-              sectionHeading="Room Details"
-              toolTipLabel="Room Details Tooltip!"
+    <DetailPagesRoot className="!overflow-hidden !h-full">
+      <EditRoomDetails.Form formHeading="Room Inspection">
+        <EditRoomDetails.FormSection sectionId="room-details">
+          <EditRoomDetails.FormSectionHeader
+            sectionHeading="Room Details"
+            toolTipLabel="Room Details Tooltip!"
+          />
+          <EditRoomDetails.FormSectionBody>
+            <TextInput
+              id="inspection-room-name"
+              label="Room Name"
+              placeholder="Room Name"
+              {...form.getInputProps("roomName")}
+              className="w-full font-medium max-w-[355px]"
             />
-            <EditRoomDetails.FormSectionBody>
-              <TextInput
-                id="inspection-room-name"
-                label="Room Name"
-                placeholder="Room Name"
-                {...form.getInputProps("roomName")}
-                className="w-full font-medium max-w-[355px]"
-              />
-              <TextInput
-                label="Notes"
-                placeholder="Write a note"
-                className="w-full font-medium"
-                {...form.getInputProps("roomNote")}
-              />
-              {form.values.roomImageRequired && (
-                <Text className="!text-gray-500" size="12px">
-                  At least one room image is required!
-                </Text>
-              )}
-            </EditRoomDetails.FormSectionBody>
-          </EditRoomDetails.FormSection>
-          <EditRoomDetails.FormSection sectionId="room-elements">
-            <EditRoomDetails.FormSectionHeader
-              sectionHeading="Room Elements"
-              toolTipLabel="Room Elements Tooltip!"
-              hasRearrangeBtn={selectedInspectionRoomElements?.length > 1}
-              rearrangeElements={rearrangingElements}
-              onClickRearrange={() => {
-                setRearrangingElements(true);
-                setAddingElement(false);
-              }}
-              handleCancelNewElementSave={() => setRearrangingElements(false)}
-              handleSaveRearrangedElement={updateRoomOrder.mutate}
+            <TextInput
+              label="Notes"
+              placeholder="Write a note"
+              className="w-full font-medium"
+              {...form.getInputProps("roomNote")}
             />
-            <EditRoomDetails.FormSectionBody>
-              <SortableItemsList.Root
-                items={selectedInspectionRoomElements}
-                onRearrangeItems={setSelectedInspectionRoomElements}
-              >
-                {selectedInspectionRoomElements?.map((element) => (
-                  <SortableItemsList.RoomElement
-                    key={element._id}
-                    id={element._id}
-                    element={element}
-                    rearrangingElements={rearrangingElements}
+            {form.values.roomImageRequired && (
+              <Text className="!text-gray-500" size="12px">
+                At least one room image is required!
+              </Text>
+            )}
+          </EditRoomDetails.FormSectionBody>
+        </EditRoomDetails.FormSection>
+        <EditRoomDetails.FormSection sectionId="room-elements">
+          <EditRoomDetails.FormSectionHeader
+            sectionHeading="Room Elements"
+            toolTipLabel="Room Elements Tooltip!"
+            hasRearrangeBtn={selectedInspectionRoomElements?.length > 1}
+            rearrangeElements={rearrangingElements}
+            onClickRearrange={() => {
+              setRearrangingElements(true);
+              setAddingElement(false);
+            }}
+            handleCancelNewElementSave={() => setRearrangingElements(false)}
+            handleSaveRearrangedElement={updateRoomOrder.mutate}
+          />
+          <EditRoomDetails.FormSectionBody>
+            <SortableItemsList.Root
+              items={selectedInspectionRoomElements}
+              onRearrangeItems={setSelectedInspectionRoomElements}
+            >
+              {selectedInspectionRoomElements?.map((element) => (
+                <SortableItemsList.RoomElement
+                  key={element._id}
+                  id={element._id}
+                  element={element}
+                  rearrangingElements={rearrangingElements}
+                  elementCategory="inspection"
+                >
+                  <SortableItemsList.ElementDetail
+                    elementId={element._id}
+                    elementQuestions={element.checklist}
+                    imageRequired={element.imageRequired}
+                    makeInputsDisabled={false}
                     elementCategory="inspection"
-                  >
-                    <SortableItemsList.ElementDetail
-                      elementId={element._id}
-                      elementQuestions={element.checklist}
-                      imageRequired={element.imageRequired}
-                      makeInputsDisabled={false}
-                      elementCategory="inspection"
-                    />
-                  </SortableItemsList.RoomElement>
-                ))}
-              </SortableItemsList.Root>
-              {addingElement && (
-                <AddRoomItem
-                  onCancel={() => setAddingElement(false)}
-                  onSaveNewItem={(elementName) => {
-                    setAddingElement(false);
-                    createNewRoomElement.mutate(elementName);
-                  }}
-                  placeholder={"Enter Element Name"}
-                />
-              )}
+                  />
+                </SortableItemsList.RoomElement>
+              ))}
+            </SortableItemsList.Root>
+            {addingElement && (
+              <AddRoomItem
+                onCancel={() => setAddingElement(false)}
+                onSaveNewItem={(elementName) => {
+                  setAddingElement(false);
+                  createNewRoomElement.mutate(elementName);
+                }}
+                placeholder={"Enter Element Name"}
+              />
+            )}
 
-              {createNewRoomElement.isPending && (
-                <Skeleton width="100%" height={48} radius={8} />
-              )}
-            </EditRoomDetails.FormSectionBody>
-            <AddNewItemButton
-              title="Add New Element"
-              onClick={() => setAddingElement(true)}
-              showButton={!addingElement && !rearrangingElements}
-              className="mx-auto"
-            />
-          </EditRoomDetails.FormSection>
-          <EditRoomDetails.FormActions>
-            <Button
-              id="save-inspection-template-room"
-              label="Save Room"
-              type="button"
-              onClick={saveRoomDetails.mutate}
-              className="sm:w-[216px] w-full font-bold"
-              buttonType="contained"
-              disabled={addingElement || rearrangingElements}
-            />
-            <Button
-              id="save-template-draft"
-              label="Save as Draft"
-              type="button"
-              onClick={saveInspectionRoomAsDraft.mutate}
-              borderColor="#FF613E"
-              className="sm:w-[216px] w-full font-bold !text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
-              buttonType="outlined"
-            />
-          </EditRoomDetails.FormActions>
-        </EditRoomDetails.Form>
-      </DetailPagesRoot>
-    </React.Fragment>
+            {createNewRoomElement.isPending && (
+              <Skeleton width="100%" height={48} radius={8} />
+            )}
+          </EditRoomDetails.FormSectionBody>
+          <AddNewItemButton
+            title="Add New Element"
+            onClick={() => setAddingElement(true)}
+            showButton={!addingElement && !rearrangingElements}
+            className="mx-auto"
+          />
+        </EditRoomDetails.FormSection>
+        <EditRoomDetails.FormActions>
+          <Button
+            id="save-inspection-template-room"
+            label="Save Room"
+            type="button"
+            onClick={saveRoomDetails.mutate}
+            className="sm:w-[216px] w-full font-bold"
+            buttonType="contained"
+            disabled={addingElement || rearrangingElements}
+          />
+          <Button
+            id="save-template-draft"
+            label="Save as Draft"
+            type="button"
+            onClick={saveInspectionRoomAsDraft.mutate}
+            borderColor="#FF613E"
+            className="sm:w-[216px] w-full font-bold !text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
+            buttonType="outlined"
+          />
+        </EditRoomDetails.FormActions>
+      </EditRoomDetails.Form>
+    </DetailPagesRoot>
   );
 };
 
