@@ -99,7 +99,11 @@ const EditUserInspectionRoom = () => {
   }, [data, setSelectedInspectionRoomElements, setSavedQuestions]);
 
   // Save Room Details - Mutation
-  const saveRoomDetails = useMutation({});
+  const saveRoomDetails = useMutation({
+    mutationFn: () => {
+      console.log("Saving Room Details", selectedInspectionRoomElements);
+    },
+  });
 
   // Save Inspection Room as Draft - Mutation
   const saveInspectionRoomAsDraft = useMutation({});

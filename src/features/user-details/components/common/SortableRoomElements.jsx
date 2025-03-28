@@ -34,6 +34,7 @@ import { CSS } from "@dnd-kit/utilities";
 import InspectionModals from "./InspectionModals";
 import { cn } from "../../../../utils/cn";
 import ElementQuestion from "../inspections/details/ElementQuestion";
+import { useInspectionStore } from "../../../../store/inspectionStore";
 
 const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
@@ -216,6 +217,14 @@ const ElementDetail = ({
   makeInputsDisabled,
   elementCategory,
 }) => {
+  // Global States
+  const selectedInspectionRoomElements = useInspectionStore(
+    (state) => state.selectedInspectionRoomElements
+  );
+  const setSelectedInspectionRoomElements = useInspectionStore(
+    (state) => state.setSelectedInspectionRoomElements
+  );
+
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
 
@@ -256,6 +265,15 @@ const ElementDetail = ({
     );
 
     elementForm.setFieldValue("elementQuestions", updatedElementQuestions);
+
+    const updatedRoomElements = selectedInspectionRoomElements.map((room) => {
+      if (room._id === elementId) {
+        return { ...room, checklist: updatedElementQuestions };
+      }
+      return room;
+    });
+
+    setSelectedInspectionRoomElements(updatedRoomElements);
   };
 
   return (
@@ -367,6 +385,7 @@ const ElementDetail = ({
                   {option?.type === "radio" ? (
                     !makeInputsDisabled ? (
                       <ElementQuestion.Radio
+                        id={option?._id}
                         label={`${index + 1}. ${option?.text}`}
                         isRequired={option?.answerRequired}
                         options={option?.options}
@@ -387,7 +406,7 @@ const ElementDetail = ({
                       />
                     )
                   ) : option?.type === "textArea" ? (
-                    !makeInputsDisabled ? (
+                    makeInputsDisabled ? (
                       <TextAreaQuestion
                         question={option?.text}
                         questionNumber={index + 1}
@@ -397,13 +416,45 @@ const ElementDetail = ({
                       <ElementQuestion.TextArea
                         label={`${index + 1}. ${option?.text}`}
                         isRequired={option?.answerRequired}
-                        valueRef={elementForm.getInputProps(
-                          `elementQuestions[${index}].answer`
-                        )}
+                        value={option?.answer}
+                        onChange={(value) => {
+                          const updatedChecklist =
+                            elementForm.values.elementQuestions.map(
+                              (question) => {
+                                if (question._id === option._id) {
+                                  return {
+                                    ...question,
+                                    answer: value,
+                                  };
+                                }
+                                return question;
+                              }
+                            );
+
+                          elementForm.setFieldValue(
+                            "elementQuestions",
+                            updatedChecklist
+                          );
+
+                          const updatedRoomElements =
+                            selectedInspectionRoomElements.map((room) => {
+                              if (room._id === elementId) {
+                                return {
+                                  ...room,
+                                  checklist: updatedChecklist,
+                                };
+                              }
+                              return room;
+                            });
+
+                          setSelectedInspectionRoomElements(
+                            updatedRoomElements
+                          );
+                        }}
                       />
                     )
                   ) : option?.type === "dropDown" ? (
-                    !makeInputsDisabled ? (
+                    makeInputsDisabled ? (
                       <DropDownQuestion
                         questionNumber={index + 1}
                         question={option?.text}
@@ -414,9 +465,41 @@ const ElementDetail = ({
                         label={`${index + 1}. ${option?.text}`}
                         isRequired={option?.answerRequired}
                         options={option?.options}
-                        valueRef={elementForm.getInputProps(
-                          `elementQuestions[${index}].answer`
-                        )}
+                        value={option?.answer}
+                        onChange={(value) => {
+                          const updatedChecklist =
+                            elementForm.values.elementQuestions.map(
+                              (question) => {
+                                if (question._id === option._id) {
+                                  return {
+                                    ...question,
+                                    answer: value,
+                                  };
+                                }
+                                return question;
+                              }
+                            );
+
+                          elementForm.setFieldValue(
+                            "elementQuestions",
+                            updatedChecklist
+                          );
+
+                          const updatedRoomElements =
+                            selectedInspectionRoomElements.map((room) => {
+                              if (room._id === elementId) {
+                                return {
+                                  ...room,
+                                  checklist: updatedChecklist,
+                                };
+                              }
+                              return room;
+                            });
+
+                          setSelectedInspectionRoomElements(
+                            updatedRoomElements
+                          );
+                        }}
                       />
                     )
                   ) : null}

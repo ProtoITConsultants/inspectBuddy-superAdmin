@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { RadioGroup, Select, TextInput } from "@mantine/core";
 import { QUESTIONS_ICONS_LIST } from "../../../../../constants/QuestionsIcons";
 
-const Radio = ({ label, options, isRequired, value, onChange }) => {
+const Radio = ({ id, label, options, isRequired, value, onChange }) => {
   // Memoizing the icons list to avoid unnecessary recalculations on re-renders
   const getIcon = useCallback((iconId) => {
     return QUESTIONS_ICONS_LIST.find((icon) => icon?.id === Number(iconId))
@@ -19,7 +19,7 @@ const Radio = ({ label, options, isRequired, value, onChange }) => {
 
   return (
     <RadioGroup
-      name={label + "radio-question"}
+      name={label + "radio-question" + id}
       value={value}
       label={label}
       withAsterisk={isRequired}
@@ -37,7 +37,7 @@ const Radio = ({ label, options, isRequired, value, onChange }) => {
               <input
                 type="radio"
                 id={option.option + "-" + index}
-                name="radio-option"
+                name={option._id + "radio-option"}
                 value={value}
                 hidden
                 onChange={() => handleOnChange(option.option)}
@@ -80,7 +80,7 @@ const Radio = ({ label, options, isRequired, value, onChange }) => {
   );
 };
 
-const TextArea = ({ label, isRequired, valueRef }) => {
+const TextArea = ({ label, isRequired, value, onChange }) => {
   return (
     <TextInput
       id="room-question-text-area-answer"
@@ -88,12 +88,13 @@ const TextArea = ({ label, isRequired, valueRef }) => {
       placeholder="Answer"
       multiline
       required={isRequired}
-      {...valueRef}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
     />
   );
 };
 
-const DropDown = ({ label, options, isRequired, valueRef }) => {
+const DropDown = ({ label, options, isRequired, value, onChange }) => {
   return (
     <Select
       id="room-question-drop-down"
@@ -103,7 +104,8 @@ const DropDown = ({ label, options, isRequired, valueRef }) => {
       className="w-full"
       clearable
       withAsterisk={isRequired}
-      {...valueRef}
+      value={value}
+      onChange={(value) => onChange(value)}
     />
   );
 };
