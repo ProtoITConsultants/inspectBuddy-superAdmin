@@ -12,14 +12,14 @@ const Radio = ({ id, label, options, isRequired, value, onChange }) => {
   // Optimizing the onChange handler to be stable
   const handleOnChange = useCallback(
     (optionValue) => {
-      onChange(optionValue);
+      onChange(optionValue, id); // ✅ Pass the question ID
     },
-    [onChange]
+    [onChange, id]
   );
 
   return (
     <RadioGroup
-      name={label + "radio-question" + id}
+      name={label + "-" + id}
       value={value}
       label={label}
       withAsterisk={isRequired}
@@ -36,15 +36,17 @@ const Radio = ({ id, label, options, isRequired, value, onChange }) => {
             >
               <input
                 type="radio"
-                id={option.option + "-" + index}
-                name={option._id + "radio-option"}
-                value={value}
+                id={`${id}-${option.option}-${index}`}
+                name={`radio-option-${id}`}
+                value={option.option}
                 hidden
-                onChange={() => handleOnChange(option.option)}
+                onChange={() => {
+                  handleOnChange(option.option);
+                }}
                 checked={isSelected}
               />
               <label
-                htmlFor={option.option + "-" + index}
+                htmlFor={`${id}-${option.option}-${index}`}
                 className={`p-[8px] flex flex-col items-center justify-center gap-[4px] h-full hover:cursor-pointer ${
                   isSelected ? "bg-primary text-white" : "text-gray-dark"
                 } rounded-[8px] w-full sm:p-0 px-[30px] py-[9px]`}

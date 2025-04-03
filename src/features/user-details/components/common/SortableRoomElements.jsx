@@ -380,131 +380,134 @@ const ElementDetail = ({
                 No questions added! Add questions by clicking the button below.
               </div>
             ) : (
-              elementForm.values.elementQuestions.map((option, index) => (
-                <div key={index}>
-                  {option?.type === "radio" ? (
-                    !makeInputsDisabled ? (
-                      <ElementQuestion.Radio
-                        id={option?._id}
-                        label={`${index + 1}. ${option?.text}`}
-                        isRequired={option?.answerRequired}
-                        options={option?.options}
-                        value={option?.answer}
-                        onChange={(value) =>
-                          handleChangeAnswer({
-                            questionId: option?._id,
-                            answer: value,
-                          })
-                        }
-                      />
-                    ) : (
-                      <RadioQuestion
-                        questionNumber={index + 1}
-                        question={option?.text}
-                        isRequired={option?.answerRequired}
-                        options={option?.options}
-                      />
-                    )
-                  ) : option?.type === "textArea" ? (
-                    makeInputsDisabled ? (
-                      <TextAreaQuestion
-                        question={option?.text}
-                        questionNumber={index + 1}
-                        isRequired={option?.answerRequired}
-                      />
-                    ) : (
-                      <ElementQuestion.TextArea
-                        label={`${index + 1}. ${option?.text}`}
-                        isRequired={option?.answerRequired}
-                        value={option?.answer}
-                        onChange={(value) => {
-                          const updatedChecklist =
-                            elementForm.values.elementQuestions.map(
-                              (question) => {
-                                if (question._id === option._id) {
-                                  return {
-                                    ...question,
-                                    answer: value,
-                                  };
+              elementForm.values.elementQuestions.map((option, index) => {
+                // console.log("Option", option);
+                return (
+                  <div key={index}>
+                    {option?.type === "radio" ? (
+                      !makeInputsDisabled ? (
+                        <ElementQuestion.Radio
+                          id={option?._id}
+                          label={`${index + 1}. ${option?.text}`}
+                          isRequired={option?.answerRequired}
+                          options={option?.options}
+                          value={option?.answer}
+                          onChange={(value) => {
+                            handleChangeAnswer({
+                              questionId: option?._id,
+                              answer: value,
+                            });
+                          }}
+                        />
+                      ) : (
+                        <RadioQuestion
+                          questionNumber={index + 1}
+                          question={option?.text}
+                          isRequired={option?.answerRequired}
+                          options={option?.options}
+                        />
+                      )
+                    ) : option?.type === "textArea" ? (
+                      makeInputsDisabled ? (
+                        <TextAreaQuestion
+                          question={option?.text}
+                          questionNumber={index + 1}
+                          isRequired={option?.answerRequired}
+                        />
+                      ) : (
+                        <ElementQuestion.TextArea
+                          label={`${index + 1}. ${option?.text}`}
+                          isRequired={option?.answerRequired}
+                          value={option?.answer}
+                          onChange={(value) => {
+                            const updatedChecklist =
+                              elementForm.values.elementQuestions.map(
+                                (question) => {
+                                  if (question._id === option._id) {
+                                    return {
+                                      ...question,
+                                      answer: value,
+                                    };
+                                  }
+                                  return question;
                                 }
-                                return question;
-                              }
+                              );
+
+                            elementForm.setFieldValue(
+                              "elementQuestions",
+                              updatedChecklist
                             );
 
-                          elementForm.setFieldValue(
-                            "elementQuestions",
-                            updatedChecklist
-                          );
-
-                          const updatedRoomElements =
-                            selectedInspectionRoomElements.map((room) => {
-                              if (room._id === elementId) {
-                                return {
-                                  ...room,
-                                  checklist: updatedChecklist,
-                                };
-                              }
-                              return room;
-                            });
-
-                          setSelectedInspectionRoomElements(
-                            updatedRoomElements
-                          );
-                        }}
-                      />
-                    )
-                  ) : option?.type === "dropDown" ? (
-                    makeInputsDisabled ? (
-                      <DropDownQuestion
-                        questionNumber={index + 1}
-                        question={option?.text}
-                        isRequired={option?.answerRequired}
-                      />
-                    ) : (
-                      <ElementQuestion.DropDown
-                        label={`${index + 1}. ${option?.text}`}
-                        isRequired={option?.answerRequired}
-                        options={option?.options}
-                        value={option?.answer}
-                        onChange={(value) => {
-                          const updatedChecklist =
-                            elementForm.values.elementQuestions.map(
-                              (question) => {
-                                if (question._id === option._id) {
+                            const updatedRoomElements =
+                              selectedInspectionRoomElements.map((room) => {
+                                if (room._id === elementId) {
                                   return {
-                                    ...question,
-                                    answer: value,
+                                    ...room,
+                                    checklist: updatedChecklist,
                                   };
                                 }
-                                return question;
-                              }
+                                return room;
+                              });
+
+                            setSelectedInspectionRoomElements(
+                              updatedRoomElements
+                            );
+                          }}
+                        />
+                      )
+                    ) : option?.type === "dropDown" ? (
+                      makeInputsDisabled ? (
+                        <DropDownQuestion
+                          questionNumber={index + 1}
+                          question={option?.text}
+                          isRequired={option?.answerRequired}
+                        />
+                      ) : (
+                        <ElementQuestion.DropDown
+                          label={`${index + 1}. ${option?.text}`}
+                          isRequired={option?.answerRequired}
+                          options={option?.options}
+                          value={option?.answer}
+                          onChange={(value) => {
+                            const updatedChecklist =
+                              elementForm.values.elementQuestions.map(
+                                (question) => {
+                                  if (question._id === option._id) {
+                                    return {
+                                      ...question,
+                                      answer: value,
+                                    };
+                                  }
+                                  return question;
+                                }
+                              );
+
+                            elementForm.setFieldValue(
+                              "elementQuestions",
+                              updatedChecklist
                             );
 
-                          elementForm.setFieldValue(
-                            "elementQuestions",
-                            updatedChecklist
-                          );
+                            const updatedRoomElements =
+                              selectedInspectionRoomElements.map((room) => {
+                                if (room._id === elementId) {
+                                  return {
+                                    ...room,
+                                    checklist: updatedChecklist,
+                                  };
+                                }
+                                return room;
+                              });
 
-                          const updatedRoomElements =
-                            selectedInspectionRoomElements.map((room) => {
-                              if (room._id === elementId) {
-                                return {
-                                  ...room,
-                                  checklist: updatedChecklist,
-                                };
-                              }
-                              return room;
-                            });
-
-                          setSelectedInspectionRoomElements(
-                            updatedRoomElements
-                          );
-                        }}
-                      />
-                    )
-                  ) : null}
-                </div>
-              ))
+                            setSelectedInspectionRoomElements(
+                              updatedRoomElements
+                            );
+                          }}
+                        />
+                      )
+                    ) : null}
+                  </div>
+                );
+              })
             )}
 
             <div className="flex items-center gap-[16px] md:justify-start justify-between">
