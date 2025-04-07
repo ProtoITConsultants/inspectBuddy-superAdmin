@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { userInspectionsAPIs } from "../api/user-inspections";
 import { toast } from "sonner";
 import { userTemplatesAPIs } from "./../api/template";
+import { userDetailsAPIs } from "../api";
 
 // Save Room Details - Mutation
 export const useSaveRoomDetails = () => useMutation({});
@@ -150,6 +151,49 @@ export const useAddQuestionToRoomElement = ({
     onError: (error) => {
       toast.error("Error!", {
         description: error.message || "Couldn't create new Question.",
+        duration: 3000,
+      });
+    },
+  });
+
+// Add Existing Question to Room Element - Mutation
+export const useAddExistingQuestionToRoomElement = ({
+  id,
+  roomId,
+  userId,
+  elementId,
+  questions,
+  elementCategory,
+  updateElementQuestions,
+}) =>
+  useMutation({
+    mutationFn: () =>
+      elementCategory === "inspection"
+        ? userInspectionsAPIs.addQuestionToRoomElementInInspection({
+            inspectionId: id,
+            roomId: roomId,
+            userId: userId,
+            elementId: elementId,
+            questions: questions,
+          })
+        : userDetailsAPIs.addSelectedQuestionsToElement({
+            templateId: id,
+            roomId: roomId,
+            userId: userId,
+            elementId: elementId,
+            questions: questions,
+          }),
+
+    onSuccess: (data) => {
+      updateElementQuestions(data);
+      toast.success("Success!", {
+        description: "Questions added successfully.",
+        duration: 3000,
+      });
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't add existing question.",
         duration: 3000,
       });
     },

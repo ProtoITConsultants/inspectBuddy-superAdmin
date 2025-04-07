@@ -24,6 +24,7 @@ import PreviewQuestion from "./PreviewQuestionElements";
 import { useInspectionStore } from "../../../../store/inspectionStore";
 import { userInspectionsAPIs } from "../../api/user-inspections";
 import {
+  useAddExistingQuestionToRoomElement,
   useAddQuestionToRoomElement,
   useDeleteRoomElementQuestions,
 } from "../../hooks/inspectionMutations";
@@ -173,7 +174,7 @@ const AddQuestion = ({
 
   // Local States
   const [active, setActive] = useState(0);
-  const [isAddingQuestion, setIsAddingQuestion] = useState(false);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
 
   // This Array will contain the updated questuions list
   // Already Added Questions contain extra field (disabled: true)
@@ -227,61 +228,110 @@ const AddQuestion = ({
   });
 
   // Mutations
-  const addSelectedQuestionsToElement = useMutation({
-    mutationFn: () => {
-      setIsAddingQuestion(true);
+  // const addSelectedQuestionsToElement = useMutation({
+  //   mutationFn: () => {
+  //     setIsAddingQuestion(true);
 
-      // remove the isdefault, __v, _id keys from the selected questions and add shouldSave key with value false
-      const questions = selectedQuestions.map((question) => {
-        const filteredEntries = Object.entries(question).filter(
-          ([key]) => !["isdefault", "__v", "_id", "user"].includes(key)
+  //     // remove the isdefault, __v, _id keys from the selected questions and add shouldSave key with value false
+  //     const questions = selectedQuestions.map((question) => {
+  //       const filteredEntries = Object.entries(question).filter(
+  //         ([key]) => !["isdefault", "__v", "_id", "user"].includes(key)
+  //       );
+
+  //       return {
+  //         ...Object.fromEntries(filteredEntries),
+  //         shouldSave: false,
+  //       };
+  //     });
+
+  //     return userDetailsAPIs.addSelectedQuestionsToElement({
+  //       templateId: templateId,
+  //       roomId: roomId,
+  //       elementId: currentElementId,
+  //       questions: questions,
+  //       userId: userId,
+  //     });
+  //   },
+
+  //   onSuccess: (data) => {
+  //     setIsAddingQuestion(false);
+  //     // Update the selectedTemplateRoomElements
+  //     const updatedElements = selectedTemplateRoomElements.map((element) => {
+  //       if (element._id === currentElementId) {
+  //         return {
+  //           ...element,
+  //           checklist: [...element.checklist, ...data.newChecklistItems],
+  //         };
+  //       }
+  //       return element;
+  //     });
+  //     setSelectedTemplateRoomElements(updatedElements);
+  //     setSelectedQuestions([]);
+  //     toast.success("Success!", {
+  //       description: "Questions added successfully.",
+  //       duration: 3000,
+  //     });
+  //     onCloseModal();
+  //   },
+
+  //   onError: (error) => {
+  //     toast.error("Error!", {
+  //       description: error.message || "Couldn't add questions.",
+  //       duration: 3000,
+  //     });
+  //     setIsAddingQuestion(false);
+  //   },
+  // });
+
+  //  Add Existing Question to Room Element - Mutation
+  const addSelectedQuestionsToElement = useAddExistingQuestionToRoomElement({
+    id: elementCategory === "inspection" ? inspectionId : templateId,
+    roomId: roomId,
+    userId: userId,
+    elementId: currentElementId,
+    questions: selectedQuestions.map((question) => {
+      const filteredEntries = Object.entries(question).filter(
+        ([key]) => !["isdefault", "__v", "_id", "user"].includes(key)
+      );
+
+      return {
+        ...Object.fromEntries(filteredEntries),
+        shouldSave: false,
+      };
+    }),
+    elementCategory: elementCategory,
+    updateElementQuestions: (data) => {
+      if (elementCategory === "inspection") {
+        const updatedElements = selectedInspectionRoomElements.map(
+          (element) => {
+            if (element._id === currentElementId) {
+              return {
+                ...element,
+                checklist: [...element.checklist, ...data.newChecklistItems],
+              };
+            }
+            return element;
+          }
         );
-
-        return {
-          ...Object.fromEntries(filteredEntries),
-          shouldSave: false,
-        };
-      });
-
-      return userDetailsAPIs.addSelectedQuestionsToElement({
-        templateId: templateId,
-        roomId: roomId,
-        elementId: currentElementId,
-        questions: questions,
-        userId: userId,
-      });
-    },
-
-    onSuccess: (data) => {
-      setIsAddingQuestion(false);
-      // Update the selectedTemplateRoomElements
-      const updatedElements = selectedTemplateRoomElements.map((element) => {
-        if (element._id === currentElementId) {
-          return {
-            ...element,
-            checklist: [...element.checklist, ...data.newChecklistItems],
-          };
-        }
-        return element;
-      });
-      setSelectedTemplateRoomElements(updatedElements);
+        setSelectedInspectionRoomElements(updatedElements);
+      } else {
+        const updatedElements = selectedTemplateRoomElements.map((element) => {
+          if (element._id === currentElementId) {
+            return {
+              ...element,
+              checklist: [...element.checklist, ...data.newChecklistItems],
+            };
+          }
+          return element;
+        });
+        setSelectedTemplateRoomElements(updatedElements);
+      }
       setSelectedQuestions([]);
-      toast.success("Success!", {
-        description: "Questions added successfully.",
-        duration: 3000,
-      });
       onCloseModal();
-    },
-
-    onError: (error) => {
-      toast.error("Error!", {
-        description: error.message || "Couldn't add questions.",
-        duration: 3000,
-      });
-      setIsAddingQuestion(false);
     },
   });
 
+  // Create New Question - Mutation
   const createNewQuestion = useAddQuestionToRoomElement({
     id: elementCategory === "inspection" ? inspectionId : templateId,
     roomId: roomId,
@@ -373,7 +423,7 @@ const AddQuestion = ({
   // UseEffect to filter the already added questions
   useEffect(() => {
     if (active === 0) {
-      setIsAddingQuestion(true);
+      setIsLoadingQuestions(true);
 
       let currentElement;
 
@@ -409,7 +459,7 @@ const AddQuestion = ({
         setExistingQuestions(filteredQuestions);
       }
 
-      setIsAddingQuestion(false);
+      setIsLoadingQuestions(false);
     }
 
     // Clean up function
@@ -484,9 +534,13 @@ const AddQuestion = ({
       openModal={isModalOpen}
       onClose={() => {
         onCloseModal();
-        setIsAddingQuestion(false);
+        setIsLoadingQuestions(false);
       }}
-      loadingOverlay={isAddingQuestion || createNewQuestion.isPending}
+      loadingOverlay={
+        isLoadingQuestions ||
+        addSelectedQuestionsToElement.isPending ||
+        createNewQuestion.isPending
+      }
     >
       <Stepper
         styles={{
