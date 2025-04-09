@@ -6,8 +6,11 @@ const GET_ALL_USERS_URL = ({ page, searchQuery, subscriptionPlan }) =>
     searchQuery
   )}&filter=${encodeURIComponent(subscriptionPlan)}`;
 
+const GENERATE_USERS_CSV_FILE_URL = "/getUsersExcelSheet";
+
 const USERS_ENDPOINTS = {
   GET_ALL_USERS_URL,
+  GENERATE_USERS_CSV_FILE_URL,
 };
 
 export default USERS_ENDPOINTS;

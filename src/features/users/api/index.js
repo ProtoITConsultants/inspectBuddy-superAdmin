@@ -1,7 +1,5 @@
-import axios from "axios";
 import USERS_ENDPOINTS from "../../../constants/api/users";
 import axiosInstance from "../../../utils/axiosInstance";
-import Cookies from "js-cookie";
 
 export const usersListAPIs = {
   getAllUsers: async ({ page, searchQuery, subscriptionPlan }) => {
@@ -22,19 +20,9 @@ export const usersListAPIs = {
     }
   },
   generateUsersCSVFile: async () => {
-    const accessToken = Cookies.get("accessToken");
-
-    if (!accessToken) {
-      throw new Error("Access token is missing");
-    }
     try {
-      const response = await axios.get(
-        "https://api.inspectbuddy.app/api/admin/getUsersExcelSheet",
-        {
-          headers: {
-            Cookies: `accessToken=${accessToken}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        USERS_ENDPOINTS.GENERATE_USERS_CSV_FILE_URL
       );
 
       return response.data;
