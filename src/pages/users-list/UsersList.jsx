@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { usersListAPIs } from "../../features/users/api";
 import { toast } from "sonner";
@@ -14,6 +14,8 @@ import UserSubscriptionCard from "../../features/users/components/UserSubscripti
 import { useModalStore } from "../../store/modalsStore";
 import DeleteUserPopup from "../../features/users/components/DeleteUserPopup";
 import Button from "./../../components/ui/Button";
+import { Group } from "@mantine/core";
+import { DOWNLOAD_ICON } from "../../assets/icons/DownloadIcon";
 
 const UsersList = () => {
   // Global States
@@ -32,6 +34,18 @@ const UsersList = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getAllUsersQuery", filtersData],
     queryFn: () => usersListAPIs.getAllUsers(filtersData),
+  });
+
+  // Generate Users CSV File - Mutation
+  const generateUsersCSVFile = useMutation({
+    mutationFn: () =>
+      toast.promise(usersListAPIs.generateUsersCSVFile, {
+        loading: "Generating CSV...",
+        success: "CSV file generated successfully.",
+        error: "Error generating CSV file.",
+        duration: 3000,
+        richColors: true,
+      }),
   });
 
   // Error Toast
@@ -90,12 +104,25 @@ const UsersList = () => {
             setFiltersData((prev) => ({ ...prev, subscriptionPlan: value }))
           }
         />
-        <Searchbar
-          placeholder="Search users by name..."
-          onSearch={(value) =>
-            setFiltersData((prev) => ({ ...prev, searchQuery: value }))
-          }
-        />
+        <Group gap="sm">
+          <Searchbar
+            placeholder="Search users by name..."
+            onSearch={(value) =>
+              setFiltersData((prev) => ({ ...prev, searchQuery: value }))
+            }
+          />
+          <Button
+            id="generate-users-report"
+            buttonType="iconButton"
+            icon={
+              <DOWNLOAD_ICON className="h-[16px] text-primary group-hover:text-white transition-colors" />
+            }
+            className="h-[40px] !border-2 !border-[#CCE2FF] !text-primary !px-6 !font-semibold hover:bg-primary hover:!text-white hover:!border-primary group transition-colors"
+            label="Generate CSV"
+            type="button"
+            onClick={generateUsersCSVFile.mutate}
+          />
+        </Group>
       </FiltersTopbar>
       {/* User List Table */}
       <Table.Root className="p-[12px] h-[calc(100%-84px)]">
