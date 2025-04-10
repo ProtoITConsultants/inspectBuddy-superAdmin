@@ -40,9 +40,9 @@ const UsersList = () => {
   const generateUsersCSVFile = useMutation({
     mutationFn: () =>
       toast.promise(usersListAPIs.generateUsersCSVFile, {
-        loading: "Generating CSV...",
-        success: "CSV file generated successfully.",
-        error: "Error generating CSV file.",
+        loading: "Generating Excel file...",
+        success: "Excel file generated successfully.",
+        error: "Error generating Excel file.",
         duration: 3000,
         richColors: true,
       }),
