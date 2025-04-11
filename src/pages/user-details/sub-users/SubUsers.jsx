@@ -7,7 +7,7 @@ import useUserAddedPropertyCategories from "../../../hooks/useUserAddedPropertyC
 import { useParams } from "react-router";
 import Table from "../../../components/ui/Table";
 import { SUBUSERS_TABLE_HEADINGS } from "../../../constants/tables/headings";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../features/user-details/api";
 import { toast } from "sonner";
 import TableSkeleton from "../../../components/ui/TableSkeleton";
@@ -20,32 +20,54 @@ import {
 import Button from "../../../components/ui/Button";
 import AssignedCategoriesCard from "../../../features/user-details/components/sub-users/AssignedCategoriesCard";
 import SubUserCard from "../../../features/user-details/components/sub-users/SubUserCard";
+import DeleteUserPopup from "../../../features/users/components/DeleteUserPopup";
 
 const SubUsers = () => {
+  // Hooks
+  const queryClient = useQueryClient();
   const { userId } = useParams();
+  const USER_ADDED_PROPERTY_CATEGORIES = useUserAddedPropertyCategories({
+    userId: userId,
+  });
 
+  // Local States
+  const [showDeleteSubUserModal, setShowDeleteSubUserModal] = useState(false);
+  const [subUserToDelete, setSubUserToDelete] = useState({});
   const [filtersData, setFiltersData] = useState({
     keyword: "All Members",
     page: 1,
     search: "",
   });
 
-  const USER_ADDED_PROPERTY_CATEGORIES = useUserAddedPropertyCategories({
-    userId: userId,
-  });
-
+  // Fetching Sub Users - Query
   const { data, isError, isPending } = useQuery({
     queryKey: ["subUsers", filtersData],
     queryFn: () =>
       userDetailsAPIs.fetchSubUsers({ userId: userId, filtersData }),
   });
 
-  if (isError) {
-    return toast.error("Error!", {
-      description: `Couldn't fetch Sub Users!`,
-      duration: 3000,
-    });
-  }
+  // Delete Sub User - Mutation
+  const deleteSubUser = useMutation({
+    mutationFn: () =>
+      userDetailsAPIs.deleteSubUser({ userId, subUserId: subUserToDelete._id }),
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: `Sub User deleted successfully.`,
+        duration: 3000,
+        richColors: true,
+      });
+      setShowDeleteSubUserModal(false);
+      setSubUserToDelete({});
+      queryClient.invalidateQueries(["subUsers"]);
+    },
+    onError: () => {
+      toast.error("Error!", {
+        description: `Couldn't delete Sub User.`,
+        duration: 3000,
+        richColors: true,
+      });
+    },
+  });
 
   const rows = data?.subUsers?.map((member) => {
     return window.innerWidth > 1150 ? (
@@ -59,7 +81,7 @@ const SubUsers = () => {
           <p className="text-[14px] font-medium text-tertiary">
             {member.userName}
           </p>
-        </Table.SingleColumn>{" "}
+        </Table.SingleColumn>
         <Table.SingleColumn>
           <p className="text-[14px] font-medium text-tertiary">
             {member.lastOnline}
@@ -83,7 +105,10 @@ const SubUsers = () => {
               buttonType="iconButton"
               icon={<DELETE_ICON className="text-[#8885AA]" />}
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                setSubUserToDelete(member);
+                setShowDeleteSubUserModal(true);
+              }}
             />
           </Table.ItemActions>
         </Table.DoubleColumn>
@@ -97,8 +122,30 @@ const SubUsers = () => {
     );
   });
 
+  if (isError) {
+    return toast.error("Error!", {
+      description: `Couldn't fetch Sub Users!`,
+      duration: 3000,
+    });
+  }
+
   return (
     <React.Fragment>
+      {/* Delete Subuser Confirmation Modal */}
+      <DeleteUserPopup
+        isModalOpen={showDeleteSubUserModal}
+        onCloseModal={() => {
+          setShowDeleteSubUserModal(false);
+          setSubUserToDelete({});
+        }}
+        onConfirmDelete={() => deleteSubUser.mutate()}
+        loadingOverlay={deleteSubUser.isPending}
+        modalContent={{
+          modalTitle: "Confirmation",
+          modalDescription: `Are you sure you want to delete "${subUserToDelete.userName}"? This action cannot be undone.`,
+        }}
+      />
+
       {/* Filters Topbar */}
       <FiltersTopbar>
         <FilterSelect

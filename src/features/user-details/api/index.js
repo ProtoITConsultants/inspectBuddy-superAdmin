@@ -89,6 +89,25 @@ export const userDetailsAPIs = {
       );
     }
   },
+
+  // API to delete Sub User
+  deleteSubUser: async ({ userId, subUserId }) => {
+    try {
+      const response = await axiosInstance.delete(
+        USER_DETAILS_ENDPOINTS.DELETE_SUB_USER_URL({
+          userId,
+          subUserId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting sub user", error);
+      throw new Error(
+        error.response?.data?.message || "Error deleting sub user"
+      );
+    }
+  },
+
   // Fetch Sub users details
   fetchSubUserDetails: async ({ subUserId }) => {
     try {

@@ -1,48 +1,34 @@
-import { useState } from "react";
 import {
   ModalActions,
   ModalContent,
   ModalRoot,
 } from "../../../components/ui/Modal";
-import { useModalStore } from "../../../store/modalsStore";
 import Button from "../../../components/ui/Button";
 
-const DeleteUserPopup = () => {
-  const [loadingOverlay, setLoadingOverlay] = useState(false);
-
-  // Global States
-  const openDeleteUserModal = useModalStore(
-    (state) => state.openDeleteUserModal
-  );
-  const setOpenDeleteUserModal = useModalStore(
-    (state) => state.setOpenDeleteUserModal
-  );
-
-  if (!openDeleteUserModal) {
-    return;
-  }
-
+const DeleteUserPopup = ({
+  isModalOpen,
+  onCloseModal,
+  onConfirmDelete,
+  loadingOverlay,
+  modalContent,
+}) => {
   return (
     <ModalRoot
       id="delete-user-warning-modal"
       loadingOverlay={loadingOverlay}
-      openModal={openDeleteUserModal}
-      onClose={() => {
-        setOpenDeleteUserModal(false);
-      }}
+      openModal={isModalOpen}
+      onClose={() => onCloseModal()}
     >
       <ModalContent
-        heading="Delete User"
-        description="Are you sure you want to delete this user? All the properties,
-          templates and inspections of this user will also be deleted
-          permanently!"
+        heading={modalContent?.modalTitle}
+        description={modalContent?.modalDescription}
       />
       <ModalActions>
         <Button
           id="confirm-delete-user"
           type="button"
           buttonType="contained"
-          onClick={() => {}}
+          onClick={onConfirmDelete}
           label="Confirm Delete"
           buttonColor="#FF613E"
           className="!font-bold hover:!bg-warning-red-dark"
@@ -51,7 +37,7 @@ const DeleteUserPopup = () => {
           id="cancel-delete-user"
           type="button"
           buttonType="outlined"
-          onClick={() => setOpenDeleteUserModal(false)}
+          onClick={() => onCloseModal()}
           label="Cancel"
           className="!font-bold"
         />

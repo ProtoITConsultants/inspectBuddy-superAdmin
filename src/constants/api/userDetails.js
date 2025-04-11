@@ -16,8 +16,10 @@ const UPDATE_SUB_USER_DETAILS_URL = ({ userId }) =>
   `/updateSubUser?id=${encodeURIComponent(userId)}`;
 const CREATE_NEW_SUB_USER_URL = ({ userId }) =>
   `/createSubUser?id=${encodeURIComponent(userId)}`;
-const DELETE_SUB_USER_URL = ({ userId }) =>
-  `/deleteSubUser?id=${encodeURIComponent(userId)}`;
+const DELETE_SUB_USER_URL = ({ userId, subUserId }) =>
+  `/deleteSubUser/${encodeURIComponent(subUserId)}?id=${encodeURIComponent(
+    userId
+  )}`;
 
 // Properties
 const FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL = ({ userId }) =>
