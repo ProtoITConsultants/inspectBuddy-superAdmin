@@ -34,12 +34,16 @@ export const AssignedCategoriesSection = ({ assignedCategories }) => {
         Assigned Categories
       </p>
       <div className="flex items-center gap-[8px]">
-        {assignedCategories.map((category) => (
-          <UserSelectedCategoriesChip
-            key={category._id}
-            label={category.value}
-          />
-        ))}
+        {assignedCategories.length < 1 ? (
+          <p className="text-[14px] text-dark-gray">No Categories Assigned</p>
+        ) : (
+          assignedCategories.map((category) => (
+            <UserSelectedCategoriesChip
+              key={category._id}
+              label={category.value}
+            />
+          ))
+        )}
       </div>
     </div>
   );
