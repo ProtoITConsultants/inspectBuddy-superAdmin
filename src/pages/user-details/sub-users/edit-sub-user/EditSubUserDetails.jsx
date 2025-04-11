@@ -38,7 +38,7 @@ const EditSubUserDetails = () => {
       (category) => {
         return form.values.assignedCategories.includes(category.value);
       }
-    );
+    ).map((category) => category._id);
 
     // API Params
     const API_PARMS = {
@@ -100,10 +100,6 @@ const EditSubUserDetails = () => {
         userPhoneNumber:
           values.userPhoneNumber.replace(/[\s()-]/g, "").length < 11
             ? "User Phone Number is not Valid!"
-            : null,
-        assignedCategories:
-          values.assignedCategories.length === 0
-            ? "Please select atleast one category"
             : null,
       };
     },
