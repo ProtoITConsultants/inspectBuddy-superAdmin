@@ -38,7 +38,7 @@ const Header = ({
         >
           <div className="w-full flex justify-end items-end">
             <Link
-              href={addButtonLink}
+              to={addButtonLink}
               className="flex items-center justify-center bg-primary text-white font-bold text-[14px] p-[12px_24px] rounded-[8px]"
             >
               {addButtonLabel}

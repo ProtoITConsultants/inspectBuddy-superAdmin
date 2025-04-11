@@ -72,6 +72,23 @@ export const userDetailsAPIs = {
       );
     }
   },
+  // API to add new Sub User
+  createNewSubUser: async ({ userId, subUserDetails }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.CREATE_NEW_SUB_USER_URL({
+          userId,
+        }),
+        subUserDetails
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating new sub user", error);
+      throw new Error(
+        error.response?.data?.message || "Error creating new sub user"
+      );
+    }
+  },
   // Fetch Sub users details
   fetchSubUserDetails: async ({ subUserId }) => {
     try {

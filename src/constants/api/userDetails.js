@@ -14,6 +14,10 @@ const FETCH_SUB_USER_DETAILS_URL = ({ subUserId }) =>
   `/getSubUserById/${encodeURIComponent(subUserId)}`;
 const UPDATE_SUB_USER_DETAILS_URL = ({ userId }) =>
   `/updateSubUser?id=${encodeURIComponent(userId)}`;
+const CREATE_NEW_SUB_USER_URL = ({ userId }) =>
+  `/createSubUser?id=${encodeURIComponent(userId)}`;
+const DELETE_SUB_USER_URL = ({ userId }) =>
+  `/deleteSubUser?id=${encodeURIComponent(userId)}`;
 
 // Properties
 const FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL = ({ userId }) =>
@@ -74,6 +78,8 @@ const USER_DETAILS_ENDPOINTS = {
   FETCH_SUB_USER_FOR_USER_URL,
   FETCH_SUB_USER_DETAILS_URL,
   UPDATE_SUB_USER_DETAILS_URL,
+  CREATE_NEW_SUB_USER_URL,
+  DELETE_SUB_USER_URL,
   // Properties
   FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL,
   FETCH_USER_ADDED_PROPERTIES_URL,
