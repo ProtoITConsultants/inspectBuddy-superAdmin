@@ -54,10 +54,6 @@ const AddNewSubUser = () => {
           values.userPhoneNumber.replace(/[\s()-]/g, "").length < 11
             ? "User Phone Number is not Valid!"
             : null,
-        assignedCategories:
-          values.assignedCategories.length === 0
-            ? "Please select atleast one category"
-            : null,
       };
     },
   });
@@ -71,7 +67,7 @@ const AddNewSubUser = () => {
             category.value
           );
         }
-      );
+      ).map((category) => category._id);
 
       const subUserDetails = {
         name: subUserDetailsForm.values.userName,
@@ -87,7 +83,7 @@ const AddNewSubUser = () => {
         assignedCategories: assignedCategories,
       };
 
-      userDetailsAPIs.createNewSubUser({
+      return userDetailsAPIs.createNewSubUser({
         userId: userId,
         subUserDetails: subUserDetails,
       });

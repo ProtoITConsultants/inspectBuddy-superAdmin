@@ -12,7 +12,7 @@ const SubUserCard = ({ memberData, totalCategories }) => {
 
         <div className="flex items-center justify-center gap-[8px]">
           <Link
-            to={`/member-details/${memberData._id}`}
+            to={`details/${memberData._id}`}
             className="px-[16px] py-[10px] rounded-[8px] border-[#E5E6EB] border-[1.5px] text-dark-blue font-medium text-[14px] w-fit"
           >
             <span>View Details</span>

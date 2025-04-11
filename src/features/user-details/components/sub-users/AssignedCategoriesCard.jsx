@@ -7,6 +7,19 @@ const AssignedCategoriesCard = ({ assignedCategories, totalCategories }) => {
     (category) => category.value
   );
 
+  if (assignedCategoriesCount < 1) {
+    return (
+      <Tooltip
+        label="No Categories Assigned"
+        transitionProps={{ transition: "pop-bottom-left", duration: 300 }}
+      >
+        <div className="p-[8px] bg-[#2a85ff24] rounded-[8px] hover:cursor-pointer h-fit">
+          <p className="text-[14px] font-bold text-primary">N/A</p>
+        </div>
+      </Tooltip>
+    );
+  }
+
   return (
     <Tooltip
       label={tooltipCategories.join(", ")}

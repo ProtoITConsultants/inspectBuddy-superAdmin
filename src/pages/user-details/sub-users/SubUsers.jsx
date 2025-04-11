@@ -68,7 +68,7 @@ const SubUsers = () => {
         <Table.DoubleColumn>
           <AssignedCategoriesCard
             assignedCategories={member.categoriesAssigned}
-            totalCategories={3 + USER_ADDED_PROPERTY_CATEGORIES.length}
+            totalCategories={USER_ADDED_PROPERTY_CATEGORIES.length}
           />
         </Table.DoubleColumn>
         <Table.DoubleColumn>
@@ -92,7 +92,7 @@ const SubUsers = () => {
       <SubUserCard
         key={member._id}
         memberData={member}
-        totalCategories={3 + USER_ADDED_PROPERTY_CATEGORIES.length}
+        totalCategories={USER_ADDED_PROPERTY_CATEGORIES.length}
       />
     );
   });
