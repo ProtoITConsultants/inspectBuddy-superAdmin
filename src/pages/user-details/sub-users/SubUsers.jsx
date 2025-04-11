@@ -40,6 +40,8 @@ const SubUsers = () => {
       userDetailsAPIs.fetchSubUsers({ userId: userId, filtersData }),
   });
 
+  console.log("Sub Users Data: ", data);
+
   if (isError) {
     return toast.error("Error!", {
       description: `Couldn't fetch Sub Users!`,
@@ -158,7 +160,7 @@ const SubUsers = () => {
           )}
         </Table.Body>
         {/* Pagination */}
-        {data && data?.totalPages && (
+        {data && data?.totalPages > 0 && (
           <Table.Pagination
             filtersData={filtersData}
             setFiltersData={(value) =>
