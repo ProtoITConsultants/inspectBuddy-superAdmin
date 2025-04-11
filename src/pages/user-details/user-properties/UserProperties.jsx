@@ -182,7 +182,7 @@ const UserProperties = () => {
             rows
           )}
         </Table.Body>
-        {data && data?.totalPages && (
+        {data && data?.totalPages > 0 && (
           <Table.Pagination
             filtersData={filtersData}
             setFiltersData={(value) =>
