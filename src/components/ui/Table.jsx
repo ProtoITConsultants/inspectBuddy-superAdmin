@@ -17,7 +17,13 @@ const Root = ({ children, className }) => {
   );
 };
 
-const Header = ({ children, showAddButton = false, className = "" }) => {
+const Header = ({
+  children,
+  className = "",
+  showAddButton = false,
+  addButtonLabel,
+  addButtonLink,
+}) => {
   return (
     <div
       className={cn(
@@ -32,10 +38,10 @@ const Header = ({ children, showAddButton = false, className = "" }) => {
         >
           <div className="w-full flex justify-end items-end">
             <Link
-              href="#"
+              href={addButtonLink}
               className="flex items-center justify-center bg-primary text-white font-bold text-[14px] p-[12px_24px] rounded-[8px]"
             >
-              Add New User
+              {addButtonLabel}
             </Link>
           </div>
         </div>

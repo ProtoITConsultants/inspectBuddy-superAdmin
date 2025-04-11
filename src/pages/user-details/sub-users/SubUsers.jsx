@@ -40,8 +40,6 @@ const SubUsers = () => {
       userDetailsAPIs.fetchSubUsers({ userId: userId, filtersData }),
   });
 
-  console.log("Sub Users Data: ", data);
-
   if (isError) {
     return toast.error("Error!", {
       description: `Couldn't fetch Sub Users!`,
@@ -126,7 +124,11 @@ const SubUsers = () => {
         className={`p-[12px] md:h-[calc(100%-84px)] h-[calc(100%-136px)]`}
       >
         {/* Table Header */}
-        <Table.Header>
+        <Table.Header
+          showAddButton={true}
+          addButtonLabel="Add Sub User"
+          addButtonLink={`/user-details/${userId}/add-sub-user`}
+        >
           {SUBUSERS_TABLE_HEADINGS.map((heading) =>
             heading.key === "assignedCategories" ? (
               <Table.DoubleColumn key={heading.key}>
@@ -143,8 +145,8 @@ const SubUsers = () => {
         <Table.Body
           className={`${
             data?.totalPages < 2
-              ? "h-[calc(100%-105px)]"
-              : "h-[calc(100%-115px)]"
+              ? "h-[calc(100%-126px)]"
+              : "h-[calc(100%-136px)]"
           }`}
         >
           {isPending ? (
