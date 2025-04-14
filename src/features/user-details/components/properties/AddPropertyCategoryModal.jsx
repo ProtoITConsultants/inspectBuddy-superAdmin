@@ -54,6 +54,7 @@ const AddPropertyCategoryModal = ({ isModalOpen, onCloseModal }) => {
         richColors: true,
       });
       onCloseModal();
+      form.reset();
     },
     onError: () => {
       toast.error("Error!", {
