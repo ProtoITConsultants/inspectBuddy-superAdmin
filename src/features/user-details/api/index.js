@@ -159,7 +159,7 @@ export const userDetailsAPIs = {
           userId,
         }),
         {
-          category: filtersData.propertyCategory,
+          categoryId: filtersData.propertyCategory,
           page: filtersData.page,
           search: filtersData.search,
           startDate: filtersData.startdate,

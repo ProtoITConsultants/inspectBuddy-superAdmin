@@ -27,9 +27,16 @@ const FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL = ({ userId }) =>
 const FETCH_PROPERTY_DETAILS_URL = ({ propertyId }) =>
   `/getPropertyById/${encodeURIComponent(propertyId)}`;
 const UPDATE_PROPERTY_DETAILS_URL = "/editExistingProperty";
-
 const FETCH_USER_ADDED_PROPERTIES_URL = ({ userId }) =>
   `/getCompleteProperties?id=${encodeURIComponent(userId)}`;
+const ADD_NEW_USER_PROPERTY_URL = ({ userId }) =>
+  `/createProperty?id=${encodeURIComponent(userId)}`;
+const DELETE_USER_PROPERTY_URL = ({ userId, propertyId }) =>
+  `/deleteProperty/${encodeURIComponent(propertyId)}?id=${encodeURIComponent(
+    userId
+  )}`;
+const CREATE_NEW_PROPERTY_CATEGORY_URL = ({ userId }) =>
+  `/addPropertyCategory?id=${encodeURIComponent(userId)}`;
 
 // Templates
 const FETCH_USER_ADDED_TEMPLATES_URL = ({ userId }) =>
@@ -87,6 +94,9 @@ const USER_DETAILS_ENDPOINTS = {
   FETCH_USER_ADDED_PROPERTIES_URL,
   FETCH_PROPERTY_DETAILS_URL,
   UPDATE_PROPERTY_DETAILS_URL,
+  ADD_NEW_USER_PROPERTY_URL,
+  CREATE_NEW_PROPERTY_CATEGORY_URL,
+  DELETE_USER_PROPERTY_URL,
   // Templates
   FETCH_USER_ADDED_TEMPLATES_URL,
   FETCH_TEMPLATE_DETAILS_URL,

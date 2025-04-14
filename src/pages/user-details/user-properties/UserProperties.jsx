@@ -30,6 +30,8 @@ const UserProperties = () => {
     userId: userId,
   });
 
+  // console.log("USER_ADDED_PROPERTY_CATEGORIES", USER_ADDED_PROPERTY_CATEGORIES);
+
   // Filters Data
   const [filtersData, setFiltersData] = useState({
     propertyCategory: "",
@@ -78,7 +80,7 @@ const UserProperties = () => {
             propertyData={{
               propertyName: property.name,
               propertyAddress: property.address,
-              propertyImageURL: property.image.url,
+              propertyImageURL: property?.image?.url || "",
             }}
           />
         </Table.DoubleColumn>
@@ -110,11 +112,25 @@ const UserProperties = () => {
       <FiltersTopbar>
         <FilterSelect
           options={[
-            { _id: "1", label: "All Properties", value: "" },
+            { label: "All Properties", value: "all", iconId: "" },
             ...USER_ADDED_PROPERTY_CATEGORIES,
           ]}
           onChange={(value) => {
-            setFiltersData((prev) => ({ ...prev, propertyCategory: value }));
+            if (value === "all") {
+              return setFiltersData((prev) => ({
+                ...prev,
+                propertyCategory: "",
+              }));
+            }
+
+            // Get the property category id
+            const selectedCategoryId = USER_ADDED_PROPERTY_CATEGORIES.find(
+              (cat) => cat.value === value
+            );
+            setFiltersData((prev) => ({
+              ...prev,
+              propertyCategory: selectedCategoryId,
+            }));
           }}
           initialValue={null}
           placeholder="Select Category"
