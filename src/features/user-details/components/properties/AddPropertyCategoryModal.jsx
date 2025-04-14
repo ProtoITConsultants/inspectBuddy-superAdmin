@@ -40,7 +40,7 @@ const AddPropertyCategoryModal = ({ isModalOpen, onCloseModal }) => {
   const createPropertyCategory = useMutation({
     mutationFn: () =>
       userPropertiesAPIs.createPropertyCategory({
-        propertyCategory: form.values.propertyCategory,
+        value: form.values.propertyCategory,
         iconId: form.values.propertyCategoryIconId,
         userId: userId,
       }),
