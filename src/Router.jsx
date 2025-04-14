@@ -27,6 +27,7 @@ import ViewInspectionDetails from "./pages/user-details/user-inspections/view-in
 import EditUserInspection from "./pages/user-details/user-inspections/edit-user-inspection/EditUserInspection";
 import EditUserInspectionRoom from "./pages/user-details/user-inspections/edit-inspection-room/EditUserInspectionRoom";
 import AddNewSubUser from "./pages/user-details/sub-users/add-sub-user/AddNewSubUser";
+import AddUserProperty from "./pages/user-details/user-properties/add-user-property/AddUserProperty";
 
 export const router = createBrowserRouter([
   {
@@ -117,8 +118,13 @@ export const router = createBrowserRouter([
             path: "add-sub-user",
             element: <AddNewSubUser />,
           },
+          {
+            path: "add-new-property",
+            element: <AddUserProperty />,
+          },
         ],
       },
+
       // Edit/View Sub User, Property, Template, Inspection Routes
       {
         path: ":userId/sub-users/details",
