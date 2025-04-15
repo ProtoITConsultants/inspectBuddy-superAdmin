@@ -43,7 +43,7 @@ export const userPropertiesAPIs = {
   },
 
   // Delete Property
-  deleteProperty: async ({ propertyId, userId }) => {
+  deleteUserProperty: async ({ propertyId, userId }) => {
     try {
       const response = await axiosInstance.delete(
         USER_DETAILS_ENDPOINTS.DELETE_USER_PROPERTY_URL({

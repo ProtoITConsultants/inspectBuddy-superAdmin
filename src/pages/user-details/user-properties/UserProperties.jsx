@@ -22,6 +22,7 @@ import IconLink from "../../../components/ui/IconLink";
 import PropertyCard from "../../../features/user-details/components/properties/PropertyCard";
 import ResponsivePropertyCard from "../../../features/user-details/components/properties/ResponsivePropertyCard";
 import AddPropertyButton from "../../../features/user-details/components/properties/AddPropertyButton";
+import DeletePropertyModal from "../../../features/user-details/components/properties/DeletePropertyModal";
 
 const UserProperties = () => {
   // Hooks
@@ -30,7 +31,8 @@ const UserProperties = () => {
     userId: userId,
   });
 
-  // console.log("USER_ADDED_PROPERTY_CATEGORIES", USER_ADDED_PROPERTY_CATEGORIES);
+  const [openDeletePropertyModal, setOpenDeletePropertyModal] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState({});
 
   // Filters Data
   const [filtersData, setFiltersData] = useState({
@@ -96,7 +98,10 @@ const UserProperties = () => {
               buttonType="iconButton"
               icon={<DELETE_ICON className="text-[#9EA3AE]" />}
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                setOpenDeletePropertyModal(true);
+                setPropertyToDelete(property);
+              }}
             />
           </Table.ItemActions>
         </Table.DoubleColumn>
@@ -108,6 +113,13 @@ const UserProperties = () => {
 
   return (
     <React.Fragment>
+      {openDeletePropertyModal && (
+        <DeletePropertyModal
+          isModalOpen={openDeletePropertyModal}
+          onCloseModal={() => setOpenDeletePropertyModal(false)}
+          propertyToDelete={propertyToDelete}
+        />
+      )}
       {/* Filters Topbar */}
       <FiltersTopbar>
         <FilterSelect
