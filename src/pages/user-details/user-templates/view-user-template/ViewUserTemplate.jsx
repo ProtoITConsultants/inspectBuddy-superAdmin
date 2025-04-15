@@ -41,13 +41,20 @@ const ViewUserTemplate = () => {
         updatedOn="Dec 11, 2024"
       />
       <ViewTemplate.RoomsRoot>
-        {templateData?.map((room) => (
-          <ViewTemplate.RoomCard
-            key={room._id}
-            roomName={room.name}
-            elementsCount={room.elementCount}
-          />
-        ))}
+        {templateData.length > 0 ? (
+          templateData?.map((room) => (
+            <ViewTemplate.RoomCard
+              key={room._id}
+              roomName={room.name}
+              elementsCount={room.elementCount}
+            />
+          ))
+        ) : (
+          <p className="text-[16px] text-dark-gray text-center mx-auto max-w-[400px]">
+            No Rooms Added for this Template. Please Click on the{" "}
+            <b>Edit Details</b> button and Start Adding Rooms!
+          </p>
+        )}
       </ViewTemplate.RoomsRoot>
     </DetailPagesRoot>
   );
