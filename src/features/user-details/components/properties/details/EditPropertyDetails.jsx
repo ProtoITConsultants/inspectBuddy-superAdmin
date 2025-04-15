@@ -44,8 +44,14 @@ const ImageInput = ({
   };
 
   useEffect(() => {
+    // Check if imageURL is file then convert it to URL first
     if (imageURL) {
-      setPropertyImage(imageURL);
+      if (imageURL instanceof File) {
+        const url = URL.createObjectURL(imageURL);
+        setPropertyImage(url);
+      } else {
+        setPropertyImage(imageURL);
+      }
     }
 
     return () => {

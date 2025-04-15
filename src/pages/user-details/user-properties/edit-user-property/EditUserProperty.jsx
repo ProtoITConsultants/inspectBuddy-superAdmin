@@ -13,10 +13,10 @@ import PropertyCategorySelect from "../../../../features/user-details/components
 import Button from "../../../../components/ui/Button";
 import EditPropertySkeletion from "../../../../features/user-details/components/properties/details/EditPropertySkeletion";
 
-const PROPERTY_CATEGORIES = [
-  { _id: 1, value: "Residential", iconId: "2" },
-  { _id: 2, value: "Commercial", iconId: "5" },
-];
+// const PROPERTY_CATEGORIES = [
+//   { _id: 1, value: "Residential", iconId: "2" },
+//   { _id: 2, value: "Commercial", iconId: "5" },
+// ];
 
 const EditUserProperty = () => {
   // Hooks
@@ -185,7 +185,7 @@ const EditUserProperty = () => {
     });
   }
   return (
-    <DetailPagesRoot>
+    <DetailPagesRoot className="!h-full !overflow-hidden">
       <EditPropertyForm.Root heading="Property Details">
         <EditPropertyForm.ImageInput
           imageURL={form.values.propertyImage}
@@ -269,7 +269,7 @@ const EditUserProperty = () => {
                   setShowCustomCategoryInput(false);
                   form.setFieldValue("propertyCategory", {
                     value: value,
-                    iconId: PROPERTY_CATEGORIES.find(
+                    iconId: USER_ADDED_PROPERTY_CATEGORIES.find(
                       (cat) => cat.value === value
                     )?.iconId,
                   });
