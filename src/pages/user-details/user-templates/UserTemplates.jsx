@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { userDetailsAPIs } from "../../../features/user-details/api";
@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import FiltersTopbar from "../../../components/ui/FiltersTopbar";
 import { TEMPLATE_CATEGORIES } from "../../../constants/filters";
 import FilterSelect from "../../../components/ui/FilterSelect";
-import { Group } from "@mantine/core";
+import { Group, TextInput } from "@mantine/core";
 import Searchbar from "../../../components/ui/Searchbar";
 import DateRangeFilter from "../../../components/ui/DateRangeFilter";
 import Table from "../../../components/ui/Table";
@@ -23,6 +23,8 @@ import {
 } from "../../../assets/icons/DynamicIcons";
 import Button from "../../../components/ui/Button";
 import ResponsiveTemplateCard from "../../../features/user-details/components/templates/ResponsiveTemplateCard";
+import AddNewTemplateModal from "../../../features/user-details/components/templates/AddNewTemplateModal";
+import { ModalActions } from "../../../components/ui/Modal";
 
 const UserTemplates = () => {
   // Hooks
@@ -37,12 +39,20 @@ const UserTemplates = () => {
     enddate: "",
   });
 
+  const [newTemplateModalData, setNewTemplateModalData] = useState({
+    openModal: false,
+    templateName: "",
+  });
+
   // Query to fetch the Templates
   const { data, isError, error, isPending } = useQuery({
     queryKey: ["templatesQuery", filtersData, userId],
     queryFn: () =>
       userDetailsAPIs.fetchUserAddedTemplates({ userId: userId, filtersData }),
   });
+
+  // Create New Template - Mutation
+  const createNewTemplate = useMutation({});
 
   if (isError) {
     return toast.error("Error!", {
@@ -112,6 +122,47 @@ const UserTemplates = () => {
 
   return (
     <React.Fragment>
+      {/* Add New Template Modal */}
+      <AddNewTemplateModal
+        isModalOpen={newTemplateModalData.openModal}
+        onCloseModal={() => {
+          setNewTemplateModalData((prev) => ({ ...prev, openModal: false }));
+        }}
+        isCreatingTemplate={createNewTemplate.isPending}
+      >
+        <TextInput
+          id="template-name"
+          label="Template Name"
+          placeholder="Enter Template Name"
+          value={newTemplateModalData.templateName}
+          onChange={(e) => {
+            setNewTemplateModalData((prev) => ({
+              ...prev,
+              templateName: e.target.value,
+            }));
+          }}
+        />
+        <ModalActions>
+          <Button
+            id="confirm-create-template"
+            type="button"
+            buttonType="contained"
+            onClick={() => createNewTemplate.mutate("")}
+            label="Continue"
+            buttonColor="#FF613E"
+            className="!font-bold hover:!bg-warning-red-dark"
+          />
+          <Button
+            id="save-as-draft-template"
+            type="button"
+            buttonType="outlined"
+            onClick={() => createNewTemplate.mutate("draft")}
+            label="Save as Draft"
+            className="!font-bold"
+          />
+        </ModalActions>
+      </AddNewTemplateModal>
+
       {/* Filters Topbar */}
       <FiltersTopbar>
         <FilterSelect
@@ -152,7 +203,15 @@ const UserTemplates = () => {
               </Table.SingleColumn>
             )
           )}
-          <AddNewTemplateBtn className="col-span-3" />
+          <AddNewTemplateBtn
+            className="col-span-3"
+            onClick={() =>
+              setNewTemplateModalData((prev) => ({
+                ...prev,
+                openModal: true,
+              }))
+            }
+          />
         </Table.Header>
 
         <AddNewTemplateBtn className="w1150:hidden lg:pb-[24px] pb-[12px] lg:mb-0 mb-[12px] border-b border-[#E4F0FF]" />
