@@ -17,9 +17,15 @@ export const PropertyDetailsContainer = ({ children }) => {
 };
 
 export const PropertyDetailsHeader = ({ propertyImageURL }) => {
-  return (
+  return propertyImageURL ? (
     <img
       src={propertyImageURL}
+      alt="property"
+      className="w-full md:h-[310px] h-[145px] object-cover object-center rounded-t-[8px]"
+    />
+  ) : (
+    <img
+      src="https://storage.googleapis.com/helloinspector_data_storage/frontend-imgs/default-property-image-details-page.svg"
       alt="property"
       className="w-full md:h-[310px] h-[145px] object-cover object-center rounded-t-[8px]"
     />
