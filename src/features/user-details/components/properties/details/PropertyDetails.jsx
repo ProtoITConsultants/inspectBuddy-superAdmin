@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { EDIT_DETAILS_ICON } from "../../../../../assets/icons/EditIcon";
 import Button from "../../../../../components/ui/Button";
 import {
@@ -7,6 +7,8 @@ import {
   VIEW_DETAIL_ICON,
 } from "../../../../../assets/icons/DynamicIcons";
 import styles from "./PropertyDetails.module.css";
+import React, { useState } from "react";
+import DeletePropertyModal from "../DeletePropertyModal";
 
 export const PropertyDetailsContainer = ({ children }) => {
   return (
@@ -41,36 +43,53 @@ export const PropertyDetailsBody = ({ children }) => {
 };
 
 export const PropertyDetails = ({ propertyDetails }) => {
-  return (
-    <div className="md:flex items-center justify-between lg:px-[32px]">
-      <div className="text-dark-blue">
-        <h1 className="lg:text-[32px] md:text-[28px] text-[20px] font-bold">
-          {propertyDetails?.name}
-        </h1>
-        <p className="opacity-50 md:text-[16px] text-[14px]">
-          {`${propertyDetails?.address?.unit}, ${propertyDetails?.address?.street}, ${propertyDetails?.address?.city}, ${propertyDetails?.address?.state}, ${propertyDetails?.address?.country}`}
-        </p>
-      </div>
+  // Hooks
+  const navigate = useNavigate();
 
-      <div className="flex md:gap-[8px] gap-[16px] md:mt-0 mt-[24px]">
-        <Link
-          to={`edit-property`}
-          className="px-[10px] py-[8px] rounded-[8px] border-[1.5px] border-[#cce2ff] flex items-center justify-center gap-[8px] md:w-fit w-full"
-        >
-          <EDIT_DETAILS_ICON className="text-[#9EA3AE] h-[20px] w-[20px]" />
-          <p className="text-dark-blue font-medium text-[14px]">Edit Details</p>
-        </Link>
-        <Button
-          id="delete-report-btn"
-          label="Delete Property"
-          buttonType="iconButton"
-          icon={<DELETE_ICON className="text-[#FF613E] h-[20px] w-[20px]" />}
-          type="button"
-          onClick={() => {}}
-          className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#FF613E] md:w-fit w-full !text-[#FF613E] !text-[14px] h-fit !font-medium"
-        />
+  // Local States
+  const [openDeletePropertyModal, setOpenDeletePropertyModal] = useState(false);
+  return (
+    <React.Fragment>
+      <DeletePropertyModal
+        isModalOpen={openDeletePropertyModal}
+        onCloseModal={() => {
+          setOpenDeletePropertyModal(false);
+        }}
+        propertyToDelete={propertyDetails}
+        onDeleteSuccess={() => navigate(-1)}
+      />
+      <div className="md:flex items-center justify-between lg:px-[32px]">
+        <div className="text-dark-blue">
+          <h1 className="lg:text-[32px] md:text-[28px] text-[20px] font-bold">
+            {propertyDetails?.name}
+          </h1>
+          <p className="opacity-50 md:text-[16px] text-[14px]">
+            {`${propertyDetails?.address?.unit}, ${propertyDetails?.address?.street}, ${propertyDetails?.address?.city}, ${propertyDetails?.address?.state}, ${propertyDetails?.address?.country}`}
+          </p>
+        </div>
+
+        <div className="flex md:gap-[8px] gap-[16px] md:mt-0 mt-[24px]">
+          <Link
+            to={`edit-property`}
+            className="px-[10px] py-[8px] rounded-[8px] border-[1.5px] border-[#cce2ff] flex items-center justify-center gap-[8px] md:w-fit w-full"
+          >
+            <EDIT_DETAILS_ICON className="text-[#9EA3AE] h-[20px] w-[20px]" />
+            <p className="text-dark-blue font-medium text-[14px]">
+              Edit Details
+            </p>
+          </Link>
+          <Button
+            id="delete-report-btn"
+            label="Delete Property"
+            buttonType="iconButton"
+            icon={<DELETE_ICON className="text-[#FF613E] h-[20px] w-[20px]" />}
+            type="button"
+            onClick={() => setOpenDeletePropertyModal(true)}
+            className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#FF613E] md:w-fit w-full !text-[#FF613E] !text-[14px] h-fit !font-medium"
+          />
+        </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
