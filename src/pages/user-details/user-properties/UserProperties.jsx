@@ -116,7 +116,10 @@ const UserProperties = () => {
       {openDeletePropertyModal && (
         <DeletePropertyModal
           isModalOpen={openDeletePropertyModal}
-          onCloseModal={() => setOpenDeletePropertyModal(false)}
+          onCloseModal={() => {
+            setOpenDeletePropertyModal(false);
+            setPropertyToDelete({});
+          }}
           propertyToDelete={propertyToDelete}
         />
       )}

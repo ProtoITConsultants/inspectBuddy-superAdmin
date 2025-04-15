@@ -38,6 +38,7 @@ const DeletePropertyModal = ({
       }),
 
     onSuccess: () => {
+      onCloseModal();
       queryClient.invalidateQueries(["propertiesQuery"]);
       setActive(0);
       toast.success("Success!", {
