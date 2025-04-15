@@ -41,6 +41,10 @@ const CREATE_NEW_PROPERTY_CATEGORY_URL = ({ userId }) =>
 // Templates
 const CREATE_NEW_TEMPLATE_URL = ({ userId }) =>
   `/createInspectionTemplateDraft?id=${encodeURIComponent(userId)}`;
+const DELETE_USER_TEMPLATE_URL = ({ userId, templateId }) =>
+  `/deleteTemplate/${encodeURIComponent(templateId)}?id=${encodeURIComponent(
+    userId
+  )}`;
 const FETCH_USER_ADDED_TEMPLATES_URL = ({ userId }) =>
   `/getAllTemplates?id=${encodeURIComponent(userId)}`;
 const FETCH_TEMPLATE_DETAILS_URL = ({ templateId }) =>
@@ -101,6 +105,7 @@ const USER_DETAILS_ENDPOINTS = {
   DELETE_USER_PROPERTY_URL,
   // Templates
   CREATE_NEW_TEMPLATE_URL,
+  DELETE_USER_TEMPLATE_URL,
   FETCH_USER_ADDED_TEMPLATES_URL,
   FETCH_TEMPLATE_DETAILS_URL,
   ADD_NEW_ROOM_IN_TEMPLATE_URL,

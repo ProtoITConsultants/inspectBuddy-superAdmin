@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { userDetailsAPIs } from "../../../features/user-details/api";
@@ -26,11 +26,13 @@ import ResponsiveTemplateCard from "../../../features/user-details/components/te
 import AddNewTemplateModal from "../../../features/user-details/components/templates/AddNewTemplateModal";
 import { ModalActions } from "../../../components/ui/Modal";
 import { userTemplatesAPIs } from "../../../features/user-details/api/template";
+import DeleteTemplateModal from "../../../features/user-details/components/templates/DeleteTemplateModal";
 
 const UserTemplates = () => {
   // Hooks
   const { userId } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   //  Local States
   const [filtersData, setFiltersData] = useState({
@@ -43,6 +45,11 @@ const UserTemplates = () => {
 
   const [newTemplateModalData, setNewTemplateModalData] = useState({
     openModal: false,
+    templateName: "",
+  });
+  const [templateToDeleteData, setTemplateToDeleteData] = useState({
+    openModal: false,
+    templateId: "",
     templateName: "",
   });
 
@@ -75,6 +82,32 @@ const UserTemplates = () => {
       toast.error("Error!", {
         description:
           error.response?.data?.message || "Couldn't create Template!",
+        duration: 3000,
+        richColors: true,
+      });
+    },
+  });
+
+  // Delete Template - Mutation
+  const deleteTemplate = useMutation({
+    mutationFn: () =>
+      userTemplatesAPIs.deleteTemplate({
+        templateId: templateToDeleteData.templateId,
+        userId: userId,
+      }),
+    onSuccess: () => {
+      setTemplateToDeleteData({ openModal: false, templateId: "" });
+      queryClient.invalidateQueries({
+        queryKey: ["templatesQuery"],
+      });
+      toast.success("Template Deleted Successfully!", {
+        duration: 3000,
+        richColors: true,
+      });
+    },
+    onError: () => {
+      toast.error("Error!", {
+        description: "Couldn't delete Template!",
         duration: 3000,
         richColors: true,
       });
@@ -133,7 +166,13 @@ const UserTemplates = () => {
               buttonType="iconButton"
               icon={<DELETE_ICON className="text-[#9EA3AE]" />}
               type="button"
-              onClick={() => {}}
+              onClick={() =>
+                setTemplateToDeleteData({
+                  openModal: true,
+                  templateId: template._id,
+                  templateName: template.name,
+                })
+              }
             />
           </Table.ItemActions>
         </Table.TripleColumn>
@@ -194,6 +233,16 @@ const UserTemplates = () => {
           />
         </ModalActions>
       </AddNewTemplateModal>
+
+      {/* Delete Template Modal */}
+      <DeleteTemplateModal
+        isModalOpen={templateToDeleteData.openModal}
+        onCloseModal={() => {
+          setTemplateToDeleteData((prev) => ({ ...prev, openModal: false }));
+        }}
+        isDeletingTemplate={deleteTemplate.isPending}
+        onDeleteTemplate={() => deleteTemplate.mutate()}
+      ></DeleteTemplateModal>
 
       {/* Filters Topbar */}
       <FiltersTopbar>

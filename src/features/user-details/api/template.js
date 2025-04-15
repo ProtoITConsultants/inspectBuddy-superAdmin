@@ -22,6 +22,24 @@ export const userTemplatesAPIs = {
     }
   },
 
+  // Delete Template
+  deleteTemplate: async ({ templateId, userId }) => {
+    try {
+      const response = await axiosInstance.delete(
+        USER_DETAILS_ENDPOINTS.DELETE_USER_TEMPLATE_URL({
+          templateId,
+          userId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting Template", error);
+      throw new Error(
+        error.response?.data?.message || "Error deleting Template"
+      );
+    }
+  },
+
   // Create New Question
   createNewQuestion: async ({
     templateId,
