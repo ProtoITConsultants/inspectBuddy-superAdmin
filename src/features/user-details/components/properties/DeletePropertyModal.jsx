@@ -125,7 +125,7 @@ const DeletePropertyModal = ({
             classNames={{
               input: "!border-[#FDA591] !bg-[#FFEDE9]",
             }}
-            className="mt-[16px] w-full max-w-[375px] !font-bold"
+            className="mt-[16px] !mb-[32px] w-full max-w-[375px] !font-bold"
           />
           <ModalActions>
             <Button
