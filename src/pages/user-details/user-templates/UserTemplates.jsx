@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { userDetailsAPIs } from "../../../features/user-details/api";
 import { toast } from "sonner";
 import FiltersTopbar from "../../../components/ui/FiltersTopbar";
@@ -25,10 +25,12 @@ import Button from "../../../components/ui/Button";
 import ResponsiveTemplateCard from "../../../features/user-details/components/templates/ResponsiveTemplateCard";
 import AddNewTemplateModal from "../../../features/user-details/components/templates/AddNewTemplateModal";
 import { ModalActions } from "../../../components/ui/Modal";
+import { userTemplatesAPIs } from "../../../features/user-details/api/template";
 
 const UserTemplates = () => {
   // Hooks
   const { userId } = useParams();
+  const navigate = useNavigate();
 
   //  Local States
   const [filtersData, setFiltersData] = useState({
@@ -52,7 +54,32 @@ const UserTemplates = () => {
   });
 
   // Create New Template - Mutation
-  const createNewTemplate = useMutation({});
+  const createNewTemplate = useMutation({
+    mutationFn: () =>
+      userTemplatesAPIs.createNewTemplate({
+        templateName: newTemplateModalData.templateName,
+        userId: userId,
+      }),
+    onSuccess: (data) => {
+      setNewTemplateModalData({ openModal: false, templateName: "" });
+      navigate(
+        `/user-details/${userId}/templates/details/${data.templateId}/edit-details`
+      );
+      toast.success("Template Created Successfully!", {
+        duration: 3000,
+        richColors: true,
+      });
+    },
+
+    onError: (error) => {
+      toast.error("Error!", {
+        description:
+          error.response?.data?.message || "Couldn't create Template!",
+        duration: 3000,
+        richColors: true,
+      });
+    },
+  });
 
   if (isError) {
     return toast.error("Error!", {
@@ -153,11 +180,16 @@ const UserTemplates = () => {
             className="!font-bold hover:!bg-warning-red-dark"
           />
           <Button
-            id="save-as-draft-template"
+            id="cancel-create-template"
             type="button"
             buttonType="outlined"
-            onClick={() => createNewTemplate.mutate("draft")}
-            label="Save as Draft"
+            onClick={() => {
+              setNewTemplateModalData((prev) => ({
+                ...prev,
+                openModal: false,
+              }));
+            }}
+            label="Cancel"
             className="!font-bold"
           />
         </ModalActions>

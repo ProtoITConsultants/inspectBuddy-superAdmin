@@ -2,6 +2,26 @@ import USER_DETAILS_ENDPOINTS from "../../../constants/api/userDetails";
 import axiosInstance from "../../../utils/axiosInstance";
 
 export const userTemplatesAPIs = {
+  // Create New Template
+  createNewTemplate: async ({ templateName, userId }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.CREATE_NEW_TEMPLATE_URL({
+          userId,
+        }),
+        {
+          templateName: templateName,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating New Template", error);
+      throw new Error(
+        error.response?.data?.message || "Error creating New Template"
+      );
+    }
+  },
+
   // Create New Question
   createNewQuestion: async ({
     templateId,
