@@ -27,7 +27,7 @@ const Header = ({
   return (
     <div
       className={cn(
-        "rounded-[8px] w1150:grid hidden grid-cols-7 gap-x-[20px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]",
+        "rounded-[8px] w1150:grid hidden grid-cols-7 xl:gap-x-[20px] gap-[10px] xl:p-[24px] lg:p-[12px] bg-[#F3F8FF] p-[12px]",
         className
       )}
     >
@@ -107,7 +107,7 @@ const Body = ({ children, className = "" }) => {
 const ItemRoot = ({ children }) => {
   return (
     <div
-      className={`border-b-[1.5px] border-[#E4F0FF] md:pb-[18px] pb-[12px] grid grid-cols-7 gap-x-[20px] gap-[10px]`}
+      className={`border-b-[1.5px] border-[#E4F0FF] md:pb-[18px] pb-[12px] grid grid-cols-7 xl:gap-x-[20px] gap-[10px]`}
     >
       {children}
     </div>

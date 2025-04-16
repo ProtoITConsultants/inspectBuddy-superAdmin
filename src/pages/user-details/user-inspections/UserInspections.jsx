@@ -163,16 +163,28 @@ const UserInspections = () => {
             <IconLink
               href={`details/${inspection._id}`}
               icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
-              label="View Details"
+              label={
+                <>
+                  <span className="hidden xl:inline">View Details</span>
+                  <span className="inline xl:hidden">View</span>
+                </>
+              }
+              className="whitespace-nowrap"
             />
             <Button
               id="generate-report-btn"
+              label={
+                <>
+                  <span className="hidden xl:inline">Generate Report</span>
+                  <span className="inline xl:hidden">Generate</span>
+                </>
+              }
               buttonType="iconButton"
               icon={<GENERATE_REPORT_ICON className="text-[#9EA3AE]" />}
               type="button"
               onClick={() => {}}
               disabled={!inspection?.isInspectionCompleted}
-              className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium"
+              className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium whitespace-nowrap"
             />
           </Table.ItemActions>
         </Table.DoubleColumn>
