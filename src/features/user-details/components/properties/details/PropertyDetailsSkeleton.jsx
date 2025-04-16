@@ -4,7 +4,7 @@ import { PropertyDetailsBody } from "./PropertyDetails";
 
 const PropertyDetailsSkeleton = () => {
   return (
-    <DetailPagesRoot className="max-w-[892px]">
+    <DetailPagesRoot className="max-w-[892px] overflow-hidden">
       <Skeleton
         width={"100%"}
         radius={"8px"}
