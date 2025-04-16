@@ -81,7 +81,13 @@ const UserProperties = () => {
           <PropertyCard
             propertyData={{
               propertyName: property.name,
-              propertyAddress: property.address,
+              propertyAddress: [
+                property?.address?.unit,
+                property?.address?.street,
+                property?.address?.city,
+              ]
+                .filter(Boolean)
+                .join(", "),
               propertyImageURL: property?.image?.url || "",
             }}
           />
