@@ -2,6 +2,54 @@ import USER_DETAILS_ENDPOINTS from "../../../constants/api/userDetails";
 import axiosInstance from "../../../utils/axiosInstance";
 
 export const userInspectionsAPIs = {
+  // Create New Inspection
+  createNewInspection: async ({ userId, inspectionData }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.CREATE_NEW_USER_INSPECTION_URL({ userId }),
+        inspectionData
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating new Inspection", error);
+      throw new Error(
+        error.response?.data?.message || "Error creating new Inspection"
+      );
+    }
+  },
+  // Fetch User Properties to link with new Inspection
+  fetchUserPropertiesForInspection: async ({ userId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_USER_PROPERTIES_FOR_INSPECTION_URL({
+          userId,
+        })
+      );
+      return response.data.properties;
+    } catch (error) {
+      console.error("Error fetching User Properties", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching User Properties"
+      );
+    }
+  },
+  // Fetch User Templates to link with new Inspection
+  fetchUserTemplatesForInspection: async ({ userId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_USER_TEMPLATES_FOR_INSPECTION_URL({
+          userId,
+        })
+      );
+      return response.data.templates;
+    } catch (error) {
+      console.error("Error fetching User Templates", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching User Templates"
+      );
+    }
+  },
+
   // Fetch Inspection Details
   fetchInspectionDetails: async ({ inspectionId }) => {
     try {

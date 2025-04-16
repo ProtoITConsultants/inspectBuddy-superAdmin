@@ -3,7 +3,7 @@ import { ARROW_DOWN_ICON } from "../../../../assets/icons/DynamicIcons";
 import selectTemplateIcon from "../../../../assets/icons/template-icon.svg";
 import startFromScratchIcon from "../../../../assets/icons/scratch-icon.svg";
 
-const AddInspectionMenu = ({ disabled = false }) => {
+const AddInspectionMenu = ({ disabled = false, onSelectInspectionType }) => {
   return (
     <Menu shadow="md" position="bottom-end" disabled={disabled}>
       <Menu.Target>
@@ -27,7 +27,7 @@ const AddInspectionMenu = ({ disabled = false }) => {
             />
           }
           className="!text-[#000929] font-medium"
-          onClick={() => {}}
+          onClick={() => onSelectInspectionType("template")}
         >
           Select a Template
         </Menu.Item>
@@ -43,7 +43,7 @@ const AddInspectionMenu = ({ disabled = false }) => {
             />
           }
           className="!text-[#000929] font-medium"
-          onClick={() => {}}
+          onClick={() => onSelectInspectionType("scratch")}
         >
           Start from Scratch
         </Menu.Item>

@@ -70,6 +70,12 @@ const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
   `/getInspections?id=${encodeURIComponent(userId)}`;
 const FETCH_USER_INSPECTION_STATS_URL = ({ userId }) =>
   `/getUserInspectionAndPropertyData?id=${encodeURIComponent(userId)}`;
+const CREATE_NEW_USER_INSPECTION_URL = ({ userId }) =>
+  `/createBasicInspectionDraft?id=${encodeURIComponent(userId)}`;
+const FETCH_USER_PROPERTIES_FOR_INSPECTION_URL = ({ userId }) =>
+  `/getProperties?id=${encodeURIComponent(userId)}`;
+const FETCH_USER_TEMPLATES_FOR_INSPECTION_URL = ({ userId }) =>
+  `/getTemplates?id=${encodeURIComponent(userId)}`;
 const FETCH_INSPECTION_DETAILS_URL = ({ inspectionId }) =>
   `/getSpecificInspection/${encodeURIComponent(inspectionId)}`;
 const ADD_NEW_ROOM_IN_INSPECTION_URL = "/InspectionAddNewRoom";
@@ -123,6 +129,9 @@ const USER_DETAILS_ENDPOINTS = {
   // Inspections
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,
+  CREATE_NEW_USER_INSPECTION_URL,
+  FETCH_USER_PROPERTIES_FOR_INSPECTION_URL,
+  FETCH_USER_TEMPLATES_FOR_INSPECTION_URL,
   FETCH_INSPECTION_DETAILS_URL,
   ADD_NEW_ROOM_IN_INSPECTION_URL,
   DELETE_ROOM_FROM_INSPECTION_URL,
