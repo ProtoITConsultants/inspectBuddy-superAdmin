@@ -41,7 +41,6 @@ export const userPropertiesAPIs = {
       );
     }
   },
-
   // Delete Property
   deleteUserProperty: async ({ propertyId, userId }) => {
     try {
@@ -57,6 +56,26 @@ export const userPropertiesAPIs = {
       console.error("Error deleting Property", error);
       throw new Error(
         error.response?.data?.message || "Error deleting Property"
+      );
+    }
+  },
+
+  // Fetch Next Pages of Related Inspections with a Property
+  fetchRelatedInspectionsOfProperty: async ({ propertyId, page, limit }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_LINKED_PROPERTY_INSPECTIONS_URL({
+          propertyId,
+          page,
+          limit: limit,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching User Property Inspections", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error fetching User Property Inspections"
       );
     }
   },

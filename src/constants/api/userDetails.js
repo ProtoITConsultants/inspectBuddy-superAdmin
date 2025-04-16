@@ -37,6 +37,12 @@ const DELETE_USER_PROPERTY_URL = ({ userId, propertyId }) =>
   )}`;
 const CREATE_NEW_PROPERTY_CATEGORY_URL = ({ userId }) =>
   `/addPropertyCategory?id=${encodeURIComponent(userId)}`;
+const FETCH_LINKED_PROPERTY_INSPECTIONS_URL = ({
+  propertyId,
+  page,
+  limit = 10,
+}) =>
+  `/getInspectionsByPropertyId?propertyId=${propertyId}&page=${page}&limit=${limit}`;
 
 // Templates
 const CREATE_NEW_TEMPLATE_URL = ({ userId }) =>
@@ -109,6 +115,7 @@ const USER_DETAILS_ENDPOINTS = {
   ADD_NEW_USER_PROPERTY_URL,
   CREATE_NEW_PROPERTY_CATEGORY_URL,
   DELETE_USER_PROPERTY_URL,
+  FETCH_LINKED_PROPERTY_INSPECTIONS_URL,
   // Templates
   CREATE_NEW_TEMPLATE_URL,
   DELETE_USER_TEMPLATE_URL,
