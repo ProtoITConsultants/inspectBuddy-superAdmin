@@ -18,7 +18,7 @@ const UserDetailsLayout = ({ children }) => {
             isUserDetailsScreen={pagePath === "/user-details/:userId"}
           />
         )}
-        <div className="w-[calc(100vw-var(--scrollbar-width))] h-full md:p-[32px] p-[20px] flex relative md:mt-[164px] mt-[140px] md:min-h-[calc(100dvh-164px)] min-h-[calc(100dvh-140px)]">
+        <div className="w-[calc(100vw-var(--scrollbar-width))] md:p-[32px] p-[20px] flex relative md:mt-[164px] mt-[140px] md:h-[calc(100dvh-164px)] h-[calc(100dvh-140px)]">
           {pageTitle === "User's Details" && (
             <React.Fragment>
               <UserDetailsSidebar />
