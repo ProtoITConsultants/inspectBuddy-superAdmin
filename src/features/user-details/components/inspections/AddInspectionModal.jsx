@@ -100,7 +100,9 @@ const AddInspectionModal = ({
     },
     onSuccess: (data) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["inspectionsQuery"] });
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionsQuery", "userInspectionStats"],
+      });
       toast.success("Success!", {
         description: "Inspection created successfully!",
         duration: 3000,
