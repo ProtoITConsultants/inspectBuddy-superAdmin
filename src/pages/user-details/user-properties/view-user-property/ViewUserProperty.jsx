@@ -17,6 +17,7 @@ import { convertDateFormate } from "../../../../features/user-details/services/c
 import PropertyDetailsSkeleton from "../../../../features/user-details/components/properties/details/PropertyDetailsSkeleton";
 import { useEffect, useState } from "react";
 import { userPropertiesAPIs } from "./../../../../features/user-details/api/user-properties";
+import { Loader } from "@mantine/core";
 
 const ViewUserProperty = () => {
   // Hooks
@@ -168,7 +169,11 @@ const ViewUserProperty = () => {
           <RelatedInspectionsTable
             relatedInspections={realatedInspectionsData.relatedInspections}
           />
-          {realatedInspectionsData.isPending && <div>Loading...</div>}
+          {realatedInspectionsData.isPending && (
+            <div className="flex justify-center w-full">
+              <Loader color="blue" type="dots" />
+            </div>
+          )}
         </PropertyDetailsBody>
       </PropertyDetailsContainer>
     </DetailPagesRoot>
