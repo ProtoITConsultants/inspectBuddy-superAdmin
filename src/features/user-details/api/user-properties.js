@@ -61,13 +61,13 @@ export const userPropertiesAPIs = {
   },
 
   // Fetch Next Pages of Related Inspections with a Property
-  fetchRelatedInspectionsOfProperty: async ({ propertyId, page, limit }) => {
+  fetchRelatedInspectionsOfProperty: async ({ propertyId, page }) => {
     try {
       const response = await axiosInstance.get(
         USER_DETAILS_ENDPOINTS.FETCH_LINKED_PROPERTY_INSPECTIONS_URL({
           propertyId,
           page,
-          limit: limit,
+          limit: 10, // Keep the limit consistent
         })
       );
       return response.data;

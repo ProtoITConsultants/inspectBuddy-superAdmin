@@ -46,7 +46,6 @@ const ViewUserProperty = () => {
     mutationFn: () =>
       userPropertiesAPIs.fetchRelatedInspectionsOfProperty({
         propertyId,
-        limit: 1,
         page: realatedInspectionsData.currentPage + 1,
       }),
     onSuccess: (data) => {
