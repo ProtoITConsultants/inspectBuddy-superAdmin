@@ -17,13 +17,7 @@ const PropertyCard = ({ propertyData }) => {
 
       <div>
         <p className="text-[16px] font-bold text-dark-blue">{propertyName}</p>
-        <p className="text-[14px] text-tertiary">
-          {propertyAddress.unit +
-            ", " +
-            propertyAddress.street +
-            ", " +
-            propertyAddress.city}
-        </p>
+        <p className="text-[14px] text-tertiary">{propertyAddress}</p>
       </div>
     </div>
   );
