@@ -113,6 +113,8 @@ const AddInspectionModal = ({
         );
       }
 
+      newInspectionForm.reset();
+
       setSaveInspectionAsDraft(false);
       // Reset the Editing State
       onCloseModal();
