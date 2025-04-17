@@ -4,6 +4,7 @@ import { matchPath, useLocation } from "react-router";
 const ROUTES = [
   { path: "/", title: "Dashboard" },
   { path: "/all-users", title: "User Detail" },
+  { path: "/add-new-user", title: "New User" },
   { path: "/report-settings", title: "Report Settings" },
   { path: "/plan-settings", title: "Plan Settings" },
   { path: "/user-details/:userId", title: "User's Details" },

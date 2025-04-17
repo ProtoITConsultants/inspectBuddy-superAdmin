@@ -13,7 +13,7 @@ const UserDetailsLayout = ({ children }) => {
         <Navbar withSidebar={false} />
       </section>
       <React.Fragment>
-        {pageTitle === "User's Details" && (
+        {(pageTitle === "User's Details" || pageTitle === "New User") && (
           <BackButton
             isUserDetailsScreen={pagePath === "/user-details/:userId"}
           />
