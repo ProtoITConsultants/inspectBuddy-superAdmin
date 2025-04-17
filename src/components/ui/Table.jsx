@@ -104,10 +104,13 @@ const Body = ({ children, className = "" }) => {
   );
 };
 
-const ItemRoot = ({ children }) => {
+const ItemRoot = ({ children, className }) => {
   return (
     <div
-      className={`border-b-[1.5px] border-[#E4F0FF] md:pb-[18px] pb-[12px] grid grid-cols-7 xl:gap-x-[20px] gap-[10px]`}
+      className={cn(
+        `border-b-[1.5px] border-[#E4F0FF] md:pb-[18px] pb-[12px] grid grid-cols-7 xl:gap-x-[20px] gap-[10px]`,
+        className
+      )}
     >
       {children}
     </div>

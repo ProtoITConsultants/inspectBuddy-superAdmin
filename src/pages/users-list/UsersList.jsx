@@ -15,6 +15,8 @@ import DeleteUserPopup from "../../features/users/components/DeleteUserPopup";
 import Button from "./../../components/ui/Button";
 import { Group } from "@mantine/core";
 import { DOWNLOAD_ICON } from "../../assets/icons/DownloadIcon";
+import ResponsiveUserCard from "../../features/users/components/ResponsiveUserCard";
+import { Link } from "react-router";
 
 const UsersList = () => {
   // Hooks
@@ -86,40 +88,46 @@ const UsersList = () => {
 
   // Create Rows of the Table
   const rows = data?.users?.map((user, index) => (
-    <Table.ItemRoot key={user._id}>
-      <Table.SingleColumn>
-        <p className="text-[14px] font-medium text-[#6C727F]">{index + 1}</p>
-      </Table.SingleColumn>
-      <Table.SingleColumn>
-        <p className="text-[14px] font-medium text-[#6C727F]">
-          {user.fullname}
-        </p>
-      </Table.SingleColumn>
-      <Table.DoubleColumn>
-        <p className="text-[14px] font-medium text-[#6C727F]">{user.email}</p>
-      </Table.DoubleColumn>
-      <Table.SingleColumn>
-        <UserSubscriptionCard subscriptionPlan={user.role} />
-      </Table.SingleColumn>
-      <Table.DoubleColumn>
-        <Table.ItemActions>
-          <IconLink
-            href={`/user-details/${user._id}`}
-            icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
-            label="View Details"
-          />
-          <Button
-            id="delete-user-btn"
-            buttonType="iconButton"
-            icon={<DELETE_ICON className="text-[#FF613E]" />}
-            type="button"
-            onClick={() =>
-              setDeleteUserModalData({ openModal: true, userToDelete: user })
-            }
-          />
-        </Table.ItemActions>
-      </Table.DoubleColumn>
-    </Table.ItemRoot>
+    <React.Fragment key={user._id}>
+      <Table.ItemRoot className="w1150:grid hidden">
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-[#6C727F]">{index + 1}</p>
+        </Table.SingleColumn>
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-[#6C727F]">
+            {user.fullname}
+          </p>
+        </Table.SingleColumn>
+        <Table.DoubleColumn>
+          <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
+            {user.email}
+          </p>
+        </Table.DoubleColumn>
+        <Table.SingleColumn>
+          <UserSubscriptionCard subscriptionPlan={user.role} />
+        </Table.SingleColumn>
+        <Table.DoubleColumn>
+          <Table.ItemActions>
+            <IconLink
+              href={`/user-details/${user._id}`}
+              icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
+              label="View Details"
+            />
+            <Button
+              id="delete-user-btn"
+              buttonType="iconButton"
+              icon={<DELETE_ICON className="text-[#FF613E]" />}
+              type="button"
+              onClick={() =>
+                setDeleteUserModalData({ openModal: true, userToDelete: user })
+              }
+              className="!w-fit !h-fit !bg-transparent !p-0"
+            />
+          </Table.ItemActions>
+        </Table.DoubleColumn>
+      </Table.ItemRoot>
+      <ResponsiveUserCard userData={user} />
+    </React.Fragment>
   ));
 
   return (
@@ -136,18 +144,30 @@ const UsersList = () => {
       />
 
       {/* Filters Topbar */}
-      <FiltersTopbar>
+      <FiltersTopbar className="w900:!flex !grid sm:p-[8px_12px] p-0 sm:!border !border-[0px]">
         <SubscriptionFilter
           handleFilterChange={(value) =>
             setFiltersData((prev) => ({ ...prev, subscriptionPlan: value }))
           }
         />
-        <Group gap="sm">
+        <div className="flex justify-end w900:hidden">
+          <Link
+            to="/add-new-user"
+            className="items-center justify-center bg-primary text-white font-bold text-[14px] p-[12px_24px] rounded-[8px] w-fit"
+          >
+            Add New User
+          </Link>
+        </div>
+        <Group
+          gap="sm"
+          className="col-span-2 w900:!justify-start !justify-between sm:!flex-row !flex-col"
+        >
           <Searchbar
             placeholder="Search users by name..."
             onSearch={(value) =>
               setFiltersData((prev) => ({ ...prev, searchQuery: value }))
             }
+            className="sm:w-[305px] w-full"
           />
           <Button
             id="generate-users-report"
@@ -155,7 +175,7 @@ const UsersList = () => {
             icon={
               <DOWNLOAD_ICON className="h-[16px] text-primary group-hover:text-white transition-colors" />
             }
-            className="h-[40px] !border-2 !border-[#CCE2FF] !text-primary !px-6 !font-semibold hover:bg-primary hover:!text-white hover:!border-primary group transition-colors"
+            className="h-[40px] !border-2 !border-[#CCE2FF] !text-primary !px-6 !font-semibold hover:bg-primary hover:!text-white hover:!border-primary group transition-colors whitespace-nowrap sm:w-fit w-full"
             label="Generate CSV"
             type="button"
             onClick={generateUsersCSVFile.mutate}
@@ -163,7 +183,7 @@ const UsersList = () => {
         </Group>
       </FiltersTopbar>
       {/* User List Table */}
-      <Table.Root className="p-[12px] h-[calc(100%-84px)]">
+      <Table.Root className="lg:p-[12px] user-list-table-root">
         {/* Table Header */}
         <Table.Header
           showAddButton={true}
@@ -182,12 +202,22 @@ const UsersList = () => {
             )
           )}
         </Table.Header>
+
+        <div className="flex justify-end">
+          <Link
+            to="/add-new-user"
+            className="w1150:hidden w900:flex hidden items-center justify-center bg-primary text-white font-bold text-[14px] p-[12px_24px] rounded-[8px] w-fit"
+          >
+            Add New User
+          </Link>
+        </div>
         {/* Table Body */}
+        {/* xl:px-[24px] lg:px-[12px] lg:pt-[24px] */}
         <Table.Body
           className={`${
-            data?.totalPages < 2
-              ? "h-[calc(100%-126px)]"
-              : "h-[calc(100%-136px)]"
+            data?.totalPages > 2
+              ? "h-[calc(100%-126px)] user-list-table-body-no-pagination"
+              : "user-list-table-body"
           }`}
         >
           {isLoading ? (
@@ -202,7 +232,7 @@ const UsersList = () => {
             rows
           )}
         </Table.Body>
-        {data && data?.totalPages && (
+        {data && data?.totalPages > 0 && (
           <Table.Pagination
             filtersData={filtersData}
             setFiltersData={(value) =>

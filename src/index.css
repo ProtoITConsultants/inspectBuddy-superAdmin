@@ -21,6 +21,7 @@
   /* Custom Breakpoints */
   --breakpoint-ms: 440px;
   --breakpoint-xs: 330px;
+  --breakpoint-w900: 900px;
   --breakpoint-w1150: 1150px;
   --breakpoint-2xl: 1321px;
   --breakpoint-3xl: 1382px;

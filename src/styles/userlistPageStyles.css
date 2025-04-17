@@ -1,0 +1,64 @@
+.user-list-table-root {
+  height: calc(100% - 167px) !important;
+  border-width: 0px !important;
+}
+.user-list-table-body {
+  padding: 0% !important;
+  height: calc(100% - 42px) !important;
+}
+.user-list-table-body-no-pagination {
+  padding: 0% !important;
+  height: calc(100% - 32px) !important;
+}
+
+@media (min-width: 640px) {
+  .user-list-table-root {
+    height: calc(100% - 142px) !important;
+  }
+  .user-list-table-body {
+    height: calc(100% - 42px) !important;
+  }
+  .user-list-table-body-no-pagination {
+    height: calc(100% - 32px) !important;
+  }
+}
+@media (min-width: 768px) {
+  .user-list-table-root {
+    height: calc(100% - 167px) !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .user-list-table-root {
+    height: calc(100% - 82px) !important;
+  }
+  .user-list-table-body {
+    height: calc(100% - 88px) !important;
+    padding-top: 24px !important;
+  }
+  .user-list-table-body-no-pagination {
+    height: calc(100% - 78px) !important;
+    padding-top: 24px !important;
+  }
+}
+@media (min-width: 1024px) {
+  .user-list-table-root {
+    border-width: 1.5px !important;
+  }
+  .user-list-table-body {
+    padding-inline: 12px !important;
+  }
+}
+@media (min-width: 1150px) {
+  .user-list-table-body {
+    padding-inline: 12px !important;
+  }
+}
+@media (min-width: 1280px) {
+  .user-list-table-body {
+    height: calc(100% - 136px) !important;
+  }
+  .user-list-table-body-no-pagination {
+    height: calc(100% - 126px) !important;
+  }
+}

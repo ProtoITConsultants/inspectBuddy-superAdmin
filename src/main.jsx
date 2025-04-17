@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 
 // Importing the styles
 import "./index.css";
+import "./styles/userlistPageStyles.css";
 import "./styles/mantineStyles.css";
 import "./styles/toaster.css";
 import "./styles/scrollbarStyles.css";

@@ -25,7 +25,7 @@ const UserSubscriptionCard = ({ subscriptionPlan }) => {
         backgroundColor: bgColor,
       }}
     >
-      <p className={cn(`text-[14px] font-bold`)}>{status}</p>
+      <p className={cn(`text-[14px] font-bold whitespace-nowrap`)}>{status}</p>
     </div>
   );
 };
