@@ -2,6 +2,7 @@ import USERS_ENDPOINTS from "../../../constants/api/users";
 import axiosInstance from "../../../utils/axiosInstance";
 
 export const usersListAPIs = {
+  // Get All Users
   getAllUsers: async ({ page, searchQuery, subscriptionPlan }) => {
     try {
       const response = await axiosInstance.get(
@@ -19,6 +20,21 @@ export const usersListAPIs = {
       );
     }
   },
+
+  // Delete a User
+  deleteUser: async ({ userId }) => {
+    try {
+      const response = await axiosInstance.delete(
+        USERS_ENDPOINTS.DELETE__SPECIFIC_USER_URL({ userId })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting User", error);
+      throw new Error(error.response?.data?.message || "Error deleting User");
+    }
+  },
+
+  // Generate Users CSV File
   generateUsersCSVFile: async () => {
     try {
       const response = await axiosInstance.get(

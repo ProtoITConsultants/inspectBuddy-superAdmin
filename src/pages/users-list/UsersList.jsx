@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { usersListAPIs } from "../../features/users/api";
 import { toast } from "sonner";
@@ -11,17 +11,20 @@ import TableSkeleton from "./../../components/ui/TableSkeleton";
 import { DELETE_ICON, VIEW_DETAIL_ICON } from "../../assets/icons/DynamicIcons";
 import IconLink from "../../components/ui/IconLink";
 import UserSubscriptionCard from "../../features/users/components/UserSubscriptionCard";
-import { useModalStore } from "../../store/modalsStore";
 import DeleteUserPopup from "../../features/users/components/DeleteUserPopup";
 import Button from "./../../components/ui/Button";
 import { Group } from "@mantine/core";
 import { DOWNLOAD_ICON } from "../../assets/icons/DownloadIcon";
 
 const UsersList = () => {
-  // Global States
-  const setOpenDeleteUserModal = useModalStore(
-    (state) => state.setOpenDeleteUserModal
-  );
+  // Hooks
+  const queryClient = new QueryClient();
+
+  // Local States
+  const [deleteUserModalData, setDeleteUserModalData] = useState({
+    openModal: false,
+    userToDelete: {},
+  });
 
   // Filters State
   const [filtersData, setFiltersData] = useState({
@@ -46,6 +49,31 @@ const UsersList = () => {
         duration: 3000,
         richColors: true,
       }),
+  });
+
+  // Delete User - Mutation
+  const deleteSubUser = useMutation({
+    mutationFn: () =>
+      usersListAPIs.deleteUser({
+        userId: deleteUserModalData.userToDelete._id,
+      }),
+    onSuccess: () => {
+      toast.success("User deleted successfully!", {
+        duration: 3000,
+        richColors: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getAllUsersQuery"],
+      });
+      setDeleteUserModalData({ openModal: false, userToDelete: {} });
+    },
+    onError: () => {
+      toast.error("Error!", {
+        description: "Couldn't delete User.",
+        duration: 3000,
+        richColors: true,
+      });
+    },
   });
 
   // Error Toast
@@ -85,7 +113,9 @@ const UsersList = () => {
             buttonType="iconButton"
             icon={<DELETE_ICON className="text-[#FF613E]" />}
             type="button"
-            onClick={() => setOpenDeleteUserModal(true)}
+            onClick={() =>
+              setDeleteUserModalData({ openModal: true, userToDelete: user })
+            }
           />
         </Table.ItemActions>
       </Table.DoubleColumn>
@@ -95,7 +125,15 @@ const UsersList = () => {
   return (
     <React.Fragment>
       {/* Delete User Warning Modal */}
-      <DeleteUserPopup />
+      <DeleteUserPopup
+        isModalOpen={deleteUserModalData.openModal}
+        onCloseModal={() =>
+          setDeleteUserModalData((prev) => ({ ...prev, openModal: false }))
+        }
+        onConfirmDelete={() => deleteSubUser.mutate()}
+        isDeletingUser={deleteSubUser.isPending}
+        userToDelete={deleteUserModalData.userToDelete}
+      />
 
       {/* Filters Topbar */}
       <FiltersTopbar>
