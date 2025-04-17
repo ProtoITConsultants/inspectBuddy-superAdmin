@@ -17,6 +17,25 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Delete User Inspection
+  deleteUserInspection: async ({ userId, inspectionId }) => {
+    try {
+      const response = await axiosInstance.delete(
+        USER_DETAILS_ENDPOINTS.DELETE_USER_INSPECTION_URL({
+          userId,
+          inspectionId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting User Inspection", error);
+      throw new Error(
+        error.response?.data?.message || "Error deleting User Inspection"
+      );
+    }
+  },
+
   // Fetch User Properties to link with new Inspection
   fetchUserPropertiesForInspection: async ({ userId }) => {
     try {

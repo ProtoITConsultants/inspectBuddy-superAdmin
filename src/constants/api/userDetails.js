@@ -78,6 +78,10 @@ const FETCH_USER_INSPECTION_STATS_URL = ({ userId }) =>
   `/getUserInspectionAndPropertyData?id=${encodeURIComponent(userId)}`;
 const CREATE_NEW_USER_INSPECTION_URL = ({ userId }) =>
   `/createBasicInspectionDraft?id=${encodeURIComponent(userId)}`;
+const DELETE_USER_INSPECTION_URL = ({ userId, inspectionId }) =>
+  `/deleteInspection/${encodeURIComponent(
+    inspectionId
+  )}?id=${encodeURIComponent(userId)}`;
 const FETCH_USER_PROPERTIES_FOR_INSPECTION_URL = ({ userId }) =>
   `/getProperties?id=${encodeURIComponent(userId)}`;
 const FETCH_USER_TEMPLATES_FOR_INSPECTION_URL = ({ userId }) =>
@@ -137,6 +141,7 @@ const USER_DETAILS_ENDPOINTS = {
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,
   CREATE_NEW_USER_INSPECTION_URL,
+  DELETE_USER_INSPECTION_URL,
   FETCH_USER_PROPERTIES_FOR_INSPECTION_URL,
   FETCH_USER_TEMPLATES_FOR_INSPECTION_URL,
   FETCH_INSPECTION_DETAILS_URL,

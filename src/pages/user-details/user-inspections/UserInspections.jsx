@@ -1,4 +1,4 @@
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { userDetailsAPIs } from "../../../features/user-details/api";
@@ -21,11 +21,13 @@ import PropertyCard from "../../../features/user-details/components/properties/P
 import InspectionStatusCard from "../../../features/user-details/components/inspections/InspectionStatusCard";
 import IconLink from "../../../components/ui/IconLink";
 import {
+  DELETE_ICON,
   GENERATE_REPORT_ICON,
   VIEW_DETAIL_ICON,
 } from "../../../assets/icons/DynamicIcons";
 import Button from "../../../components/ui/Button";
 import ResponsiveInspectionCard from "../../../features/user-details/components/inspections/ResponsiveInspectionCard";
+import DeleteInspectionModal from "../../../features/user-details/components/inspections/DeleteInspectionModal";
 
 const UserInspections = () => {
   // Hooks
@@ -35,6 +37,13 @@ const UserInspections = () => {
     thirdPreviousMonthStartDate,
     fifthPreviousMonthStartDate,
   } = useMonthStartDates();
+  const queryClient = useQueryClient();
+
+  // Local States
+  const [deleteInspectionModalData, setDeleteInspectionModalData] = useState({
+    openModal: false,
+    inspectionToDelete: {},
+  });
 
   // Filters Data
   const [filtersData, setFiltersData] = useState({
@@ -119,7 +128,7 @@ const UserInspections = () => {
     }
   };
 
-  const rows = userInspections?.data?.inspections.map((inspection) => {
+  const rows = userInspections?.data?.inspections?.map((inspection) => {
     return window.innerWidth > 1150 ? (
       <Table.ItemRoot key={inspection._id}>
         <Table.SingleColumn>
@@ -186,6 +195,19 @@ const UserInspections = () => {
               disabled={!inspection?.isInspectionCompleted}
               className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium whitespace-nowrap"
             />
+            <Button
+              id="delete-inspection-btn"
+              buttonType="iconButton"
+              icon={<DELETE_ICON className="text-[#FF613E] w-[20px]" />}
+              type="button"
+              onClick={() =>
+                setDeleteInspectionModalData({
+                  openModal: true,
+                  inspectionToDelete: inspection,
+                })
+              }
+              className="!p-0 !w-fit !h-fit"
+            />
           </Table.ItemActions>
         </Table.DoubleColumn>
       </Table.ItemRoot>
@@ -199,6 +221,27 @@ const UserInspections = () => {
 
   return (
     <React.Fragment>
+      {/* Delete Inspection Modal */}
+      <DeleteInspectionModal
+        isModalOpen={deleteInspectionModalData.openModal}
+        onCloseModal={() =>
+          setDeleteInspectionModalData({
+            openModal: false,
+            inspectionToDelete: {},
+          })
+        }
+        inspectionToDelete={deleteInspectionModalData.inspectionToDelete}
+        onSuccess={() => {
+          // Update the Query Data
+          queryClient.invalidateQueries([
+            "inspectionsQuery",
+            filtersData,
+            userId,
+          ]);
+          queryClient.invalidateQueries(["userInspectionStats", userId]);
+        }}
+      />
+
       {/* Filters Topbar */}
       <FiltersTopbar>
         <FilterSelect

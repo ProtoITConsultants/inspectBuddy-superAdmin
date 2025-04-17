@@ -132,7 +132,7 @@ const AddInspectionModal = ({
 
   return (
     <ModalRoot
-      id="delete-property-modal"
+      id="add-inspection-modal"
       loadingOverlay={
         createNewInspection.isPending ||
         userPropertiesAndInspectionsQuery.isPending
