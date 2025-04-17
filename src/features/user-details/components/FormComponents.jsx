@@ -12,18 +12,18 @@ const UserDetailsFormRoot = ({ children, onFormSubmit }) => (
 
 const UserDetailFormSection = ({ children, heading, className }) => {
   // Global States
-  // const editingUserDetails = useUserDetailsStore(
-  //   (state) => state.editingUserDetails
-  // );
-  // const setEditingUserDetails = useUserDetailsStore(
-  //   (state) => state.setEditingUserDetails
-  // );
+  const editingUserDetails = useUserDetailsStore(
+    (state) => state.editingUserDetails
+  );
+  const setEditingUserDetails = useUserDetailsStore(
+    (state) => state.setEditingUserDetails
+  );
 
   return (
     <div className="flex flex-col gap-[24px]">
       <div className="flex justify-between items-center">
         <h1 className="text-dark-blue font-bold text-[20px]">{heading}</h1>
-        {/* {heading === "User Details" && !editingUserDetails && (
+        {heading === "User Details" && !editingUserDetails && (
           <button
             type="button"
             className="md:hidden block"
@@ -35,7 +35,7 @@ const UserDetailFormSection = ({ children, heading, className }) => {
               className="w-[24px] h-[24px]"
             />
           </button>
-        )} */}
+        )}
       </div>
       <div
         className={cn(
