@@ -29,6 +29,7 @@ import EditUserInspectionRoom from "./pages/user-details/user-inspections/edit-i
 import AddNewSubUser from "./pages/user-details/sub-users/add-sub-user/AddNewSubUser";
 import AddUserProperty from "./pages/user-details/user-properties/add-user-property/AddUserProperty";
 import AddNewUser from "./pages/users-list/add-new-user/AddNewUser";
+import AddNewUserLayout from "./layouts/AddNewUserLayout";
 
 export const router = createBrowserRouter([
   {
@@ -65,9 +66,9 @@ export const router = createBrowserRouter([
     path: "/add-new-user",
     element: (
       <AuthMiddleware>
-        <UserDetailsLayout>
+        <AddNewUserLayout>
           <AddNewUser />
-        </UserDetailsLayout>
+        </AddNewUserLayout>
       </AuthMiddleware>
     ),
   },

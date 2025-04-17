@@ -21,6 +21,22 @@ export const usersListAPIs = {
     }
   },
 
+  // Add New User
+  createNewUser: async (userDetails) => {
+    try {
+      const response = await axiosInstance.post(
+        USERS_ENDPOINTS.CREATE_NEW_USER_URL,
+        userDetails
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating new User", error);
+      throw new Error(
+        error.response?.data?.message || "Error creating new User"
+      );
+    }
+  },
+
   // Delete a User
   deleteUser: async ({ userId }) => {
     try {

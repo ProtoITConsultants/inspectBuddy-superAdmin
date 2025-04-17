@@ -32,7 +32,7 @@ const PhoneInput = ({
 
   return (
     <div id={id} className="flex flex-col gap-[8px]">
-      <p className="text-[14px]">{label}</p>
+      <p className="text-[14px] font-medium">{label}</p>
       <div className="flex flex-col gap-[5px]">
         <div className="flex items-center">
           <Autocomplete
@@ -43,6 +43,7 @@ const PhoneInput = ({
             maxDropdownHeight={300}
             renderOption={renderAutocompleteOption}
             className="w-[120px]"
+            placeholder="+1"
             onChange={(value) => {
               setCountryCode(`+${value}`);
             }}
