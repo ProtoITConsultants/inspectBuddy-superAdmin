@@ -1,7 +1,7 @@
 import { IconChevronRight } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ADD_ICON } from "../../../../assets/icons/AddIcon";
 import { EDIT_DETAILS_ICON } from "./../../../../assets/icons/EditIcon";
 import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
@@ -13,14 +13,14 @@ import { Loader, LoadingOverlay, Modal } from "@mantine/core";
 import { CLOSE_MODAL_ICON } from "../../../../assets/icons/CloseModalIcon";
 import { cn } from "../../../../utils/cn";
 
-const RoomImagePreviewModal = ({
+const RoomImagePreviewModal = React.memo(function RoomImagePreviewModal({
   isModalOpen,
   onCloseModal,
   imagesData,
   setImagesData,
   previewImageIndex,
   setPreviewImageIndex,
-}) => {
+}) {
   // Hooks
   const { inspectionId, roomId } = useParams();
   const queryClient = useQueryClient();
@@ -343,6 +343,6 @@ const RoomImagePreviewModal = ({
       </div>
     </Modal>
   );
-};
+});
 
 export default RoomImagePreviewModal;
