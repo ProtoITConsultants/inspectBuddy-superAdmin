@@ -126,6 +126,16 @@ const UploadRoomImageInput = ({ roomImages }) => {
         onCloseModal={() =>
           setPreviewImageModalData({ openModal: false, imageIndex: 0 })
         }
+        imagesData={localRoomImages}
+        setImagesData={setLocalRoomImages}
+        handleRemoveImage={deleteRoomImage.mutate}
+        previewImageIndex={previewImageModalData.imageIndex}
+        setPreviewImageIndex={(index) => {
+          setPreviewImageModalData((prev) => ({
+            ...prev,
+            imageIndex: index,
+          }));
+        }}
       />
       <div className="flex flex-col gap-[8px]">
         <h2 className="text-dark-blue text-[14px] font-medium">

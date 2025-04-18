@@ -343,4 +343,31 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Update Specifc Image's Caption of a specific room
+  updateRoomImageCaptionInInspection: async ({
+    inspectionId,
+    roomId,
+    imageId,
+    caption,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_ROOM_IMAGE_CAPTION_IN_INSPECTION_URL,
+        {
+          inspectionId,
+          roomId,
+          imageId,
+          caption,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading Room Image in Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error uploading Room Image in Inspection"
+      );
+    }
+  },
 };
