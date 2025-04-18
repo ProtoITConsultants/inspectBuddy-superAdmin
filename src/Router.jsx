@@ -30,6 +30,7 @@ import AddNewSubUser from "./pages/user-details/sub-users/add-sub-user/AddNewSub
 import AddUserProperty from "./pages/user-details/user-properties/add-user-property/AddUserProperty";
 import AddNewUser from "./pages/users-list/add-new-user/AddNewUser";
 import AddNewUserLayout from "./layouts/AddNewUserLayout";
+import RestoreRequests from "./pages/restore-requests/RestoreRequests";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: "all-users",
         element: <UsersList />,
+      },
+      {
+        path: "restore-requests",
+        element: <RestoreRequests />,
       },
     ],
   },
