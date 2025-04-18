@@ -6,7 +6,7 @@ const SidebarLayout = ({ children }) => {
   return (
     <main className="App overflow-x-hidden">
       <section className="fixed top-0 z-[10] flex">
-        <div className="md:h-[96px] h-[72px] p-[24px] border-r-[1.5px] border-[#ECECEC] min-[1630px]:!w-[305px] lg:w-[250px] bg-white lg:flex hidden items-center">
+        <div className="md:h-[96px] h-[72px] p-[24px] border-r-[1.5px] border-[#ECECEC] lg:w-[250px] min-[1630px]:!w-[305px] bg-white lg:flex hidden items-center">
           <img src={logo} alt="inspectBuddy-logo" />
         </div>
         <Navbar withSidebar={true} />
