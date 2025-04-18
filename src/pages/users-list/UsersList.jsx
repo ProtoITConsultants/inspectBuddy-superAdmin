@@ -36,7 +36,7 @@ const UsersList = () => {
   });
 
   // Fetching Users - Query
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ["getAllUsersQuery", filtersData],
     queryFn: () => usersListAPIs.getAllUsers(filtersData),
   });
@@ -219,7 +219,7 @@ const UsersList = () => {
               : "user-list-table-body"
           }`}
         >
-          {isLoading ? (
+          {isPending ? (
             <TableSkeleton />
           ) : data?.users?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
