@@ -36,13 +36,13 @@ const ViewUserTemplate = () => {
   return (
     <DetailPagesRoot className="!overflow-hidden">
       <ViewTemplate.Header
-        templateName="Residential Template"
-        createdOn="Dec 9, 2024"
-        updatedOn="Dec 11, 2024"
+        templateName={templateData?.name}
+        createdOn={templateData?.createdAt}
+        updatedOn={templateData?.updatedAt}
       />
       <ViewTemplate.RoomsRoot>
-        {templateData.length > 0 ? (
-          templateData?.map((room) => (
+        {templateData?.rooms?.length > 0 ? (
+          templateData?.rooms?.map((room) => (
             <ViewTemplate.RoomCard
               key={room._id}
               roomName={room.name}

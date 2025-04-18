@@ -1,16 +1,19 @@
 import { ARROW_RIGHT_ICON } from "../../../../../assets/icons/ArrowRight";
+import { convertDateFormate } from "../../../services/convertDateFormate";
 
 const Header = ({ templateName, createdOn, updatedOn }) => {
+  const formattedCreationDate = convertDateFormate.inspectionDetails(createdOn);
+  const formattedUpdateDate = convertDateFormate.inspectionDetails(updatedOn);
   return (
     <div className="flex flex-col gap-[8px]">
       <h1 className="text-dark-blue font-bold md:text-[32px] text-[24px]">
         {templateName}
       </h1>
       <p className="text-[16px] text-dark-blue font-medium opacity-50">
-        Created on: {createdOn}
+        Created on: {formattedCreationDate}
       </p>
       <p className="text-[16px] text-dark-blue font-medium opacity-50">
-        Last updated on: {updatedOn}
+        Last updated on: {formattedUpdateDate}
       </p>
     </div>
   );

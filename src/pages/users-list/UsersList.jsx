@@ -65,7 +65,7 @@ const UsersList = () => {
         richColors: true,
       });
       queryClient.invalidateQueries({
-        queryKey: ["getAllUsersQuery"],
+        queryKey: ["getAllUsersQuery", filtersData],
       });
       setDeleteUserModalData({ openModal: false, userToDelete: {} });
     },

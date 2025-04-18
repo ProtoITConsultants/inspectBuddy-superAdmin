@@ -242,7 +242,7 @@ export const userDetailsAPIs = {
           templateId,
         })
       );
-      return response.data.rooms || [];
+      return response.data;
     } catch (error) {
       console.error("Error fetching Template Details", error);
       throw new Error(
