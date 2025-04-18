@@ -23,10 +23,40 @@ export const usersListAPIs = {
 
   // Add New User
   createNewUser: async (userDetails) => {
+    // Extract the role
+    const userRole =
+      userDetails.userSubscriptionPlan === "Free Tier"
+        ? "FREETIER"
+        : userDetails.userSubscriptionPlan === "Standard Tier"
+        ? "STANDARDTIER"
+        : userDetails.userSubscriptionPlan === "Top Tier"
+        ? "TOPTIER"
+        : "";
+
+    const API_DATA = new FormData();
+    API_DATA.append("fullname", userDetails.fullname);
+    API_DATA.append("email", userDetails.email);
+    API_DATA.append("role", userRole);
+    API_DATA.append("deviceType", "web");
+    if (userDetails.personalImage !== "") {
+      API_DATA.append("image", userDetails.personalImage);
+    }
+
+    // Print Form Data
+    // Print the FormData entries
+    for (let [key, value] of API_DATA.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
     try {
       const response = await axiosInstance.post(
         USERS_ENDPOINTS.CREATE_NEW_USER_URL,
-        userDetails
+        API_DATA,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       return response.data;
     } catch (error) {

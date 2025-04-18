@@ -5,7 +5,7 @@ const GET_ALL_USERS_URL = ({ page, searchQuery, subscriptionPlan }) =>
   )}&limit=10&search=${encodeURIComponent(
     searchQuery
   )}&filter=${encodeURIComponent(subscriptionPlan)}`;
-const CREATE_NEW_USER_URL = "createNormalUser";
+const CREATE_NEW_USER_URL = "/createNormalUser";
 const DELETE__SPECIFIC_USER_URL = ({ userId }) =>
   `/deleteNormalUser/${encodeURIComponent(userId)}`;
 const GENERATE_USERS_CSV_FILE_URL = "/getUsersExcelSheet";

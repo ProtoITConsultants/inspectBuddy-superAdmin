@@ -6,12 +6,13 @@ import DetailPagesRoot from "../../../features/user-details/components/DetailPag
 import UserDetailsForm from "../../../features/user-details/components/FormComponents";
 import { Select, TextInput } from "@mantine/core";
 import Button from "../../../components/ui/Button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import PictureInput from "../../../components/PictureInput/PictureInput";
 
 const AddNewUser = () => {
   // Access the client
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // Mantine Form
   const newUserForm = useForm({
@@ -38,37 +39,33 @@ const AddNewUser = () => {
     }),
   });
 
-  console.log(newUserForm.values);
-  console.log("Errors", newUserForm.errors);
-
   // Create New User - Mutation
   const createNewUser = useMutation({
     mutationFn: () => usersListAPIs.createNewUser(newUserForm.values),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["getAllUsersQuery"], (oldQueryData) => [
-        ...oldQueryData,
-        data,
-      ]);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllUsersQuery"] });
       toast.success("Success!", {
         description: "User added successfully.",
         duration: 3000,
+        richColors: true,
       });
+      navigate("/all-users");
     },
 
-    onError: () => {
+    onError: (error) => {
+      console.error(error);
       toast.error("Error!", {
-        description: "Couldn't add new User.",
+        description: error?.message || "Couldn't add new User.",
         duration: 3000,
+        richColors: true,
       });
     },
   });
 
-  const testSubmit = () => {};
-
   return (
     <DetailPagesRoot className="!overflow-hidden !h-full">
       <form
-        onSubmit={newUserForm.onSubmit(() => testSubmit())}
+        onSubmit={newUserForm.onSubmit(createNewUser.mutate)}
         className="flex flex-col gap-[32px]"
       >
         <UserDetailsForm.UserDetailFormSection
@@ -103,8 +100,8 @@ const AddNewUser = () => {
 
             <Select
               id="editUserPlanDetails"
-              label="Current Plan"
-              placeholder="Select User's Plan"
+              label="User Role"
+              placeholder="Select User's Role"
               data={["Free Tier", "Standard Tier", "Top Tier"]}
               {...newUserForm.getInputProps("userSubscriptionPlan")}
               allowDeselect={false}
