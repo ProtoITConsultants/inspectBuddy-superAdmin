@@ -1,0 +1,15 @@
+.navbar-with-sidebar {
+  width: calc(100vw - var(--scrollbar-width));
+}
+
+@media (min-width: 1024px) {
+  .navbar-with-sidebar {
+    width: calc(100vw - 250px - var(--scrollbar-width)) !important;
+  }
+}
+
+@media (min-width: 1630px) {
+  .navbar-with-sidebar {
+    width: calc(100vw - 305px - var(--scrollbar-width)) !important;
+  }
+}

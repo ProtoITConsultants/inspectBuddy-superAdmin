@@ -13,7 +13,7 @@ const SidebarItem = ({ title, Icon, link }) => {
         isActiveLink ? "bg-[#E4F0FF]" : "hover:bg-[#E4F0FF]"
       )}
     >
-      <div className="flex space-x-[12px] items-center">
+      <div className="flex gap-[12px] items-center">
         <Icon
           className={cn(isActiveLink ? "text-primary" : "text-[#8885AA]")}
         />

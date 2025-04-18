@@ -1,8 +1,9 @@
 import {
   DashboardIcon,
   MyTeamIcon,
+  PlanSettingsIcon,
   ReportsIcon,
-  TemplatesIcon,
+  RestoreRequestsIcon,
 } from "../assets/icons/SideBarIcons.jsx";
 
 export const SIDEBAR_LINKS = [
@@ -18,13 +19,18 @@ export const SIDEBAR_LINKS = [
   },
   {
     title: "Plan Settings",
-    Icon: TemplatesIcon,
+    Icon: PlanSettingsIcon,
     link: "/plan-settings",
   },
   {
     title: "Report Settings",
     Icon: ReportsIcon,
     link: "/report-settings",
+  },
+  {
+    title: "Restore Requests",
+    Icon: RestoreRequestsIcon,
+    link: "/restore-requests",
   },
 ];
 
