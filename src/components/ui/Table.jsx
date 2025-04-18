@@ -78,9 +78,11 @@ const SingleColumn = ({ children }) => {
   );
 };
 
-const DoubleColumn = ({ children }) => {
+const DoubleColumn = ({ children, className = "" }) => {
   return (
-    <div className="flex items-center gap-[4px] col-span-2">{children}</div>
+    <div className={cn("flex items-center gap-[4px] col-span-2", className)}>
+      {children}
+    </div>
   );
 };
 

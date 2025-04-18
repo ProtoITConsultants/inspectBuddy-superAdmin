@@ -36,3 +36,10 @@ export const INSPECTIONS_TABLE_HEADINGS = [
   { key: "property", value: "Property" },
   { key: "status", value: "Status" },
 ];
+
+// User Requests Tables Headings - User Requests page
+export const USER_REQUESTS_TABLE_HEADINGS = [
+  { key: "serialNo", value: "S#NO" },
+  { key: "userName", value: "User Name" },
+  { key: "userEmail", value: "User Email" },
+];

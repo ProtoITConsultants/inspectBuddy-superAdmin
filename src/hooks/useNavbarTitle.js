@@ -5,8 +5,9 @@ const ROUTES = [
   { path: "/", title: "Dashboard" },
   { path: "/all-users", title: "User Detail" },
   { path: "/add-new-user", title: "New User" },
-  { path: "/report-settings", title: "Report Settings" },
   { path: "/plan-settings", title: "Plan Settings" },
+  { path: "/report-settings", title: "Report Settings" },
+  { path: "/restore-requests", title: "Restore Requests" },
   { path: "/user-details/:userId", title: "User's Details" },
   { path: "/user-details/:userId/:section", title: "User's Details" },
   {
