@@ -212,7 +212,6 @@ const UsersList = () => {
           </Link>
         </div>
         {/* Table Body */}
-        {/* xl:px-[24px] lg:px-[12px] lg:pt-[24px] */}
         <Table.Body
           className={`${
             data?.totalPages > 2
