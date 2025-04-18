@@ -214,7 +214,7 @@ const UsersList = () => {
         {/* Table Body */}
         <Table.Body
           className={`${
-            data?.totalPages > 2
+            data?.totalPages < 2
               ? "h-[calc(100%-126px)] user-list-table-body-no-pagination"
               : "user-list-table-body"
           }`}

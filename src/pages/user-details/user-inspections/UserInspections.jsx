@@ -299,7 +299,7 @@ const UserInspections = () => {
         {/* Table Body */}
         <Table.Body
           className={`${
-            userInspections?.data?.totalPages < 0
+            userInspections?.data?.totalPages < 2
               ? "xl:h-[calc(100%-275px)] 3xl:!h-[calc(100%-230px)] 2xl:!h-[calc(100%-250px)] w1150:!h-[calc(100%-295px)] sm:h-[calc(100%-208.98px)] ms:h-[calc(100%-273.8px)] h-[calc(100%-298.58px)]"
               : "xl:h-[calc(100%-225.59px)] 3xl:!h-[calc(100%-240px)] 2xl:!h-[calc(100%-260px)] w1150:!h-[calc(100%-305px)] sm:h-[calc(100%-219.28px)] ms:h-[calc(100%-284.08px)] h-[calc(100%-308.88px)]"
           } pt-[12px]`}
