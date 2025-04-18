@@ -9,8 +9,9 @@ import { TICK_ICON } from "../../../../assets/icons/TickIcon";
 import { CROSS_ICON } from "../../../../assets/icons/CrossIcon";
 import { toast } from "sonner";
 import { userInspectionsAPIs } from "../../api/user-inspections";
-import { LoadingOverlay, Modal } from "@mantine/core";
+import { Loader, LoadingOverlay, Modal } from "@mantine/core";
 import { CLOSE_MODAL_ICON } from "../../../../assets/icons/CloseModalIcon";
+import { cn } from "../../../../utils/cn";
 
 const RoomImagePreviewModal = ({
   isModalOpen,
@@ -118,6 +119,9 @@ const RoomImagePreviewModal = ({
       // Set focus to the input field when adding or editing caption
       inputRef.current?.focus();
     }
+    return () => {
+      // Clean up
+    };
   }, [
     previewImageModalStates.addingCaption,
     previewImageModalStates.editingImage,
@@ -144,15 +148,20 @@ const RoomImagePreviewModal = ({
         className={`rounded-[8px] md:w-[70vw] w-[90%] md:h-[80dvh] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:flex outline-none`}
       >
         <LoadingOverlay
-          visible={
-            deleteRoomImage.isPending || updateRoomImageCaption.isPending
-          }
+          visible={deleteRoomImage.isPending}
           zIndex={1000}
           overlayProps={{ radius: "sm", blur: 2 }}
         />
         <button
           className="absolute !top-[8px] !right-[8px]"
-          onClick={onCloseModal}
+          onClick={
+            deleteRoomImage.isPending || updateRoomImageCaption.isPending
+              ? () => {}
+              : onCloseModal
+          }
+          disabled={
+            deleteRoomImage.isPending || updateRoomImageCaption.isPending
+          }
         >
           <CLOSE_MODAL_ICON />
         </button>
@@ -233,21 +242,29 @@ const RoomImagePreviewModal = ({
                     : "hidden"
                 } flex justify-between items-center w-full`}
               >
-                <input
-                  type="text"
-                  value={previewImageModalStates?.captionValue}
-                  ref={inputRef}
-                  onChange={(e) => {
-                    setPreviewImageModalStates((prevState) => ({
-                      ...prevState,
-                      captionValue: e.target.value,
-                    }));
-                  }}
-                  className="border-1 outline-none border-white w-1/2 bg-transparent text-white text-[14px] font-normal p-[2px_4px] rounded-md"
-                  placeholder="Add Caption Here"
-                />
+                {updateRoomImageCaption.isPending ? (
+                  <Loader color="blue" size="sm" type="dots" />
+                ) : (
+                  <input
+                    type="text"
+                    value={previewImageModalStates?.captionValue}
+                    ref={inputRef}
+                    onChange={(e) => {
+                      setPreviewImageModalStates((prevState) => ({
+                        ...prevState,
+                        captionValue: e.target.value,
+                      }));
+                    }}
+                    className="border-1 outline-none border-white w-1/2 bg-transparent text-white text-[14px] font-normal p-[2px_4px] rounded-md"
+                    placeholder="Add Caption Here"
+                  />
+                )}
 
-                <div className="flex items-center gap-[16px]">
+                <div
+                  className={cn("flex items-center gap-[16px]", {
+                    hidden: updateRoomImageCaption.isPending,
+                  })}
+                >
                   <button
                     className="border-none outline-none focus:outline-none"
                     onClick={updateRoomImageCaption.mutate}
@@ -293,7 +310,7 @@ const RoomImagePreviewModal = ({
           </div>
         </div>
         <div className="space-y-[32.5px] md:flex hidden flex-col pr-[8px]">
-          <div className="w-[100px] flex items-center justify-end flex-1">
+          <div className={cn("w-[100px] flex items-center justify-end flex-1")}>
             <button
               onClick={() => {
                 setPreviewImageModalStates((prevState) => ({
@@ -310,6 +327,13 @@ const RoomImagePreviewModal = ({
                   }
                 });
               }}
+              disabled={
+                updateRoomImageCaption.isPending || deleteRoomImage.isPending
+              }
+              type="button"
+              className={cn("block", {
+                hidden: imagesData.length === 1,
+              })}
             >
               <IconChevronRight size={24} color="white" />
             </button>
