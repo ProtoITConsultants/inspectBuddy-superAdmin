@@ -7,7 +7,6 @@ import { cn } from "../../utils/cn";
 import SidebarMobileVersion from "../Sidebar/SidebarMobileVersion";
 import { useScrollbarWidth } from "../../hooks/useScrollbarWidth";
 import useNavbarTitle from "../../hooks/useNavbarTitle";
-import "../../styles/navbarStyles.css";
 
 const Navbar = ({ withSidebar = false }) => {
   const { pageTitle } = useNavbarTitle();
@@ -22,7 +21,8 @@ const Navbar = ({ withSidebar = false }) => {
         "md:h-[96px] h-[72px] md:px-[32px] px-[20px] flex items-center justify-between bg-white border-b-[1.5px] border-b-[#ECECEC]",
         {
           "w-[calc(100vw-var(--scrollbar-width))]": !withSidebar,
-          "navbar-with-sidebar": withSidebar,
+          "w-[calc(100vw-var(--scrollbar-width))] lg:w-[calc(100vw-250px-var(--scrollbar-width))] min-[1630px]:!w-[calc(100vw-305px-var(--scrollbar-width))]":
+            withSidebar,
         }
       )}
     >
