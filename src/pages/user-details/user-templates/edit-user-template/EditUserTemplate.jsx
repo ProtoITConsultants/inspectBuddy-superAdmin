@@ -38,7 +38,7 @@ const EditUserTemplate = () => {
   // Update Room List - Side Effects
   useEffect(() => {
     if (data) {
-      setTemplateRooms(data);
+      setTemplateRooms(data?.rooms);
     }
 
     // Cleanup
