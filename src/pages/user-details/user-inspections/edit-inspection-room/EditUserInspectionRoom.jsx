@@ -18,6 +18,7 @@ import {
   useCreateNewRoomElement,
   useRearrangeRoomElements,
 } from "../../../../features/user-details/hooks/inspectionMutations";
+import UploadRoomImageInput from "../../../../features/user-details/components/inspections/UploadRoomImageInput";
 
 const EditUserInspectionRoom = () => {
   // hooks
@@ -144,11 +145,14 @@ const EditUserInspectionRoom = () => {
               className="w-full font-medium"
               {...form.getInputProps("roomNote")}
             />
-            {form.values.roomImageRequired && (
-              <Text className="!text-gray-500" size="12px">
-                At least one room image is required!
-              </Text>
-            )}
+            <div className="flex flex-col gap-[4px]">
+              <UploadRoomImageInput roomImages={form.values.roomImages || []} />
+              {form.values.roomImageRequired && (
+                <Text className="!text-gray-500" size="12px">
+                  At least one room image is required!
+                </Text>
+              )}
+            </div>
           </EditRoomDetails.FormSectionBody>
         </EditRoomDetails.FormSection>
         <EditRoomDetails.FormSection sectionId="room-elements">

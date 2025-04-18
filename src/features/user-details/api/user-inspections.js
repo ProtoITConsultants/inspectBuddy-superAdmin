@@ -17,7 +17,6 @@ export const userInspectionsAPIs = {
       );
     }
   },
-
   // Delete User Inspection
   deleteUserInspection: async ({ userId, inspectionId }) => {
     try {
@@ -283,6 +282,64 @@ export const userInspectionsAPIs = {
       throw new Error(
         error.response?.data?.message ||
           "Error deleting Selected Questions from Room Element in Inspection"
+      );
+    }
+  },
+
+  // Upload Room Image From Inspection
+  uploadSpecificRoomImageInInspection: async ({
+    inspectionId,
+    roomId,
+    image,
+  }) => {
+    // Create a FormData object
+    const formData = new FormData();
+
+    // Append the fields required by your API
+    formData.append("inspectionId", inspectionId);
+    formData.append("roomId", roomId);
+    formData.append("image", image);
+
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.UPLOAD_SPECIFIC_ROOM_IMAGE_IN_INSPECTION_URL,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading Room Image in Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error uploading Room Image in Inspection"
+      );
+    }
+  },
+  // Delete Room Image From Inspection
+  deleteSpecificRoomImageInInspection: async ({
+    inspectionId,
+    roomId,
+    imageId,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.DELETE_SPECIFIC_ROOM_IMAGE_IN_INSPECTION_URL,
+        {
+          inspectionId,
+          roomId,
+          imageId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading Room Image in Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error uploading Room Image in Inspection"
       );
     }
   },
