@@ -1,5 +1,5 @@
 // import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { userRestoreRequestsAPIs } from "../../../features/user-requests/api";
 // import { toast } from "sonner";
 import Table from "../../../components/ui/Table";
@@ -14,15 +14,21 @@ import PropertyCard from "../../../features/user-details/components/properties/P
 // import DetailPagesRoot from "../../../features/user-details/components/DetailPagesRoot";
 import RequestDetailsRoot from "../../../features/user-requests/components/RequestDetailsRoot";
 import { useForm } from "@mantine/form";
+import { useParams } from "react-router";
+import { useQueries } from "@tanstack/react-query";
+import { userRestoreRequestsAPIs } from "./../../../features/user-requests/api/index";
 
 const RestoreRequestDetail = () => {
   // Local States
   const [activeTab, setActiveTab] = useState("TEMPLATE");
+  const { requesterId } = useParams();
 
   // Filters Data
   const [filtersData, setFiltersData] = useState({
     search: "",
-    page: 1,
+    templatesPage: 1,
+    inspectionsPage: 1,
+    propertiesPage: 1,
   });
 
   // Form for Restore Requests
@@ -34,25 +40,52 @@ const RestoreRequestDetail = () => {
       selectAllTemplates: false,
       selectAllInspections: false,
       selectAllProperties: false,
+      requestedTemplatesData: {},
+      requestedInspectionsData: {},
+      requestedPropertiesData: {},
     },
   });
 
-  // Fetch User Requests Query
-  //   const { data, isError, error, isPending } = useQuery({
-  //     queryKey: ["userRequestsQuery", filtersData],
-  //     queryFn: () =>
-  //       userRestoreRequestsAPIs.fetchUsersWithRequests({
-  //         filtersData,
-  //       }),
-  //   });
-
-  //   if (isError) {
-  //     return toast.error("Error!", {
-  //       message: error.message,
-  //       duration: 3000,
-  //       richColors: true,
-  //     });
-  //   }
+  // Queries to fetch Data
+  const requestsData = useQueries({
+    queries: [
+      {
+        queryKey: ["requestedTemplatesQuery", filtersData],
+        queryFn: () =>
+          userRestoreRequestsAPIs.fetchUserRequests({
+            userId: requesterId,
+            type: "TEMPLATE",
+            page: filtersData.templatesPage,
+          }),
+        enabled: activeTab === "TEMPLATE",
+      },
+      {
+        queryKey: ["requestedInspectionsQuery", filtersData],
+        queryFn: () =>
+          userRestoreRequestsAPIs.fetchUserRequests({
+            userId: requesterId,
+            type: "INSPECTION",
+            page: filtersData.inspectionsPage,
+          }),
+        enabled: activeTab === "INSPECTION",
+      },
+      {
+        queryKey: ["requestedPropertiesQuery", filtersData],
+        queryFn: () =>
+          userRestoreRequestsAPIs.fetchUserRequests({
+            userId: requesterId,
+            type: "PROPERTY",
+            page: filtersData.propertiesPage,
+          }),
+        enabled: activeTab === "PROPERTY",
+      },
+    ],
+    combine: (data) => ({
+      requestedTemplates: data[0].data,
+      requestedInspections: data[1].data,
+      requestedProperties: data[2].data,
+    }),
+  });
 
   const DUMMY_TEMPLATES = [
     {
@@ -99,153 +132,178 @@ const RestoreRequestDetail = () => {
     },
   ];
 
-  const TEMPLATE_ROWS = DUMMY_TEMPLATES.map((template) => {
-    // Check if the template is selected
-    const isSelected = restoreRequestForm.values.selectedTemplateIds.includes(
-      template._id
-    );
+  const TEMPLATE_ROWS = requestsData?.requestedTemplates?.requests?.map(
+    (request) => {
+      // Check if the template is selected
+      const isSelected = restoreRequestForm.values.selectedTemplateIds.includes(
+        request._id
+      );
 
-    const handleCheckboxChange = () => {
-      // Toggle the selection of the template
-      if (isSelected) {
-        restoreRequestForm.setFieldValue(
-          "selectedTemplateIds",
-          restoreRequestForm.values.selectedTemplateIds.filter(
-            (id) => id !== template._id
-          )
-        );
-      } else {
-        restoreRequestForm.setFieldValue("selectedTemplateIds", [
-          ...restoreRequestForm.values.selectedTemplateIds,
-          template._id,
-        ]);
-      }
-    };
+      const handleCheckboxChange = () => {
+        // Toggle the selection of the template
+        if (isSelected) {
+          restoreRequestForm.setFieldValue(
+            "selectedTemplateIds",
+            restoreRequestForm.values.selectedTemplateIds.filter(
+              (id) => id !== request._id
+            )
+          );
+        } else {
+          restoreRequestForm.setFieldValue("selectedTemplateIds", [
+            ...restoreRequestForm.values.selectedTemplateIds,
+            request._id,
+          ]);
+        }
+      };
 
-    return (
-      <React.Fragment key={template._id}>
-        <Table.ItemRoot className="md:grid hidden">
-          <div className="col-span-7 flex items-center gap-[12px]">
-            <Checkbox
-              id={`checkbox-${template._id}`}
-              checked={isSelected}
-              onChange={handleCheckboxChange}
-              label={
-                <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
-                  {template.templateName}
-                </p>
-              }
-            />
-          </div>
-        </Table.ItemRoot>
-      </React.Fragment>
-    );
-  });
-  const INSPECTION_ROWS = DUMMY_INSPECTIONS.map((inspection) => {
-    // Check if the inspection is selected
-    const isSelected = restoreRequestForm.values.selectedInspectionIds.includes(
-      inspection._id
-    );
-    const handleCheckboxChange = () => {
-      // Toggle the selection of the inspection
-      if (isSelected) {
-        restoreRequestForm.setFieldValue(
-          "selectedInspectionIds",
-          restoreRequestForm.values.selectedInspectionIds.filter(
-            (id) => id !== inspection._id
-          )
-        );
-      } else {
-        restoreRequestForm.setFieldValue("selectedInspectionIds", [
-          ...restoreRequestForm.values.selectedInspectionIds,
-          inspection._id,
-        ]);
-      }
-    };
+      return (
+        <React.Fragment key={request?._id}>
+          <Table.ItemRoot className="md:grid hidden">
+            <div className="col-span-7 flex items-center gap-[12px]">
+              <Checkbox
+                id={`checkbox-${request?._id}`}
+                checked={isSelected}
+                onChange={handleCheckboxChange}
+                label={
+                  <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
+                    {request?.template?.name}
+                  </p>
+                }
+              />
+            </div>
+          </Table.ItemRoot>
+        </React.Fragment>
+      );
+    }
+  );
+  const INSPECTION_ROWS = requestsData?.requestedInspections?.requests?.map(
+    (request) => {
+      // Check if the inspection is selected
+      const isSelected =
+        restoreRequestForm.values.selectedInspectionIds.includes(request._id);
+      const handleCheckboxChange = () => {
+        // Toggle the selection of the inspection
+        if (isSelected) {
+          restoreRequestForm.setFieldValue(
+            "selectedInspectionIds",
+            restoreRequestForm.values.selectedInspectionIds.filter(
+              (id) => id !== request._id
+            )
+          );
+        } else {
+          restoreRequestForm.setFieldValue("selectedInspectionIds", [
+            ...restoreRequestForm.values.selectedInspectionIds,
+            request._id,
+          ]);
+        }
+      };
 
-    return (
-      <React.Fragment key={inspection._id}>
-        <Table.ItemRoot className="md:grid hidden">
-          <div className="col-span-2 flex items-center gap-[12px]">
-            <Checkbox
-              id={`checkbox-${inspection._id}`}
-              checked={isSelected}
-              onChange={handleCheckboxChange}
-            />
-            <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
-              {inspection.inspectionName}
-            </p>
-          </div>
-          <div className="col-span-5">
-            <PropertyCard
-              propertyData={{
-                propertyName: inspection.propertyName,
-                propertyAddress: inspection.propertyAddress,
-                propertyImageURL: inspection.propertyImageURL,
-              }}
-            />
-          </div>
-        </Table.ItemRoot>
-      </React.Fragment>
-    );
-  });
-  const PROPERTIES_ROWS = DUMMY_PROPERTIES.map((property) => {
-    // Check if the property is selected
-    const isSelected = restoreRequestForm.values.selectedPropertyIds.includes(
-      property._id
-    );
+      const { property } = request.inspection;
 
-    const handleCheckboxChange = () => {
-      // Toggle the selection of the property
-      if (isSelected) {
-        restoreRequestForm.setFieldValue(
-          "selectedPropertyIds",
-          restoreRequestForm.values.selectedPropertyIds.filter(
-            (id) => id !== property._id
-          )
-        );
-      } else {
-        restoreRequestForm.setFieldValue("selectedPropertyIds", [
-          ...restoreRequestForm.values.selectedPropertyIds,
-          property._id,
-        ]);
-      }
-    };
+      return (
+        <React.Fragment key={request?._id}>
+          <Table.ItemRoot className="md:grid hidden">
+            <div className="col-span-2 flex items-center gap-[12px]">
+              <Checkbox
+                id={`checkbox-${request?._id}`}
+                checked={isSelected}
+                onChange={handleCheckboxChange}
+              />
+              <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
+                {request?.inspection?.name}
+              </p>
+            </div>
+            <div className="col-span-5">
+              <PropertyCard
+                propertyData={{
+                  propertyName: property?.name,
+                  propertyAddress: [
+                    property?.address?.unit,
+                    property?.address?.street,
+                    property?.address?.city,
+                  ]
+                    .filter(Boolean)
+                    .join(", "),
+                  propertyImageURL: property?.image?.url || "",
+                }}
+              />
+            </div>
+          </Table.ItemRoot>
+        </React.Fragment>
+      );
+    }
+  );
+  const PROPERTIES_ROWS = requestsData?.requestedProperties?.requests?.map(
+    (request) => {
+      // Check if the property is selected
+      const isSelected = restoreRequestForm.values.selectedPropertyIds.includes(
+        request._id
+      );
 
-    return (
-      <React.Fragment key={property._id}>
-        <Table.ItemRoot className="md:grid hidden">
-          <div className="col-span-2 flex items-center gap-[12px]">
-            <Checkbox
-              id={`checkbox-${property._id}`}
-              checked={isSelected}
-              onChange={handleCheckboxChange}
-            />
-            <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
-              {property.propertyCatgory}
-            </p>
-          </div>
-          <div className="col-span-5">
-            <PropertyCard
-              propertyData={{
-                propertyName: property.propertyName,
-                propertyAddress: property.propertyAddress,
-                propertyImageURL: property.propertyImageURL,
-              }}
-            />
-          </div>
-        </Table.ItemRoot>
-      </React.Fragment>
-    );
-  });
+      const handleCheckboxChange = () => {
+        // Toggle the selection of the property
+        if (isSelected) {
+          restoreRequestForm.setFieldValue(
+            "selectedPropertyIds",
+            restoreRequestForm.values.selectedPropertyIds.filter(
+              (id) => id !== request._id
+            )
+          );
+        } else {
+          restoreRequestForm.setFieldValue("selectedPropertyIds", [
+            ...restoreRequestForm.values.selectedPropertyIds,
+            request._id,
+          ]);
+        }
+      };
 
-  const isPending = false;
-  const data = {
-    totalPages: 1,
-    currentPage: 1,
-    totalUsers: 2,
-    users: DUMMY_INSPECTIONS,
-  };
+      return (
+        <React.Fragment key={request?._id}>
+          <Table.ItemRoot className="md:grid hidden">
+            <div className="col-span-2 flex items-center gap-[12px]">
+              <Checkbox
+                id={`checkbox-${request?._id}`}
+                checked={isSelected}
+                onChange={handleCheckboxChange}
+              />
+              <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
+                {request?.property?.category?.value}
+              </p>
+            </div>
+            <div className="col-span-5">
+              <PropertyCard
+                propertyData={{
+                  propertyName: request?.property?.name,
+                  propertyAddress: [
+                    request?.property?.address?.unit,
+                    request?.property?.address?.street,
+                    request?.property?.address?.city,
+                  ]
+                    .filter(Boolean)
+                    .join(", "),
+                  propertyImageURL: request?.property?.image?.url || "",
+                }}
+              />
+            </div>
+          </Table.ItemRoot>
+        </React.Fragment>
+      );
+    }
+  );
+
+  const formRef = React.useRef(restoreRequestForm);
+
+  useEffect(() => {
+    if (requestsData?.requestedTemplates) {
+      formRef.current.setFieldValue("requestedTemplatesData", {
+        currentEntityCount: requestsData?.requestedTemplates.currentEntityCount,
+        currentPage: requestsData?.requestedTemplates.currentPage,
+        totalEntityLimit: requestsData?.requestedTemplates.totalEntityLimit,
+        totalPages: requestsData?.requestedTemplates.totalPages,
+        totalRequests: requestsData?.requestedTemplates.totalRequests,
+      });
+    }
+  }, [requestsData?.requestedTemplates]);
 
   return (
     <RequestDetailsRoot className="!overflow-hidden max-w-[1220px]">
@@ -265,7 +323,6 @@ const RestoreRequestDetail = () => {
           <Tabs.Tab value="INSPECTION">For Inspections</Tabs.Tab>
           <Tabs.Tab value="PROPERTY">For Properties</Tabs.Tab>
         </Tabs.List>
-
         <Tabs.Panel value="TEMPLATE">
           {/* User Requests Table - Templates*/}
           <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
@@ -309,14 +366,14 @@ const RestoreRequestDetail = () => {
             {/* Table Body */}
             <Table.Body
               className={`${
-                data?.totalPages < 2
+                requestsData?.requestedTemplates?.totalPages < 2
                   ? "h-[calc(100%-96.8px)]"
                   : "h-[calc(100%-106.8px)]"
               }`}
             >
-              {isPending ? (
+              {requestsData?.isPending ? (
                 <TableSkeleton />
-              ) : data?.users?.length < 1 ? (
+              ) : requestsData?.requestedTemplates?.requests?.length < 1 ? (
                 <div className="flex justify-center items-center h-full">
                   <p className="text-[14px] font-medium text-[#6C727F] text-center">
                     No Request Found for restoring templates.
@@ -327,17 +384,23 @@ const RestoreRequestDetail = () => {
               )}
             </Table.Body>
 
-            {data && data?.totalPages > 0 && (
-              <Table.Pagination
-                filtersData={filtersData}
-                setFiltersData={(value) => setFiltersData({ page: value.page })}
-                paginationData={{
-                  totalPages: data?.totalPages,
-                  currentPage: data?.currentPage,
-                  totalItems: data?.totalUsers,
-                }}
-              />
-            )}
+            {requestsData?.requestedTemplates &&
+              requestsData?.requestedTemplates?.totalPages > 0 && (
+                <Table.Pagination
+                  filtersData={filtersData}
+                  setFiltersData={(value) =>
+                    setFiltersData((prev) => ({
+                      ...prev,
+                      templatesPage: value.page,
+                    }))
+                  }
+                  paginationData={{
+                    totalPages: requestsData?.requestedTemplates?.totalPages,
+                    currentPage: requestsData?.requestedTemplates?.currentPage,
+                    totalItems: requestsData?.requestedTemplates?.totalRequests,
+                  }}
+                />
+              )}
           </Table.Root>
         </Tabs.Panel>
 
@@ -390,14 +453,14 @@ const RestoreRequestDetail = () => {
             {/* Table Body */}
             <Table.Body
               className={`${
-                data?.totalPages < 2
+                requestsData?.requestedInspections?.totalPages < 2
                   ? "h-[calc(100%-96.8px)]"
                   : "h-[calc(100%-106.8px)]"
               }`}
             >
-              {isPending ? (
+              {requestsData?.isPending ? (
                 <TableSkeleton />
-              ) : data?.users?.length < 1 ? (
+              ) : requestsData?.requestedInspections?.requests?.length < 1 ? (
                 <div className="flex justify-center items-center h-full">
                   <p className="text-[14px] font-medium text-[#6C727F] text-center">
                     No Request Found for restoring Inspections.
@@ -408,17 +471,25 @@ const RestoreRequestDetail = () => {
               )}
             </Table.Body>
 
-            {data && data?.totalPages > 0 && (
-              <Table.Pagination
-                filtersData={filtersData}
-                setFiltersData={(value) => setFiltersData({ page: value.page })}
-                paginationData={{
-                  totalPages: data?.totalPages,
-                  currentPage: data?.currentPage,
-                  totalItems: data?.totalUsers,
-                }}
-              />
-            )}
+            {requestsData?.requestedInspections &&
+              requestsData?.requestedInspections?.totalPages > 0 && (
+                <Table.Pagination
+                  filtersData={filtersData}
+                  setFiltersData={(value) =>
+                    setFiltersData((prev) => ({
+                      ...prev,
+                      inspectionsPage: value.page,
+                    }))
+                  }
+                  paginationData={{
+                    totalPages: requestsData?.requestedInspections?.totalPages,
+                    currentPage:
+                      requestsData?.requestedInspections?.currentPage,
+                    totalItems:
+                      requestsData?.requestedInspections?.totalRequests,
+                  }}
+                />
+              )}
           </Table.Root>
         </Tabs.Panel>
 
@@ -471,14 +542,14 @@ const RestoreRequestDetail = () => {
             {/* Table Body */}
             <Table.Body
               className={`${
-                data?.totalPages < 2
+                requestsData?.requestedTemplates?.totalPages < 2
                   ? "h-[calc(100%-96.8px)]"
                   : "h-[calc(100%-106.8px)]"
               }`}
             >
-              {isPending ? (
+              {requestsData?.isPending ? (
                 <TableSkeleton />
-              ) : data?.users?.length < 1 ? (
+              ) : requestsData?.requestedProperties?.requests.length < 1 ? (
                 <div className="flex justify-center items-center h-full">
                   <p className="text-[14px] font-medium text-[#6C727F] text-center">
                     No User Request Found for restoring properties.
@@ -488,17 +559,23 @@ const RestoreRequestDetail = () => {
                 PROPERTIES_ROWS
               )}
             </Table.Body>
-            {data && data?.totalPages > 0 && (
-              <Table.Pagination
-                filtersData={filtersData}
-                setFiltersData={(value) => setFiltersData({ page: value.page })}
-                paginationData={{
-                  totalPages: data?.totalPages,
-                  currentPage: data?.currentPage,
-                  totalItems: data?.totalUsers,
-                }}
-              />
-            )}
+            {requestsData?.requestedProperties &&
+              requestsData?.requestedProperties?.totalPages > 0 && (
+                <Table.Pagination
+                  filtersData={filtersData}
+                  setFiltersData={(value) =>
+                    setFiltersData((prev) => ({
+                      ...prev,
+                      propertiesPage: value.page,
+                    }))
+                  }
+                  paginationData={{
+                    totalPages: requestsData.requestedProperties?.totalPages,
+                    currentPage: requestsData.requestedProperties?.currentPage,
+                    totalItems: requestsData.requestedProperties?.totalRequests,
+                  }}
+                />
+              )}
           </Table.Root>
         </Tabs.Panel>
       </Tabs>

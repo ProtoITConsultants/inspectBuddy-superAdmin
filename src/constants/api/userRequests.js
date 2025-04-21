@@ -1,5 +1,5 @@
 // API Endpoints
-const FETCH_USERS_WITH_REQUESTS_URL = ({ type, search, page }) =>
+const FETCH_USERS_WITH_REQUESTS_URL = ({ search, page }) =>
   `/getUsersWithRequests?search=${encodeURIComponent(
     search
   )}&page=${encodeURIComponent(page)}`;
