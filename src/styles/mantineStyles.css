@@ -242,6 +242,8 @@
 }
 
 /* SearchBar Input - Restore Requests of Users */
-#search-user-request {
-  background-color: white;
+@media (min-width: 768px) {
+  #search-user-request {
+    background-color: white;
+  }
 }

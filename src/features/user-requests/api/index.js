@@ -3,11 +3,10 @@ import axiosInstance from "../../../utils/axiosInstance";
 
 export const userRestoreRequestsAPIs = {
   // Fetch All Users with Requests
-  fetchUsersWithRequests: async ({ filtersData, type }) => {
+  fetchUsersWithRequests: async ({ filtersData }) => {
     try {
       const response = await axiosInstance.get(
         USER_REQUESTS_ENDPOINTS.FETCH_USERS_WITH_REQUESTS_URL({
-          type,
           search: filtersData.search,
           page: filtersData.page,
         })

@@ -8,6 +8,7 @@ import { VIEW_DETAIL_ICON } from "../../assets/icons/DynamicIcons";
 import { userRestoreRequestsAPIs } from "../../features/user-requests/api";
 import { toast } from "sonner";
 import Searchbar from "../../components/ui/Searchbar";
+import ResponsiveRequestCard from "../../features/user-requests/components/ResponsiveRequestCard";
 
 const RestoreRequests = () => {
   // Filters Data
@@ -25,13 +26,13 @@ const RestoreRequests = () => {
       }),
   });
 
-  // if (isError) {
-  //   return toast.error("Error!", {
-  //     message: error.message,
-  //     duration: 3000,
-  //     richColors: true,
-  //   });
-  // }
+  if (isError) {
+    return toast.error("Error!", {
+      message: error.message,
+      duration: 3000,
+      richColors: true,
+    });
+  }
 
   const rows = data?.users?.map((user, index) => (
     <React.Fragment key={user._id}>
@@ -58,13 +59,14 @@ const RestoreRequests = () => {
           />
         </Table.DoubleColumn>
       </Table.ItemRoot>
+      <ResponsiveRequestCard requestData={user} />
     </React.Fragment>
   ));
 
   return (
-    <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
+    <Table.Root className="lg:p-[16px] mt-0 md:!border border-0 h-full md:p-[12px]">
       {/* Table Header */}
-      <Table.Header>
+      <Table.Header className="lg:!grid !hidden">
         {USER_REQUESTS_TABLE_HEADINGS.map((heading) =>
           heading.key !== "serialNo" ? (
             <Table.DoubleColumn key={heading.key}>
@@ -87,13 +89,25 @@ const RestoreRequests = () => {
           />
         </Table.DoubleColumn>
       </Table.Header>
+
+      <div className="lg:hidden flex w-full justify-end">
+        <Searchbar
+          id="search-user-request"
+          placeholder="Search requests by user..."
+          onSearch={(value) =>
+            setFiltersData((prev) => ({ ...prev, search: value }))
+          }
+          className="md:!bg-white !border md:border-primary border-[#DAEAFF] md:w-[305px] w-full"
+        />
+      </div>
+
       {/* Table Body */}
       <Table.Body
         className={`${
           data?.totalPages < 2
-            ? "h-[calc(100%-96.8px)]"
-            : "h-[calc(100%-106.8px)]"
-        }`}
+            ? "h-[calc(100%-72px)] lg:h-[calc(100%-96px)] xl:h-[calc(100%-120px)]"
+            : "h-[calc(100%-82px)] lg:h-[calc(100%-106px)] xl:h-[calc(100%-130px)]"
+        } md:!px-[12px] md:pt-[24px] pt-[16px]`}
       >
         {isPending ? (
           <TableSkeleton />

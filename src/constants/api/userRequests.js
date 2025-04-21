@@ -1,8 +1,8 @@
 // API Endpoints
 const FETCH_USERS_WITH_REQUESTS_URL = ({ type, search, page }) =>
-  `/getUsersWithRequests?type=${encodeURIComponent(
-    type
-  )}&search=${encodeURIComponent(search)}&page=${encodeURIComponent(page)}`;
+  `/getUsersWithRequests?search=${encodeURIComponent(
+    search
+  )}&page=${encodeURIComponent(page)}`;
 const FETCH_USERS_WITH_REQUESTS_BY_ENTITY_URL = ({ userId, type, page }) =>
   `/getUserRequestsByEntity/${encodeURIComponent(
     userId
