@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import searchIcon from "../../assets/icons/search-icon.svg";
 import { cn } from "../../utils/cn";
 
-const Searchbar = ({ placeholder, onSearch, className = "" }) => {
+const Searchbar = ({ id, placeholder, onSearch, className = "" }) => {
   const [searchBarValue, setSearchBarValue] = useState("");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,7 +22,7 @@ const Searchbar = ({ placeholder, onSearch, className = "" }) => {
       <img src={searchIcon} alt="search-icon" />
       <input
         type="search"
-        id="inspections-search"
+        id={id ? id : "inspections-search"}
         value={searchBarValue}
         onChange={(e) => {
           setSearchBarValue(e.target.value);

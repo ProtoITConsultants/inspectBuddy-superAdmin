@@ -7,6 +7,7 @@ import IconLink from "../../components/ui/IconLink";
 import { VIEW_DETAIL_ICON } from "../../assets/icons/DynamicIcons";
 import { userRestoreRequestsAPIs } from "../../features/user-requests/api";
 import { toast } from "sonner";
+import Searchbar from "../../components/ui/Searchbar";
 
 const RestoreRequests = () => {
   // Filters Data
@@ -24,13 +25,13 @@ const RestoreRequests = () => {
       }),
   });
 
-  if (isError) {
-    return toast.error("Error!", {
-      message: error.message,
-      duration: 3000,
-      richColors: true,
-    });
-  }
+  // if (isError) {
+  //   return toast.error("Error!", {
+  //     message: error.message,
+  //     duration: 3000,
+  //     richColors: true,
+  //   });
+  // }
 
   const rows = data?.users?.map((user, index) => (
     <React.Fragment key={user._id}>
@@ -75,6 +76,16 @@ const RestoreRequests = () => {
             </Table.SingleColumn>
           )
         )}
+        <Table.DoubleColumn>
+          <Searchbar
+            id="search-user-request"
+            placeholder="Search requests by user..."
+            onSearch={(value) =>
+              setFiltersData((prev) => ({ ...prev, search: value }))
+            }
+            className="!bg-white !border border-primary"
+          />
+        </Table.DoubleColumn>
       </Table.Header>
       {/* Table Body */}
       <Table.Body
