@@ -53,7 +53,7 @@ const RestoreRequests = () => {
         <Table.DoubleColumn className="justify-end">
           <IconLink
             id="view-restore-request-details"
-            href={`details/${user._id}?type=templates`}
+            href={`details/${user._id}?type=TEMPLATE`}
             icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
             label="View Details"
           />

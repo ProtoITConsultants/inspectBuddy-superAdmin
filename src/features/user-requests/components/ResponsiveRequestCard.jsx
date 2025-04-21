@@ -10,7 +10,7 @@ const ResponsiveRequestCard = ({ requestData }) => {
         </h2>
         <IconLink
           id="view-restore-request-details"
-          href={`details/${requestData._id}?type=templates`}
+          href={`details/${requestData._id}?type=TEMPLATE`}
           icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
           label="View Details"
         />
