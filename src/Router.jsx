@@ -31,6 +31,7 @@ import AddUserProperty from "./pages/user-details/user-properties/add-user-prope
 import AddNewUser from "./pages/users-list/add-new-user/AddNewUser";
 import AddNewUserLayout from "./layouts/AddNewUserLayout";
 import RestoreRequests from "./pages/restore-requests/RestoreRequests";
+import RestoreRequestDetail from "./pages/restore-requests/request-details/RestoreRequestDetail";
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +77,18 @@ export const router = createBrowserRouter([
         </AddNewUserLayout>
       </AuthMiddleware>
     ),
+  },
+
+  // Restore Request Details
+  {
+    path: "/restore-requests/details",
+    element: <NoSidebarLayout />,
+    children: [
+      {
+        path: ":requesterId",
+        element: <RestoreRequestDetail />,
+      },
+    ],
   },
 
   // User Detail Screens

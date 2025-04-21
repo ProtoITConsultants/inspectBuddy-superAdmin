@@ -43,3 +43,14 @@ export const USER_REQUESTS_TABLE_HEADINGS = [
   { key: "userName", value: "User Name" },
   { key: "userEmail", value: "User Email" },
 ];
+export const USER_REQUESTS_FOR_INSPECTIONS_TABLE_HEADINGS = [
+  { key: "reportName", value: "Report Name" },
+  { key: "property", value: "Property" },
+];
+export const USER_REQUESTS_FOR_TEMPLATES_TABLE_HEADINGS = [
+  { key: "templateName", value: "Template Name" },
+];
+export const USER_REQUESTS_FOR_PROPERTIES_TABLE_HEADINGS = [
+  { key: "propertyCategory", value: "Category" },
+  { key: "property", value: "Property" },
+];
