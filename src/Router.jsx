@@ -82,7 +82,11 @@ export const router = createBrowserRouter([
   // Restore Request Details
   {
     path: "/restore-requests/details",
-    element: <NoSidebarLayout />,
+    element: (
+      <AuthMiddleware>
+        <NoSidebarLayout />
+      </AuthMiddleware>
+    ),
     children: [
       {
         path: ":requesterId",
