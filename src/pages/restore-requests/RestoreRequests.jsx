@@ -78,7 +78,7 @@ const RestoreRequests = () => {
             </Table.SingleColumn>
           )
         )}
-        <Table.DoubleColumn>
+        <Table.DoubleColumn className="justify-end">
           <Searchbar
             id="search-user-request"
             placeholder="Search requests by user..."
