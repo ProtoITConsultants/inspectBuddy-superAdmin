@@ -87,51 +87,6 @@ const RestoreRequestDetail = () => {
     }),
   });
 
-  const DUMMY_TEMPLATES = [
-    {
-      _id: "template01",
-      templateName: "Template 1",
-    },
-    {
-      _id: "template02",
-      templateName: "Template 2",
-    },
-  ];
-
-  const DUMMY_INSPECTIONS = [
-    {
-      _id: "inspection01",
-      inspectionName: "Inspection 1",
-      propertyName: "Property 1",
-      propertyAddress: "123 Main St, City, State, ZIP",
-      propertyImageURL: "https://via.placeholder.com/150",
-    },
-    {
-      _id: "inspection02",
-      inspectionName: "Inspection 2",
-      propertyName: "Property 2",
-      propertyAddress: "123 Main St, City, State, ZIP",
-      propertyImageURL: "https://via.placeholder.com/150",
-    },
-  ];
-
-  const DUMMY_PROPERTIES = [
-    {
-      _id: "property01",
-      propertyName: "Property 1",
-      propertyAddress: "123 Main St, City, State, ZIP",
-      propertyImageURL: "https://via.placeholder.com/150",
-      propertyCatgory: "Residential",
-    },
-    {
-      _id: "property02",
-      propertyName: "Property 2",
-      propertyAddress: "123 Main St, City, State, ZIP",
-      propertyImageURL: "https://via.placeholder.com/150",
-      propertyCatgory: "Residential",
-    },
-  ];
-
   const TEMPLATE_ROWS = requestsData?.requestedTemplates?.requests?.map(
     (request) => {
       // Check if the template is selected
@@ -343,9 +298,10 @@ const RestoreRequestDetail = () => {
                       );
                       if (event.currentTarget.checked) {
                         // Select all templates
-                        const allTemplateIds = DUMMY_TEMPLATES.map(
-                          (template) => template._id
-                        );
+                        const allTemplateIds =
+                          requestsData?.requestedTemplates?.requests?.map(
+                            (template) => template._id
+                          );
                         restoreRequestForm.setFieldValue(
                           "selectedTemplateIds",
                           allTemplateIds
@@ -425,9 +381,10 @@ const RestoreRequestDetail = () => {
                         );
                         if (event.currentTarget.checked) {
                           // Select all inspections
-                          const allInspectionIds = DUMMY_INSPECTIONS.map(
-                            (inspection) => inspection._id
-                          );
+                          const allInspectionIds =
+                            requestsData?.requestedInspections?.requests?.map(
+                              (inspection) => inspection._id
+                            );
                           restoreRequestForm.setFieldValue(
                             "selectedInspectionIds",
                             allInspectionIds
@@ -514,9 +471,10 @@ const RestoreRequestDetail = () => {
                         );
                         if (event.currentTarget.checked) {
                           // Select all properties
-                          const allPropertyIds = DUMMY_PROPERTIES.map(
-                            (property) => property._id
-                          );
+                          const allPropertyIds =
+                            requestsData?.requestedProperties?.requests?.map(
+                              (property) => property._id
+                            );
                           restoreRequestForm.setFieldValue(
                             "selectedPropertyIds",
                             allPropertyIds
