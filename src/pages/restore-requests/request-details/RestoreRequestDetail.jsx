@@ -1,6 +1,4 @@
-// import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-// import { userRestoreRequestsAPIs } from "../../../features/user-requests/api";
 // import { toast } from "sonner";
 import Table from "../../../components/ui/Table";
 import TableSkeleton from "../../../components/ui/TableSkeleton";
@@ -11,17 +9,20 @@ import {
   USER_REQUESTS_FOR_TEMPLATES_TABLE_HEADINGS,
 } from "../../../constants/tables/headings";
 import PropertyCard from "../../../features/user-details/components/properties/PropertyCard";
-// import DetailPagesRoot from "../../../features/user-details/components/DetailPagesRoot";
 import RequestDetailsRoot from "../../../features/user-requests/components/RequestDetailsRoot";
 import { useForm } from "@mantine/form";
 import { useParams } from "react-router";
-import { useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { userRestoreRequestsAPIs } from "./../../../features/user-requests/api/index";
+import Button from "./../../../components/ui/Button";
+import RequestStatusCard from "../../../features/user-requests/components/RequestStatusCard";
+import { toast } from "sonner";
 
 const RestoreRequestDetail = () => {
   // Local States
   const [activeTab, setActiveTab] = useState("TEMPLATE");
   const { requesterId } = useParams();
+  const queryClient = useQueryClient();
 
   // Filters Data
   const [filtersData, setFiltersData] = useState({
@@ -46,11 +47,105 @@ const RestoreRequestDetail = () => {
     },
   });
 
+  // Restore Selected Requests - Mutation
+  const restoreSelectedRequests = useMutation({
+    mutationFn: () => {
+      const {
+        selectedInspectionIds,
+        selectedPropertyIds,
+        selectedTemplateIds,
+      } = restoreRequestForm.values;
+
+      const getAvailableQuota = (current, total) => {
+        if (total === -999) return Infinity;
+        return Math.max(0, total - current); // Avoid negative quota
+      };
+
+      const inspectionsData =
+        restoreRequestForm.values.requestedInspectionsData;
+      const propertiesData = restoreRequestForm.values.requestedPropertiesData;
+      const templatesData = restoreRequestForm.values.requestedTemplatesData;
+
+      const availableQuota = {
+        inspections: getAvailableQuota(
+          inspectionsData.currentEntityCount,
+          inspectionsData.totalEntityLimit
+        ),
+        properties: getAvailableQuota(
+          propertiesData.currentEntityCount,
+          propertiesData.totalEntityLimit
+        ),
+        templates: getAvailableQuota(
+          templatesData.currentEntityCount,
+          templatesData.totalEntityLimit
+        ),
+      };
+
+      if (selectedInspectionIds.length > availableQuota.inspections) {
+        return Promise.reject(
+          new Error(
+            `You can only restore ${availableQuota.inspections} inspections.`
+          )
+        );
+      }
+
+      if (selectedPropertyIds.length > availableQuota.properties) {
+        return Promise.reject(
+          new Error(
+            `You can only restore ${availableQuota.properties} properties.`
+          )
+        );
+      }
+
+      if (selectedTemplateIds.length > availableQuota.templates) {
+        return Promise.reject(
+          new Error(
+            `You can only restore ${availableQuota.templates} templates.`
+          )
+        );
+      }
+
+      return userRestoreRequestsAPIs.approveUserRequest({
+        selectedInspectionIds,
+        selectedPropertyIds,
+        selectedTemplateIds,
+        userId: requesterId,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: "User requests approved successfully.",
+        duration: 3000,
+        richColors: true,
+      });
+      queryClient.invalidateQueries([
+        "requestedTemplatesQuery",
+        filtersData.templatesPage,
+      ]);
+      queryClient.invalidateQueries([
+        "requestedInspectionsQuery",
+        filtersData.inspectionsPage,
+      ]);
+      queryClient.invalidateQueries([
+        "requestedPropertiesQuery",
+        filtersData.propertiesPage,
+      ]);
+      restoreRequestForm.reset();
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error?.message || "Error approving user request",
+        duration: 3000,
+        richColors: true,
+      });
+    },
+  });
+
   // Queries to fetch Data
   const requestsData = useQueries({
     queries: [
       {
-        queryKey: ["requestedTemplatesQuery", filtersData],
+        queryKey: ["requestedTemplatesQuery", filtersData.templatesPage],
         queryFn: () =>
           userRestoreRequestsAPIs.fetchUserRequests({
             userId: requesterId,
@@ -60,7 +155,7 @@ const RestoreRequestDetail = () => {
         enabled: activeTab === "TEMPLATE",
       },
       {
-        queryKey: ["requestedInspectionsQuery", filtersData],
+        queryKey: ["requestedInspectionsQuery", filtersData.inspectionsPage],
         queryFn: () =>
           userRestoreRequestsAPIs.fetchUserRequests({
             userId: requesterId,
@@ -70,7 +165,7 @@ const RestoreRequestDetail = () => {
         enabled: activeTab === "INSPECTION",
       },
       {
-        queryKey: ["requestedPropertiesQuery", filtersData],
+        queryKey: ["requestedPropertiesQuery", filtersData.propertiesPage],
         queryFn: () =>
           userRestoreRequestsAPIs.fetchUserRequests({
             userId: requesterId,
@@ -114,7 +209,7 @@ const RestoreRequestDetail = () => {
       return (
         <React.Fragment key={request?._id}>
           <Table.ItemRoot className="md:grid hidden">
-            <div className="col-span-7 flex items-center gap-[12px]">
+            <div className="col-span-5 flex items-center gap-[12px]">
               <Checkbox
                 id={`checkbox-${request?._id}`}
                 checked={isSelected}
@@ -124,7 +219,11 @@ const RestoreRequestDetail = () => {
                     {request?.template?.name}
                   </p>
                 }
+                disabled={request?.status === "ACCEPTED"}
               />
+            </div>
+            <div className="col-span-2 flex items-center justify-end">
+              <RequestStatusCard status={request?.status} />
             </div>
           </Table.ItemRoot>
         </React.Fragment>
@@ -158,17 +257,20 @@ const RestoreRequestDetail = () => {
       return (
         <React.Fragment key={request?._id}>
           <Table.ItemRoot className="md:grid hidden">
-            <div className="col-span-2 flex items-center gap-[12px]">
+            <div className="col-span-2 flex items-center">
               <Checkbox
                 id={`checkbox-${request?._id}`}
                 checked={isSelected}
                 onChange={handleCheckboxChange}
+                disabled={request?.status === "ACCEPTED"}
+                label={
+                  <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
+                    {request?.inspection?.name}
+                  </p>
+                }
               />
-              <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
-                {request?.inspection?.name}
-              </p>
             </div>
-            <div className="col-span-5">
+            <div className="col-span-3">
               <PropertyCard
                 propertyData={{
                   propertyName: property?.name,
@@ -182,6 +284,9 @@ const RestoreRequestDetail = () => {
                   propertyImageURL: property?.image?.url || "",
                 }}
               />
+            </div>
+            <div className="col-span-2 flex items-center justify-end">
+              <RequestStatusCard status={request?.status} />
             </div>
           </Table.ItemRoot>
         </React.Fragment>
@@ -215,17 +320,20 @@ const RestoreRequestDetail = () => {
       return (
         <React.Fragment key={request?._id}>
           <Table.ItemRoot className="md:grid hidden">
-            <div className="col-span-2 flex items-center gap-[12px]">
+            <div className="col-span-2 flex items-center">
               <Checkbox
                 id={`checkbox-${request?._id}`}
                 checked={isSelected}
                 onChange={handleCheckboxChange}
+                disabled={request?.status === "ACCEPTED"}
+                label={
+                  <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
+                    {request?.property?.category?.value}
+                  </p>
+                }
               />
-              <p className="text-[14px] font-medium text-[#6C727F] break-all w-full">
-                {request?.property?.category?.value}
-              </p>
             </div>
-            <div className="col-span-5">
+            <div className="col-span-3">
               <PropertyCard
                 propertyData={{
                   propertyName: request?.property?.name,
@@ -239,6 +347,9 @@ const RestoreRequestDetail = () => {
                   propertyImageURL: request?.property?.image?.url || "",
                 }}
               />
+            </div>
+            <div className="col-span-2 flex items-center justify-end">
+              <RequestStatusCard status={request?.status} />
             </div>
           </Table.ItemRoot>
         </React.Fragment>
@@ -258,7 +369,30 @@ const RestoreRequestDetail = () => {
         totalRequests: requestsData?.requestedTemplates.totalRequests,
       });
     }
-  }, [requestsData?.requestedTemplates]);
+    if (requestsData?.requestedInspections) {
+      formRef.current.setFieldValue("requestedInspectionsData", {
+        currentEntityCount:
+          requestsData?.requestedInspections.currentEntityCount,
+        currentPage: requestsData?.requestedInspections.currentPage,
+        totalEntityLimit: requestsData?.requestedInspections.totalEntityLimit,
+        totalPages: requestsData?.requestedInspections.totalPages,
+        totalRequests: requestsData?.requestedInspections.totalRequests,
+      });
+    }
+
+    if (requestsData?.requestedProperties) {
+      formRef.current.setFieldValue("requestedPropertiesData", {
+        currentEntityCount:
+          requestsData?.requestedProperties.currentEntityCount,
+        currentPage: requestsData?.requestedProperties.currentPage,
+        totalEntityLimit: requestsData?.requestedProperties.totalEntityLimit,
+        totalPages: requestsData?.requestedProperties.totalPages,
+        totalRequests: requestsData?.requestedProperties.totalRequests,
+      });
+    }
+  }, [requestsData]);
+
+  console.log(requestsData);
 
   return (
     <RequestDetailsRoot className="!overflow-hidden max-w-[1220px]">
@@ -282,10 +416,10 @@ const RestoreRequestDetail = () => {
           {/* User Requests Table - Templates*/}
           <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
             {/* Table Header */}
-            <Table.Header>
+            <Table.Header className="!py-[8px]">
               {USER_REQUESTS_FOR_TEMPLATES_TABLE_HEADINGS.map((heading) => (
                 <div
-                  className="col-span-7 flex items-center gap-[12px]"
+                  className="col-span-3 flex items-center gap-[12px]"
                   key={heading.key}
                 >
                   <Checkbox
@@ -318,13 +452,23 @@ const RestoreRequestDetail = () => {
                   <Table.HeaderItem heading={heading.value} />
                 </div>
               ))}
+              <div className="col-span-4 flex justify-end">
+                <Button
+                  id="approve-requests-button"
+                  type="button"
+                  label="Approve Selected"
+                  className="w-fit text-[16px] !font-semibold"
+                  buttonType="contained"
+                  onClick={restoreSelectedRequests.mutate}
+                />
+              </div>
             </Table.Header>
             {/* Table Body */}
             <Table.Body
               className={`${
                 requestsData?.requestedTemplates?.totalPages < 2
-                  ? "h-[calc(100%-96.8px)]"
-                  : "h-[calc(100%-106.8px)]"
+                  ? "h-[calc(100%-88.8px)]"
+                  : "h-[calc(100%-98.8px)]"
               }`}
             >
               {requestsData?.isPending ? (
@@ -364,7 +508,7 @@ const RestoreRequestDetail = () => {
           {/* User Requests Table - Inspections*/}
           <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
             {/* Table Header */}
-            <Table.Header>
+            <Table.Header className="!py-[8px]">
               {USER_REQUESTS_FOR_INSPECTIONS_TABLE_HEADINGS.map((heading) =>
                 heading.key === "reportName" ? (
                   <div
@@ -401,18 +545,31 @@ const RestoreRequestDetail = () => {
                     <Table.HeaderItem heading={heading.value} />
                   </div>
                 ) : (
-                  <div key={heading.key} className="col-span-5">
+                  <div
+                    key={heading.key}
+                    className="col-span-2 flex items-center"
+                  >
                     <Table.HeaderItem heading={heading.value} />
                   </div>
                 )
               )}
+              <div className="col-span-3 flex justify-end">
+                <Button
+                  id="approve-requests-button"
+                  type="button"
+                  label="Approve Selected"
+                  className="w-fit text-[16px] !font-semibold"
+                  buttonType="contained"
+                  onClick={restoreSelectedRequests.mutate}
+                />
+              </div>
             </Table.Header>
             {/* Table Body */}
             <Table.Body
               className={`${
                 requestsData?.requestedInspections?.totalPages < 2
-                  ? "h-[calc(100%-96.8px)]"
-                  : "h-[calc(100%-106.8px)]"
+                  ? "h-[calc(100%-88.8px)]"
+                  : "h-[calc(100%-98.8px)]"
               }`}
             >
               {requestsData?.isPending ? (
@@ -454,7 +611,7 @@ const RestoreRequestDetail = () => {
           {/* User Requests Table - Properties*/}
           <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
             {/* Table Header */}
-            <Table.Header>
+            <Table.Header className="!py-[8px]">
               {USER_REQUESTS_FOR_PROPERTIES_TABLE_HEADINGS.map((heading) =>
                 heading.key === "propertyCategory" ? (
                   <div
@@ -491,18 +648,32 @@ const RestoreRequestDetail = () => {
                     <Table.HeaderItem heading={heading.value} />
                   </div>
                 ) : (
-                  <div key={heading.key} className="col-span-5">
+                  <div
+                    key={heading.key}
+                    className="col-span-2 flex items-center"
+                  >
                     <Table.HeaderItem heading={heading.value} />
                   </div>
                 )
               )}
+
+              <div className="col-span-3 flex justify-end">
+                <Button
+                  id="approve-requests-button"
+                  type="button"
+                  label="Approve Selected"
+                  className="w-fit text-[16px] !font-semibold"
+                  buttonType="contained"
+                  onClick={restoreSelectedRequests.mutate}
+                />
+              </div>
             </Table.Header>
             {/* Table Body */}
             <Table.Body
               className={`${
                 requestsData?.requestedTemplates?.totalPages < 2
-                  ? "h-[calc(100%-96.8px)]"
-                  : "h-[calc(100%-106.8px)]"
+                  ? "h-[calc(100%-88.8px)]"
+                  : "h-[calc(100%-98.8px)]"
               }`}
             >
               {requestsData?.isPending ? (

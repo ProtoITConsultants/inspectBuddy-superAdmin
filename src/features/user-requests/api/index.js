@@ -38,4 +38,29 @@ export const userRestoreRequestsAPIs = {
       );
     }
   },
+
+  // Approve User Requests
+  approveUserRequest: async ({
+    selectedInspectionIds,
+    selectedPropertyIds,
+    selectedTemplateIds,
+    userId,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_REQUESTS_ENDPOINTS.APPROVE_USER_REQUEST_URL({userId}),
+        {
+          inspectionIds: selectedInspectionIds,
+          propertyIds: selectedPropertyIds,
+          templateIds: selectedTemplateIds,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error approving user request", error);
+      throw new Error(
+        error.response?.data?.message || "Error approving user request"
+      );
+    }
+  },
 };
