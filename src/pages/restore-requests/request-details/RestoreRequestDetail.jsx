@@ -392,8 +392,6 @@ const RestoreRequestDetail = () => {
     }
   }, [requestsData]);
 
-  console.log(requestsData);
-
   return (
     <RequestDetailsRoot className="!overflow-hidden max-w-[1220px]">
       <Tabs
