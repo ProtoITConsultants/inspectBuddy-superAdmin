@@ -70,6 +70,11 @@ const EditUserInspectionRoom = () => {
     validate: {
       roomName: (value) =>
         value.length >= 4 ? null : "Room's Name must be at least 4 characters.",
+      // At least one room Image is required if roomImageRequired is true
+      roomImages: (value) =>
+        form.values.roomImageRequired && value.length < 1
+          ? "At least one Room Image is Required!"
+          : null,
     },
   });
 
@@ -99,15 +104,123 @@ const EditUserInspectionRoom = () => {
     setSelectedInspectionRoomElements(data?.room?.elements || []);
   }, [data, setSelectedInspectionRoomElements, setSavedQuestions]);
 
+  const validateRoomDetails = ({ validationType }) => {
+    const isRoomValid = form.validate();
+    let reason = "";
+    let isRoomElementsValid = true;
+
+    if (isRoomValid.hasErrors) {
+      return {
+        isValid: false,
+        reason: "Please fill all the required fields!",
+      };
+    }
+
+    if (!isRoomValid.hasErrors && validationType === "complete") {
+      for (const element of selectedInspectionRoomElements) {
+        if (element.checklist && element.checklist.length > 0) {
+          for (const question of element.checklist) {
+            if (question?.answerRequired === true && question.answer === "") {
+              reason = `${element.name} - is missing an answer!`;
+              isRoomElementsValid = false;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (!isRoomElementsValid) {
+      return {
+        isValid: false,
+        reason: reason,
+      };
+    }
+
+    return {
+      isValid: true,
+      reason: "",
+    };
+  };
+
   // Save Room Details - Mutation
   const saveRoomDetails = useMutation({
     mutationFn: () => {
-      console.log("Saving Room Details", selectedInspectionRoomElements);
+      const validateRoom = validateRoomDetails({ validationType: "complete" });
+
+      if (!validateRoom.isValid) {
+        throw new Error(validateRoom.reason);
+      }
+
+      const roomDetails = {
+        inspectionId: inspectionId,
+        roomId: roomId,
+        roomName: form.values.roomName,
+        roomNote: form.values.roomNote,
+        roomImage: form.values.roomImages,
+        roomElements: selectedInspectionRoomElements,
+      };
+
+      return userInspectionsAPIs.saveInspectionRoomAsComplete(roomDetails);
+    },
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: "Room Details Updated Successfully!",
+        duration: 3000,
+        richColors: true,
+      });
+      navigate(-1);
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't Update Room Details.",
+        duration: 3000,
+        richColors: true,
+      });
     },
   });
 
   // Save Inspection Room as Draft - Mutation
-  const saveInspectionRoomAsDraft = useMutation({});
+  const saveInspectionRoomAsDraft = useMutation({
+    mutationFn: () => {
+      const validateRoom = validateRoomDetails({ validationType: "draft" });
+
+      if (!validateRoom.isValid) {
+        throw new Error(validateRoom.reason);
+      }
+      if (!validateRoom.isValid) {
+        throw new Error(validateRoom.reason);
+      }
+
+      const roomDetails = {
+        inspectionId: inspectionId,
+        roomId: roomId,
+        roomName: form.values.roomName,
+        roomNote: form.values.roomNote,
+        roomImage: form.values.roomImages,
+        roomElements: selectedInspectionRoomElements,
+      };
+
+      return userInspectionsAPIs.saveInspectionRoomAsDraft(roomDetails);
+    },
+
+    onSuccess: () => {
+      toast.success("Success!", {
+        description: "Room Details Saved as Draft!",
+        duration: 3000,
+        richColors: true,
+      });
+      navigate(-1);
+    },
+
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't Save Room as Draft.",
+        duration: 3000,
+        richColors: true,
+      });
+    },
+  });
 
   //  Handing error occured in data fetching
   if (isError) {
@@ -119,7 +232,11 @@ const EditUserInspectionRoom = () => {
   }
 
   //  Handling Loading State in Data Fetching
-  if (isPending) {
+  if (
+    isPending ||
+    saveRoomDetails.isPending ||
+    saveInspectionRoomAsDraft.isPending
+  ) {
     return <RoomDetailsSkeleton />;
   }
 

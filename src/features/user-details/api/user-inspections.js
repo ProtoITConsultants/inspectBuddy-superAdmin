@@ -370,4 +370,70 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Save Inspection Room as Draft
+  saveInspectionRoomAsDraft: async ({
+    inspectionId,
+    roomId,
+    roomName,
+    roomNote,
+    roomImage,
+    roomElements,
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.SAVE_INSPECTION_ROOM_AS_DRAFT_URL,
+        {
+          inspectionId,
+          roomData: {
+            _id: roomId,
+            elements: roomElements,
+            name: roomName,
+            note: roomNote,
+            image: roomImage,
+          },
+          shouldComplete: false,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error saving Inspection Room as Draft", error);
+      throw new Error(
+        error.response?.data?.message || "Error saving Inspection Room as Draft"
+      );
+    }
+  },
+
+  // Save Inspection Room as Complete
+  saveInspectionRoomAsComplete: async ({
+    inspectionId,
+    roomId,
+    roomName,
+    roomNote,
+    roomImage,
+    roomElements,
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.SAVE_INSPECTION_ROOM_AS_COMPLETE_URL,
+        {
+          inspectionId,
+          roomData: {
+            _id: roomId,
+            elements: roomElements,
+            name: roomName,
+            note: roomNote,
+            image: roomImage,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error saving Inspection Room as Complete", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error saving Inspection Room as Complete"
+      );
+    }
+  },
 };
