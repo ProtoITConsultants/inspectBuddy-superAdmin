@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import imageCompression from "browser-image-compression";
 import { userInspectionsAPIs } from "./../../api/user-inspections";
 import RED_CROSS_ICON from "../../../../assets/icons/RedCrossIcon";
+import LoadingBackdrop from "./../../../../components/ui/LoadingBackdrop";
 
 const UploadRoomImageInput = ({ roomImages }) => {
   // Hooks
@@ -121,6 +122,9 @@ const UploadRoomImageInput = ({ roomImages }) => {
 
   return (
     <React.Fragment>
+      {(uploadRoomImage.isPending || deleteRoomImage.isPending) && (
+        <LoadingBackdrop />
+      )}
       <RoomImagePreviewModal
         isModalOpen={previewImageModalData.openModal}
         onCloseModal={() =>
