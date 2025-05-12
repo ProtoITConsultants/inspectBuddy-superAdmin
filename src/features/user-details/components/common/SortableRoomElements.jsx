@@ -529,6 +529,7 @@ const ElementDetail = ({
                   <DELETE_ICON className="text-[#FF613E] !w-[16px] !h-[16px]" />
                 }
                 className="flex items-center !gap-[8px] w-fit !text-[#FF613E] !text-[14px] h-fit !font-semibold !p-0 !bg-transparent"
+                disabled={elementForm.values.elementQuestions.length < 1}
               />
             </div>
           </div>
