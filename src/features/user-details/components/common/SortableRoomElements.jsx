@@ -528,7 +528,7 @@ const ElementDetail = ({
                 icon={
                   <DELETE_ICON className="text-[#FF613E] !w-[16px] !h-[16px]" />
                 }
-                className="flex items-center !gap-[8px] w-fit !text-[#FF613E] !text-[14px] h-fit !font-semibold !p-0"
+                className="flex items-center !gap-[8px] w-fit !text-[#FF613E] !text-[14px] h-fit !font-semibold !p-0 !bg-transparent"
               />
             </div>
           </div>
