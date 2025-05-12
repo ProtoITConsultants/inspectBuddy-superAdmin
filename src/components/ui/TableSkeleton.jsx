@@ -1,12 +1,10 @@
 import { Skeleton } from "@mantine/core";
 
-const TableSkeleton = () => {
-  return Array(4)
+const TableSkeleton = ({ itemsLength = 2, skeletonHeight = 48 }) => {
+  return Array(itemsLength)
     .fill(0)
     .map((_, index) => (
-      <div key={index} className="border-b-[1.5px] border-[#E4F0FF] pb-[24px]">
-        <Skeleton height={68} radius="sm" />
-      </div>
+      <Skeleton key={index} height={skeletonHeight} radius="sm" />
     ));
 };
 
