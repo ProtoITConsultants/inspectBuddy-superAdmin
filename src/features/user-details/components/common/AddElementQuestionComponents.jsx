@@ -83,11 +83,11 @@ const Actions = ({ children }) => (
 );
 
 // Create New Question Modal Elements
-const AnswerTypeSelector = ({ label, typeOptions, onSelect, error }) => {
+const AnswerTypeSelector = ({ label, typeOptions, onSelect, error, value }) => {
   return (
     <div className="space-y-[8px]">
       <p className="text-darkBlue font-medium text-[14px]">{label}</p>
-      <RadioGroup onChange={onSelect}>
+      <RadioGroup value={value} onChange={onSelect}>
         <div className="flex md:flex-row flex-col gap-[16px]">
           {typeOptions.map((type) => (
             <Radio label={type.label} value={type.value} key={type.label} />

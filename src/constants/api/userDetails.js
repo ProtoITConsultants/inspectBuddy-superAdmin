@@ -107,6 +107,8 @@ const DELETE_SPECIFIC_ROOM_IMAGE_IN_INSPECTION_URL =
   "/InspectionDeleteRoomImage";
 const SAVE_INSPECTION_ROOM_AS_DRAFT_URL = "/InspectionUpdateRoom";
 const SAVE_INSPECTION_ROOM_AS_COMPLETE_URL = "/InspectionUpdateRoom";
+const UPDATE_SAVED_QUESTION = ({ userId }) =>
+  `/updateSavedQuestion?id=${encodeURIComponent(userId)}`;
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -166,6 +168,7 @@ const USER_DETAILS_ENDPOINTS = {
   DELETE_SPECIFIC_ROOM_IMAGE_IN_INSPECTION_URL,
   SAVE_INSPECTION_ROOM_AS_DRAFT_URL,
   SAVE_INSPECTION_ROOM_AS_COMPLETE_URL,
+  UPDATE_SAVED_QUESTION,
 };
 
 export default USER_DETAILS_ENDPOINTS;

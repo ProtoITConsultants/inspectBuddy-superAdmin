@@ -27,6 +27,7 @@ import {
   useAddExistingQuestionToRoomElement,
   useAddQuestionToRoomElement,
   useDeleteRoomElementQuestions,
+  useUpdateSavedQuestion,
 } from "../../hooks/inspectionMutations";
 
 const DeleteElement = ({
@@ -418,7 +419,36 @@ const AddQuestion = ({
   //   },
   // });
 
-  const updatePreviewedQuestion = useMutation({});
+  const updatePreviewedQuestion = useUpdateSavedQuestion({
+    userId: userId,
+    questionId: questionToPreviewForm.values._id,
+    text: questionToPreviewForm.values.text,
+    type: questionToPreviewForm.values.type,
+    options: questionToPreviewForm.values.options,
+    answerRequired: questionToPreviewForm.values.answerRequired,
+    updateElementQuestions: (data) => {
+      // Update the Saved Questions
+      const updatedQuestions = savedQuestions.map((question) => {
+        if (question._id === data.questionTemplate._id) {
+          return {
+            ...question,
+            text: data.questionTemplate.text,
+            options: data.questionTemplate.options,
+            type: data.questionTemplate.type,
+            answerRequired: data.questionTemplate.answerRequired,
+            isDefault: data.questionTemplate.isDefault,
+          };
+        }
+        return question;
+      });
+
+      setSavedQuestions(updatedQuestions);
+
+      // Hide the preview modal
+      setActive(0);
+      setIsQuestionBeingEdited(false);
+    },
+  });
 
   // UseEffect to filter the already added questions
   useEffect(() => {
@@ -479,20 +509,40 @@ const AddQuestion = ({
       (icon) => icon.icon === selectedIcon
     ).id;
 
-    const newOptions = newQuestionForm.values.options.map((option, index) => {
-      if (index === iconOptionIndex) {
-        return {
-          ...option,
-          iconId: selectedIconId,
-        };
-      }
-      return option;
-    });
+    if (isQuestionBeingEdited) {
+      const updatedOptions = questionToPreviewForm.values.options.map(
+        (option, index) => {
+          if (index === iconOptionIndex) {
+            return {
+              ...option,
+              iconId: selectedIconId,
+            };
+          }
+          return option;
+        }
+      );
 
-    // Update the newQuestionData with the new options
-    newQuestionForm.setFieldValue("options", newOptions);
+      // Update the questionToPreviewForm with the new options
+      questionToPreviewForm.setFieldValue("options", updatedOptions);
 
-    setActive(1);
+      setActive(3);
+    } else {
+      const newOptions = newQuestionForm.values.options.map((option, index) => {
+        if (index === iconOptionIndex) {
+          return {
+            ...option,
+            iconId: selectedIconId,
+          };
+        }
+        return option;
+      });
+
+      // Update the newQuestionData with the new options
+      newQuestionForm.setFieldValue("options", newOptions);
+
+      setActive(1);
+    }
+
     setSelectedIcon("");
   };
 
@@ -539,7 +589,8 @@ const AddQuestion = ({
       loadingOverlay={
         isLoadingQuestions ||
         addSelectedQuestionsToElement.isPending ||
-        createNewQuestion.isPending
+        createNewQuestion.isPending ||
+        updatePreviewedQuestion.isPending
       }
     >
       <Stepper

@@ -103,4 +103,33 @@ export const userTemplatesAPIs = {
       );
     }
   },
+
+  // Update Saved Question
+  updateSavedQuestion: async ({
+    userId,
+    questionId,
+    text,
+    type,
+    options,
+    answerRequired,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_SAVED_QUESTION({ userId }),
+        {
+          questionId,
+          text,
+          type,
+          options,
+          answerRequired,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Saved Question", error);
+      throw new Error(
+        error.response?.data?.message || "Error updating Saved Question"
+      );
+    }
+  },
 };

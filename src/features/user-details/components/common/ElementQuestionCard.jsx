@@ -25,7 +25,7 @@ const ExistingOption = ({
           <div className="flex items-center gap-[8px]">
             <p className={`text-[#6C727F] text-[14px] font-semibold`}>Icon:</p>
             {
-              QUESTIONS_ICONS_LIST.find((icon) => icon.id === optionData.iconId)
+              QUESTIONS_ICONS_LIST.find((icon) => icon.id == optionData.iconId)
                 .icon
             }
           </div>

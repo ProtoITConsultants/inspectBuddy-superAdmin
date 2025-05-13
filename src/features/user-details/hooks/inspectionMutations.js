@@ -198,3 +198,38 @@ export const useAddExistingQuestionToRoomElement = ({
       });
     },
   });
+
+export const useUpdateSavedQuestion = ({
+  userId,
+  questionId,
+  text,
+  type,
+  options,
+  answerRequired,
+  updateElementQuestions,
+}) =>
+  useMutation({
+    mutationFn: () =>
+      userTemplatesAPIs.updateSavedQuestion({
+        userId,
+        questionId,
+        text,
+        type,
+        options,
+        answerRequired,
+      }),
+
+    onSuccess: (data) => {
+      updateElementQuestions(data);
+      toast.success("Success!", {
+        description: "Question updated successfully.",
+        duration: 3000,
+      });
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't update question.",
+        duration: 3000,
+      });
+    },
+  });
