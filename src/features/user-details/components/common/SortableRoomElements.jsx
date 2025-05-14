@@ -35,6 +35,7 @@ import InspectionModals from "./InspectionModals";
 import { cn } from "../../../../utils/cn";
 import ElementQuestion from "../inspections/details/ElementQuestion";
 import { useInspectionStore } from "../../../../store/inspectionStore";
+import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
 
 const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
@@ -92,6 +93,7 @@ const RoomElement = React.memo(function RoomElement({
   element,
   rearrangingElements,
   elementCategory,
+  onEditElementName,
   children,
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -198,12 +200,21 @@ const RoomElement = React.memo(function RoomElement({
           </Accordion.Item>
         </div>
         {showDeleteIcon && !rearrangingElements && (
-          <div
-            className="transition-all duration-300 opacity-100 hover:cursor-pointer"
-            onClick={() => setShowDeleteConfirmationModal(true)}
-          >
-            <DELETE_ICON className="text-[#FF613E]" />
-          </div>
+          <>
+            <button
+              type="button"
+              className="transition-all duration-300 opacity-100 hover:cursor-pointer"
+              onClick={() => onEditElementName()}
+            >
+              <EDIT_DETAILS_ICON className="w-[20px] text-gray-500" />
+            </button>
+            <div
+              className="transition-all duration-300 opacity-100 hover:cursor-pointer"
+              onClick={() => setShowDeleteConfirmationModal(true)}
+            >
+              <DELETE_ICON className="text-[#FF613E]" />
+            </div>
+          </>
         )}
       </div>
     </React.Fragment>

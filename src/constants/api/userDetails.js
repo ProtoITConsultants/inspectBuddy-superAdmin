@@ -70,6 +70,8 @@ const ADD_SELECTED_QUESTIONS_TO_ELEMENT_URL = ({ userId }) =>
 const CREATE_NEW_QUESTION_IN_ELEMENT_URL = ({ userId }) =>
   `/templateAddChecklistItem?id=${encodeURIComponent(userId)}`;
 const DELETE_QUESTIONS_FROM_ELEMENT_URL = "/templateDeleteChecklistItem";
+const UPDATE_ROOM_ELEMENT_NAME_IN_TEMPLATE_URL = `/templateChangeElementName`;
+
 
 // Inspections
 const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
@@ -111,6 +113,8 @@ const UPDATE_SAVED_QUESTION = ({ userId }) =>
   `/updateSavedQuestion?id=${encodeURIComponent(userId)}`;
 const GENERATE_INSPECTION_PDF_URL = ({ userId }) =>
   `/generateInspectionPDF?id=${encodeURIComponent(userId)}`;
+const UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL =
+  "/InspectionChangeElementName";
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -148,6 +152,7 @@ const USER_DETAILS_ENDPOINTS = {
   ADD_SELECTED_QUESTIONS_TO_ELEMENT_URL,
   CREATE_NEW_QUESTION_IN_ELEMENT_URL,
   DELETE_QUESTIONS_FROM_ELEMENT_URL,
+  UPDATE_ROOM_ELEMENT_NAME_IN_TEMPLATE_URL,
   // Inspections
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,
@@ -172,6 +177,7 @@ const USER_DETAILS_ENDPOINTS = {
   SAVE_INSPECTION_ROOM_AS_COMPLETE_URL,
   UPDATE_SAVED_QUESTION,
   GENERATE_INSPECTION_PDF_URL,
+  UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;

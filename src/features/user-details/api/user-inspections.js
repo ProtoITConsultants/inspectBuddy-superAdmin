@@ -437,6 +437,33 @@ export const userInspectionsAPIs = {
     }
   },
 
+  // Update Room Element Name in Inspection
+  updateRoomElementNameInInspection: async ({
+    inspectionId,
+    roomId,
+    elementId,
+    elementName,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL,
+        {
+          inspectionId,
+          roomId,
+          elementId,
+          elementName,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Room Element Name in Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error updating Room Element Name in Inspection"
+      );
+    }
+  },
+
   // Generate Inspection Report PDF
   generateInspectionPDF: async ({ inspectionId, userId }) => {
     try {

@@ -132,4 +132,31 @@ export const userTemplatesAPIs = {
       );
     }
   },
+
+  // Update Room Element Name in Inspection
+  updateRoomElementNameInTemplate: async ({
+    templateId,
+    roomId,
+    elementId,
+    elementName,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_ROOM_ELEMENT_NAME_IN_TEMPLATE_URL,
+        {
+          templateId,
+          roomId,
+          elementId,
+          elementName,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Room Element Name in Inspection", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error updating Room Element Name in Inspection"
+      );
+    }
+  },
 };

@@ -19,6 +19,7 @@ import {
   useRearrangeRoomElements,
 } from "../../../../features/user-details/hooks/inspectionMutations";
 import UploadRoomImageInput from "../../../../features/user-details/components/inspections/UploadRoomImageInput";
+import UpdateElementNameModal from "../../../../features/user-details/components/inspections/details/UpdateElementNameModal";
 
 const EditUserInspectionRoom = () => {
   // hooks
@@ -39,6 +40,10 @@ const EditUserInspectionRoom = () => {
   // local states
   const [rearrangingElements, setRearrangingElements] = useState(false);
   const [addingElement, setAddingElement] = useState(false);
+  const [updateElementNameModalData, setUpdateElementNameModalData] = useState({
+    isModalOpen: false,
+    elementData: {},
+  });
 
   const updateRoomOrder = useRearrangeRoomElements({
     inspectionId: inspectionId,
@@ -242,6 +247,17 @@ const EditUserInspectionRoom = () => {
 
   return (
     <DetailPagesRoot className="!overflow-hidden !h-full">
+      <UpdateElementNameModal
+        isModalOpen={updateElementNameModalData.isModalOpen}
+        onCloseModal={() =>
+          setUpdateElementNameModalData({
+            isModalOpen: false,
+            elementData: {},
+          })
+        }
+        elementData={updateElementNameModalData.elementData}
+        type="inspection"
+      />
       <EditRoomDetails.Form formHeading="Room Inspection">
         <EditRoomDetails.FormSection sectionId="room-details">
           <EditRoomDetails.FormSectionHeader
@@ -297,6 +313,15 @@ const EditUserInspectionRoom = () => {
                   element={element}
                   rearrangingElements={rearrangingElements}
                   elementCategory="inspection"
+                  onEditElementName={() =>
+                    setUpdateElementNameModalData({
+                      isModalOpen: true,
+                      elementData: {
+                        _id: element._id,
+                        name: element.name,
+                      },
+                    })
+                  }
                 >
                   <SortableItemsList.ElementDetail
                     elementId={element._id}

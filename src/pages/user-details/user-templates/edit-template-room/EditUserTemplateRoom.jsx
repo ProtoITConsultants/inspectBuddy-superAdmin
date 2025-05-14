@@ -13,6 +13,7 @@ import AddRoomItem from "../../../../features/user-details/components/common/Add
 import { useTemplateStore } from "../../../../store/templateStore";
 import SortableItemsList from "../../../../features/user-details/components/common/SortableRoomElements";
 import { RoomDetailsSkeleton } from "../../../../features/user-details/components/common/Skeletons";
+import UpdateElementNameModal from "../../../../features/user-details/components/inspections/details/UpdateElementNameModal";
 
 const EditUserTemplateRoom = () => {
   // hooks
@@ -33,6 +34,10 @@ const EditUserTemplateRoom = () => {
   // local states
   const [rearrangingElements, setRearrangingElements] = useState(false);
   const [addingElement, setAddingElement] = useState(false);
+  const [updateElementNameModalData, setUpdateElementNameModalData] = useState({
+    isModalOpen: false,
+    elementData: {},
+  });
 
   // Form to store room details
   const form = useForm({
@@ -152,6 +157,17 @@ const EditUserTemplateRoom = () => {
 
   return (
     <DetailPagesRoot className="!overflow-hidden !h-full">
+      <UpdateElementNameModal
+        isModalOpen={updateElementNameModalData.isModalOpen}
+        onCloseModal={() =>
+          setUpdateElementNameModalData({
+            isModalOpen: false,
+            elementData: {},
+          })
+        }
+        elementData={updateElementNameModalData.elementData}
+        type="template"
+      />
       <EditRoomDetails.Form formHeading="Room Template">
         <EditRoomDetails.FormSection sectionId="room-details">
           <EditRoomDetails.FormSectionHeader
@@ -208,6 +224,15 @@ const EditUserTemplateRoom = () => {
                   element={element}
                   rearrangingElements={rearrangingElements}
                   elementCategory="template"
+                  onEditElementName={() =>
+                    setUpdateElementNameModalData({
+                      isModalOpen: true,
+                      elementData: {
+                        _id: element._id,
+                        name: element.name,
+                      },
+                    })
+                  }
                 >
                   <SortableItemsList.ElementDetail
                     elementId={element._id}
