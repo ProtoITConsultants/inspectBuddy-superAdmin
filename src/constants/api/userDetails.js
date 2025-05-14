@@ -121,6 +121,8 @@ const GENERATE_INSPECTION_PDF_URL = ({ userId }) =>
   `/generateInspectionPDF?id=${encodeURIComponent(userId)}`;
 const UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL =
   "/InspectionChangeElementName";
+const UPDATE_ROOM_ELEMENT_IMAGE_URL = ({ userId }) =>
+  `/InspectionSaveElementImage?id=${encodeURIComponent(userId)}`;
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -186,6 +188,7 @@ const USER_DETAILS_ENDPOINTS = {
   UPDATE_SAVED_QUESTION,
   GENERATE_INSPECTION_PDF_URL,
   UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL,
+  UPDATE_ROOM_ELEMENT_IMAGE_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;

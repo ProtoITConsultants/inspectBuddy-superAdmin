@@ -34,7 +34,6 @@ export const userInspectionsAPIs = {
       );
     }
   },
-
   // Fetch User Properties to link with new Inspection
   fetchUserPropertiesForInspection: async ({ userId }) => {
     try {
@@ -480,6 +479,42 @@ export const userInspectionsAPIs = {
       console.error("Error generating Inspection PDF", error);
       throw new Error(
         error.response?.data?.message || "Error generating Inspection PDF"
+      );
+    }
+  },
+
+  // Update Room Element Image
+  updateRoomElementImage: async ({
+    userId,
+    inspectionId,
+    roomId,
+    elementId,
+    image,
+  }) => {
+    try {
+      // Create a FormData object
+      const formData = new FormData();
+
+      // Append the fields required by your API
+      formData.append("inspectionId", inspectionId);
+      formData.append("roomId", roomId);
+      formData.append("elementId", elementId);
+      formData.append("image", image);
+
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.UPDATE_ROOM_ELEMENT_IMAGE_URL({ userId }),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Room Element Image", error);
+      throw new Error(
+        error.response?.data?.message || "Error updating Room Element Image"
       );
     }
   },

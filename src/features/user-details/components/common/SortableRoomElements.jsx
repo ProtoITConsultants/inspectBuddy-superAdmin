@@ -36,6 +36,12 @@ import { cn } from "../../../../utils/cn";
 import ElementQuestion from "../inspections/details/ElementQuestion";
 import { useInspectionStore } from "../../../../store/inspectionStore";
 import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
+import imageCompression from "browser-image-compression";
+import { useMutation } from "@tanstack/react-query";
+import { userInspectionsAPIs } from "../../api/user-inspections";
+import { useParams } from "react-router";
+import LoadingBackdrop from "../../../../components/ui/LoadingBackdrop";
+import debounce from "lodash.debounce";
 
 const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
@@ -227,7 +233,11 @@ const ElementDetail = ({
   elementId,
   makeInputsDisabled,
   elementCategory,
+  elementImage,
+  elementNotes,
 }) => {
+  const { inspectionId, roomId, userId } = useParams();
+
   // Global States
   const selectedInspectionRoomElements = useInspectionStore(
     (state) => state.selectedInspectionRoomElements
@@ -249,22 +259,67 @@ const ElementDetail = ({
     },
   });
 
-  // local states
-
   //  Use Effect to update the element questions state
   const formRef = useRef(elementForm);
   useEffect(() => {
     formRef.current.setFieldValue("elementQuestions", elementQuestions);
     formRef.current.setFieldValue("elementImageIsRequired", imageRequired);
-
+    if (elementCategory === "inspection") {
+      formRef.current.setFieldValue("elementImage", elementImage || "");
+      formRef.current.setFieldValue("elementNotes", elementNotes);
+    }
     // clean up
     return () => {};
-  }, [elementQuestions, imageRequired]);
+  }, [elementQuestions, imageRequired, elementCategory]);
 
-  // Handle Image Change
-  const handleImageChange = (e) => {
-    console.log("Element Image", e);
-  };
+  const updateElementImage = useMutation({
+    mutationFn: async (e) => {
+      const imageFile = e.target.files[0];
+      const inputFile = e.target;
+
+      // Image Compression Options
+      const options = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      };
+
+      try {
+        const compressedFile = await imageCompression(imageFile, options);
+
+        // Reset the input field value so onChange can be triggered again if the same image is uploaded
+        inputFile.value = null;
+
+        return userInspectionsAPIs.updateRoomElementImage({
+          userId,
+          inspectionId,
+          roomId,
+          elementId,
+          image: compressedFile,
+        });
+      } catch (error) {
+        console.log("Error in Compression: ", error);
+        throw new Error("Image compression failed");
+      }
+    },
+
+    onSuccess: (data) => {
+      const updatedElementData = selectedInspectionRoomElements.map((room) => {
+        if (room._id === elementId) {
+          return {
+            ...room,
+            image: data?.newImage,
+          };
+        }
+        return room;
+      });
+
+      setSelectedInspectionRoomElements(updatedElementData);
+
+      // Update the form value
+      formRef.current.setFieldValue("elementImage", data?.newImage);
+    },
+  });
 
   // Handle Change Question Answer
   const handleChangeAnswer = (questionData) => {
@@ -287,8 +342,29 @@ const ElementDetail = ({
     setSelectedInspectionRoomElements(updatedRoomElements);
   };
 
+  const handleChangeElementNotes = useCallback(
+    debounce(({ text }) => {
+      const updatedRoomElements = selectedInspectionRoomElements.map(
+        (element) => {
+          if (element._id === elementId) {
+            return {
+              ...element,
+              note: text,
+            };
+          }
+          return element;
+        }
+      );
+
+      setSelectedInspectionRoomElements(updatedRoomElements);
+    }, 500),
+    [selectedInspectionRoomElements, elementId]
+  );
+
   return (
     <React.Fragment>
+      {updateElementImage.isPending && <LoadingBackdrop />}
+
       {showAddQuestionModal && (
         <InspectionModals.AddQuestion
           isModalOpen={showAddQuestionModal}
@@ -315,9 +391,9 @@ const ElementDetail = ({
             Element Image{imageRequired && ` *`}
           </p>
           <div className="flex items-center gap-[16px]">
-            {elementForm.values.elementImage ? (
+            {elementForm?.values?.elementImage?.url ? (
               <img
-                src={elementForm.values.elementImage}
+                src={elementForm.values.elementImage?.url}
                 alt="element-img"
                 className="w-[100px] h-[100px] rounded-sm object-cover"
               />
@@ -332,7 +408,7 @@ const ElementDetail = ({
                   accept="/image/*"
                   hidden
                   id={`${elementId}-img`}
-                  onChange={(e) => handleImageChange(e)}
+                  onChange={(e) => updateElementImage.mutate(e)}
                 />
                 <label
                   htmlFor={`${elementId}-img`}
@@ -366,7 +442,16 @@ const ElementDetail = ({
           label="Notes"
           placeholder="Write a note"
           disabled={makeInputsDisabled}
-          {...elementForm.getInputProps("elementNotes")}
+          value={elementForm.values.elementNotes}
+          error={elementForm.errors.elementNotes}
+          onChange={(e) => {
+            elementForm.setFieldValue("elementNotes", e.target.value);
+
+            handleChangeElementNotes({
+              text: e.target.value,
+            });
+          }}
+          // {...elementForm.getInputProps("elementNotes")}
           className="w-full font-medium"
           autosize
         />

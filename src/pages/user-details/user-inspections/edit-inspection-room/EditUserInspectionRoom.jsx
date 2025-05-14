@@ -327,6 +327,8 @@ const EditUserInspectionRoom = () => {
                     elementId={element._id}
                     elementQuestions={element.checklist}
                     imageRequired={element.imageRequired}
+                    elementImage={element.image}
+                    elementNotes={element.note}
                     makeInputsDisabled={false}
                     elementCategory="inspection"
                   />
