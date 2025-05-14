@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../features/user-details/api";
 import { toast } from "sonner";
 import FiltersTopbar from "../../../components/ui/FiltersTopbar";
-import FilterSelect from "../../../components/ui/FilterSelect";
+// import FilterSelect from "../../../components/ui/FilterSelect";
 import { Group } from "@mantine/core";
 import Searchbar from "../../../components/ui/Searchbar";
 import DateRangeFilter from "../../../components/ui/DateRangeFilter";
@@ -23,6 +23,7 @@ import PropertyCard from "../../../features/user-details/components/properties/P
 import ResponsivePropertyCard from "../../../features/user-details/components/properties/ResponsivePropertyCard";
 import AddPropertyButton from "../../../features/user-details/components/properties/AddPropertyButton";
 import DeletePropertyModal from "../../../features/user-details/components/properties/DeletePropertyModal";
+import { SelectCategoryFilter } from "../../../features/user-details/components/properties/SelectCategoryFilter";
 
 const UserProperties = () => {
   // Hooks
@@ -131,7 +132,31 @@ const UserProperties = () => {
       )}
       {/* Filters Topbar */}
       <FiltersTopbar>
-        <FilterSelect
+        <SelectCategoryFilter
+          filterOptions={[
+            { label: "All Properties", value: "all", iconId: "" },
+            ...USER_ADDED_PROPERTY_CATEGORIES,
+          ]}
+          onChange={(value) => {
+            if (value === "all") {
+              return setFiltersData((prev) => ({
+                ...prev,
+                propertyCategory: "",
+              }));
+            }
+
+            // Get the property category id
+            const selectedCategoryId = USER_ADDED_PROPERTY_CATEGORIES.find(
+              (cat) => cat.value === value
+            );
+            setFiltersData((prev) => ({
+              ...prev,
+              propertyCategory: selectedCategoryId,
+            }));
+          }}
+          initialValue={null}
+        />
+        {/* <FilterSelect
           options={[
             { label: "All Properties", value: "all", iconId: "" },
             ...USER_ADDED_PROPERTY_CATEGORIES,
@@ -155,7 +180,7 @@ const UserProperties = () => {
           }}
           initialValue={null}
           placeholder="Select Category"
-        />
+        /> */}
         <Group className="w-full !justify-end md:!hidden block">
           <DateRangeFilter
             filtersData={filtersData}
