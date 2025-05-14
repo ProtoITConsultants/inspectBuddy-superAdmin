@@ -436,4 +436,24 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Generate Inspection Report PDF
+  generateInspectionPDF: async ({ inspectionId, userId }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.GENERATE_INSPECTION_PDF_URL({
+          userId,
+        }),
+        {
+          inspectionId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error generating Inspection PDF", error);
+      throw new Error(
+        error.response?.data?.message || "Error generating Inspection PDF"
+      );
+    }
+  },
 };

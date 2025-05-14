@@ -1,4 +1,4 @@
-import { useQueries, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { userDetailsAPIs } from "../../../features/user-details/api";
@@ -28,6 +28,7 @@ import {
 import Button from "../../../components/ui/Button";
 import ResponsiveInspectionCard from "../../../features/user-details/components/inspections/ResponsiveInspectionCard";
 import DeleteInspectionModal from "../../../features/user-details/components/inspections/DeleteInspectionModal";
+import { userInspectionsAPIs } from "../../../features/user-details/api/user-inspections";
 
 const UserInspections = () => {
   // Hooks
@@ -52,6 +53,34 @@ const UserInspections = () => {
     search: "",
     startdate: "",
     enddate: "",
+  });
+
+  // Generate Report PDF - Mutation
+  const generateInspectionPDF = useMutation({
+    mutationFn: ({ inspectionId }) =>
+      toast.promise(
+        userInspectionsAPIs.generateInspectionPDF({
+          inspectionId,
+          userId,
+        }),
+        {
+          loading: "Generating PDF file...",
+          success: async (data) => {
+            const { url } = data;
+            const link = document.createElement("a");
+            link.href = url;
+            link.target = "_blank"; // Open in new tab
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            return "PDF generated successfully!";
+          },
+          error: "Error generating PDF file.",
+          duration: 3000,
+          richColors: true,
+        }
+      ),
   });
 
   // Query to fetch the Inspections and Inspection Stats
@@ -191,8 +220,12 @@ const UserInspections = () => {
               buttonType="iconButton"
               icon={<GENERATE_REPORT_ICON className="text-[#9EA3AE]" />}
               type="button"
-              onClick={() => {}}
-              disabled={!inspection?.isInspectionCompleted}
+              onClick={() =>
+                generateInspectionPDF.mutate({
+                  inspectionId: inspection._id,
+                })
+              }
+              // disabled={!inspection?.isInspectionCompleted}
               className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium whitespace-nowrap"
             />
             <Button

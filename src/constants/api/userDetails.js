@@ -109,6 +109,8 @@ const SAVE_INSPECTION_ROOM_AS_DRAFT_URL = "/InspectionUpdateRoom";
 const SAVE_INSPECTION_ROOM_AS_COMPLETE_URL = "/InspectionUpdateRoom";
 const UPDATE_SAVED_QUESTION = ({ userId }) =>
   `/updateSavedQuestion?id=${encodeURIComponent(userId)}`;
+const GENERATE_INSPECTION_PDF_URL = ({ userId }) =>
+  `/generateInspectionPDF?id=${encodeURIComponent(userId)}`;
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -169,6 +171,7 @@ const USER_DETAILS_ENDPOINTS = {
   SAVE_INSPECTION_ROOM_AS_DRAFT_URL,
   SAVE_INSPECTION_ROOM_AS_COMPLETE_URL,
   UPDATE_SAVED_QUESTION,
+  GENERATE_INSPECTION_PDF_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;
