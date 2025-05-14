@@ -43,6 +43,12 @@ const FETCH_LINKED_PROPERTY_INSPECTIONS_URL = ({
   limit = 10,
 }) =>
   `/getInspectionsByPropertyId?propertyId=${propertyId}&page=${page}&limit=${limit}`;
+const UPDATE_PROPERTY_CATEGORY_URL = ({ userId }) =>
+  `/updatePropertyCategory?id=${encodeURIComponent(userId)}`;
+const DELETE_USER_PROPERTY_CATEGORY_URL = ({ userId, categoryId }) =>
+  `/deletePropertyCategory/${encodeURIComponent(
+    categoryId
+  )}?id=${encodeURIComponent(userId)}`;
 
 // Templates
 const CREATE_NEW_TEMPLATE_URL = ({ userId }) =>
@@ -71,7 +77,6 @@ const CREATE_NEW_QUESTION_IN_ELEMENT_URL = ({ userId }) =>
   `/templateAddChecklistItem?id=${encodeURIComponent(userId)}`;
 const DELETE_QUESTIONS_FROM_ELEMENT_URL = "/templateDeleteChecklistItem";
 const UPDATE_ROOM_ELEMENT_NAME_IN_TEMPLATE_URL = `/templateChangeElementName`;
-
 
 // Inspections
 const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
@@ -133,6 +138,8 @@ const USER_DETAILS_ENDPOINTS = {
   UPDATE_PROPERTY_DETAILS_URL,
   ADD_NEW_USER_PROPERTY_URL,
   CREATE_NEW_PROPERTY_CATEGORY_URL,
+  UPDATE_PROPERTY_CATEGORY_URL,
+  DELETE_USER_PROPERTY_CATEGORY_URL,
   DELETE_USER_PROPERTY_URL,
   FETCH_LINKED_PROPERTY_INSPECTIONS_URL,
   // Templates

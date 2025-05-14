@@ -41,6 +41,43 @@ export const userPropertiesAPIs = {
       );
     }
   },
+
+  // Update Property Category
+  updatePropertyCategory: async ({ userId, categoryId, value, iconId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_PROPERTY_CATEGORY_URL({
+          userId,
+        }),
+        { categoryId, value, iconId }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Property Category", error);
+      throw new Error(
+        error.response?.data?.message || "Error updating Property Category"
+      );
+    }
+  },
+
+  // Delete Property Category
+  deletePropertyCategory: async ({ userId, categoryId }) => {
+    try {
+      const response = await axiosInstance.delete(
+        USER_DETAILS_ENDPOINTS.DELETE_USER_PROPERTY_CATEGORY_URL({
+          userId,
+          categoryId,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting Property Category", error);
+      throw new Error(
+        error.response?.data?.message || "Error deleting Property Category"
+      );
+    }
+  },
+
   // Delete Property
   deleteUserProperty: async ({ propertyId, userId }) => {
     try {

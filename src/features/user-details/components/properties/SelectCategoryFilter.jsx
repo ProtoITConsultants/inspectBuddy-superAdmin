@@ -6,6 +6,9 @@ import {
   CATEGORY_ADD_ICON,
   CATEGORY_NON_ICON,
 } from "./../../../../assets/icons/PropertyCategoryIcons";
+import EditPropertyCategoryModal from "./EditPropertyCategoryModal";
+import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
+import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
 
 export const SelectCategoryFilter = ({
   filterOptions,
@@ -14,6 +17,11 @@ export const SelectCategoryFilter = ({
 }) => {
   const [showAddPropertyCategoryModal, setShowAddPropertyCategoryModal] =
     useState(false);
+
+  const [updateCategoryModalData, setUpdateCategoryModalData] = useState({
+    isModalOpen: false,
+    categoryData: {},
+  });
 
   // Set initial filterValue as an empty string
   const [filterValue, setFilterValue] = useState(initialValue);
@@ -37,6 +45,16 @@ export const SelectCategoryFilter = ({
         onCloseModal={() => {
           setShowAddPropertyCategoryModal(false);
         }}
+      />
+      <EditPropertyCategoryModal
+        isModalOpen={updateCategoryModalData.isModalOpen}
+        onCloseModal={() =>
+          setUpdateCategoryModalData({
+            isModalOpen: false,
+            categoryData: {},
+          })
+        }
+        categoryData={updateCategoryModalData.categoryData}
       />
       <Select
         id="categories-select-filter-all-properties"
@@ -62,7 +80,7 @@ export const SelectCategoryFilter = ({
         renderOption={(category) => {
           if (category.option.label === "Add a Category") {
             return (
-              <Group flex="1" gap="16px" className="text-darkBlue">
+              <Group flex="1" gap="8px" className="text-dark-blue">
                 <CATEGORY_ADD_ICON className="opacity-50" />
                 <p className="text-[14px] font-medium">
                   {category.option.label}
@@ -86,31 +104,57 @@ export const SelectCategoryFilter = ({
           return (
             <Group
               flex="1"
-              gap="16px"
+              gap="24px"
               className={`${
                 category.option.value === filterValue
                   ? "text-primary"
-                  : "text-darkBlue"
-              }`}
+                  : "text-dark-blue"
+              } !justify-between`}
             >
-              {IconComponent ? (
-                <IconComponent
-                  className={`${
-                    category.option.value === filterValue
-                      ? "opacity-100"
-                      : "opacity-50"
-                  }`}
-                />
-              ) : (
-                <CATEGORY_NON_ICON
-                  className={`${
-                    category.option.value === filterValue
-                      ? "opacity-100"
-                      : "opacity-50"
-                  }`}
-                />
+              <div className="flex items-center gap-[8px]">
+                {IconComponent ? (
+                  <IconComponent
+                    className={`${
+                      category.option.value === filterValue
+                        ? "opacity-100"
+                        : "opacity-50"
+                    }`}
+                  />
+                ) : (
+                  <CATEGORY_NON_ICON
+                    className={`${
+                      category.option.value === filterValue
+                        ? "opacity-100"
+                        : "opacity-50"
+                    }`}
+                  />
+                )}
+                <p className="text-[14px] font-medium">
+                  {category.option.label}
+                </p>
+              </div>
+              {category.option.value !== "all" && (
+                <div className="flex items-center gap-[8px]">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setUpdateCategoryModalData({
+                        isModalOpen: true,
+                        categoryData: {
+                          categoryId: category.option._id,
+                          value: category.option.value,
+                          iconId: iconId,
+                        },
+                      })
+                    }
+                  >
+                    <EDIT_DETAILS_ICON className="w-[18px] text-gray-500" />
+                  </button>
+                  <button type="button">
+                    <DELETE_ICON className="w-[18px] text-[#FF613E]" />
+                  </button>
+                </div>
               )}
-              <p className="text-[14px] font-medium">{category.option.label}</p>
             </Group>
           );
         }}
