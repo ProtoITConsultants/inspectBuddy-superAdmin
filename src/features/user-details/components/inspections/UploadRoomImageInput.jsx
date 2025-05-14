@@ -31,7 +31,7 @@ const UploadRoomImageInput = ({ roomImages }) => {
       // Image Compression Options
       const options = {
         maxSizeMB: 0.5,
-        // maxWidthOrHeight: 1920,
+        maxWidthOrHeight: 1920,
         useWebWorker: true,
       };
 

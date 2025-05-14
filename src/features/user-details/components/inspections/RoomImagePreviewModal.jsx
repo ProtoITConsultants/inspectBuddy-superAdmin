@@ -143,9 +143,15 @@ const RoomImagePreviewModal = React.memo(function RoomImagePreviewModal({
       }}
       withCloseButton={false}
       padding={0}
+      classNames={{
+        // body: "md:h-[80dvh] md:w-[70vw]",
+        content: "!bg-transparent !shadow-none",
+      }}
+      shadow="none"
+      size="auto"
     >
       <div
-        className={`rounded-[8px] md:w-[70vw] w-[90%] md:h-[80dvh] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:flex outline-none`}
+        className={`rounded-[8px] md:w-[70dvw] w-[90dvw] md:h-[80dvh] relative md:flex outline-none md:pt-0 pt-8`}
       >
         <LoadingOverlay
           visible={deleteRoomImage.isPending}
@@ -153,7 +159,7 @@ const RoomImagePreviewModal = React.memo(function RoomImagePreviewModal({
           overlayProps={{ radius: "sm", blur: 2 }}
         />
         <button
-          className="absolute !top-[8px] !right-[8px]"
+          className="absolute md:!top-[8px] !top-0 !z-[1000] !right-[8px]"
           onClick={
             deleteRoomImage.isPending || updateRoomImageCaption.isPending
               ? () => {}
@@ -163,7 +169,7 @@ const RoomImagePreviewModal = React.memo(function RoomImagePreviewModal({
             deleteRoomImage.isPending || updateRoomImageCaption.isPending
           }
         >
-          <CLOSE_MODAL_ICON />
+          <CLOSE_MODAL_ICON className="text-white" />
         </button>
         <div className="space-y-[32.5px] flex flex-col items-center md:justify-start justify-center h-full flex-1">
           <div className="w-full h-[300px] md:flex-1 rounded-[8px] overflow-hidden object-cover relative">
@@ -172,9 +178,9 @@ const RoomImagePreviewModal = React.memo(function RoomImagePreviewModal({
               alt="room-img"
               className="object-cover h-full w-full"
             />
-            <div className="bg-[rgba(0,0,0,0.6)] px-[40px] py-[8.5px] min-h-[42px] flex items-center absolute bottom-0 w-full">
+            <div className="bg-[rgba(0,0,0,0.6)] md:px-[40px] px-[28px] py-[8.5px] min-h-[42px] flex items-center absolute bottom-0 w-full">
               <button
-                className={`outline-none border-none bg-transparent items-center gap-[4px] w-[127px] ${
+                className={`outline-none border-none bg-transparent items-center gap-[4px] min-w-[127px] ${
                   !previewImageModalStates.addingCaption &&
                   !imagesData[previewImageIndex]?.caption
                     ? "flex"
@@ -309,8 +315,10 @@ const RoomImagePreviewModal = React.memo(function RoomImagePreviewModal({
             ))}
           </div>
         </div>
-        <div className="space-y-[32.5px] md:flex hidden flex-col pr-[8px]">
-          <div className={cn("w-[100px] flex items-center justify-end flex-1")}>
+        <div className="space-y-[32.5px] md:flex hidden flex-col lg:ps-0 ps-4 pr-[8px]">
+          <div
+            className={cn("lg:w-[100px] flex items-center justify-end flex-1")}
+          >
             <button
               onClick={() => {
                 setPreviewImageModalStates((prevState) => ({
@@ -319,13 +327,11 @@ const RoomImagePreviewModal = React.memo(function RoomImagePreviewModal({
                 }));
 
                 // Update Preview Image Index
-                setPreviewImageIndex(() => {
-                  if (previewImageIndex === imagesData.length - 1) {
-                    return 0;
-                  } else {
-                    return previewImageIndex + 1;
-                  }
-                });
+                if (previewImageIndex === imagesData.length - 1) {
+                  return setPreviewImageIndex(0);
+                } else {
+                  return setPreviewImageIndex(previewImageIndex + 1);
+                }
               }}
               disabled={
                 updateRoomImageCaption.isPending || deleteRoomImage.isPending
