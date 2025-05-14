@@ -9,6 +9,10 @@ const ROUTES = [
   { path: "/report-settings", title: "Report Settings" },
   { path: "/restore-requests", title: "Restore Requests" },
   { path: "/user-details/:userId", title: "User's Details" },
+  {
+    path: "/user-details/:userId/add-new-property",
+    title: "Add Property",
+  },
   { path: "/user-details/:userId/:section", title: "User's Details" },
   {
     path: "/user-details/:userId/properties/details/:propertyId",
@@ -26,8 +30,9 @@ const ROUTES = [
     path: "/user-details/:userId/inspections/details/:inspectionId/edit-details",
     title: "Edit Inspection",
   },
+
   {
-    path: "/user-details/:userId/inspections/details/:inspectionId/edit-details/:roomId",
+    path: "/user-details/:userId/inspections/details/:inspectionId/edit-details/room/:roomId",
     title: "Edit Room",
   },
   {
@@ -35,11 +40,11 @@ const ROUTES = [
     title: "Template Details",
   },
   {
-    path: "/user-details/:userId/templates/details/:templateId/edit-template",
+    path: "/user-details/:userId/templates/details/:templateId/edit-details",
     title: "Edit Template",
   },
   {
-    path: "/user-details/:userId/template-details/:templateId/edit-template/:roomId",
+    path: "/user-details/:userId/templates/details/:templateId/edit-details/room/:roomId",
     title: "Edit Room",
   },
   {
