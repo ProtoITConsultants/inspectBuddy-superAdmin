@@ -9,6 +9,7 @@ import {
 import EditPropertyCategoryModal from "./EditPropertyCategoryModal";
 import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
 import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
+import DeletePropertyCategoryModal from "./DeletePropertyCategoryModal";
 
 export const SelectCategoryFilter = ({
   filterOptions,
@@ -19,6 +20,10 @@ export const SelectCategoryFilter = ({
     useState(false);
 
   const [updateCategoryModalData, setUpdateCategoryModalData] = useState({
+    isModalOpen: false,
+    categoryData: {},
+  });
+  const [deleteCategoryModalData, setDeleteCategoryModalData] = useState({
     isModalOpen: false,
     categoryData: {},
   });
@@ -55,6 +60,16 @@ export const SelectCategoryFilter = ({
           })
         }
         categoryData={updateCategoryModalData.categoryData}
+      />
+      <DeletePropertyCategoryModal
+        isModalOpen={deleteCategoryModalData.isModalOpen}
+        onCloseModal={() =>
+          setDeleteCategoryModalData({
+            isModalOpen: false,
+            categoryData: {},
+          })
+        }
+        categoryData={deleteCategoryModalData.categoryData}
       />
       <Select
         id="categories-select-filter-all-properties"
@@ -137,7 +152,8 @@ export const SelectCategoryFilter = ({
                 <div className="flex items-center gap-[8px]">
                   <button
                     type="button"
-                    onClick={() =>
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setUpdateCategoryModalData({
                         isModalOpen: true,
                         categoryData: {
@@ -145,12 +161,24 @@ export const SelectCategoryFilter = ({
                           value: category.option.value,
                           iconId: iconId,
                         },
-                      })
-                    }
+                      });
+                    }}
                   >
                     <EDIT_DETAILS_ICON className="w-[18px] text-gray-500" />
                   </button>
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDeleteCategoryModalData({
+                        isModalOpen: true,
+                        categoryData: {
+                          categoryId: category.option._id,
+                          name: category.option.label,
+                        },
+                      });
+                    }}
+                  >
                     <DELETE_ICON className="w-[18px] text-[#FF613E]" />
                   </button>
                 </div>

@@ -107,7 +107,7 @@ const EditPropertyCategoryModal = ({
 
   return (
     <ModalRoot
-      id="add-property-category-modal"
+      id="update-property-category-modal"
       loadingOverlay={updatePropertyCategory.isPending}
       openModal={isModalOpen}
       onClose={() => onCloseModal()}
