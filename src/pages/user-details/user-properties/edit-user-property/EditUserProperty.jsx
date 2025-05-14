@@ -132,7 +132,12 @@ const EditUserProperty = () => {
         zip: propertyData.propertyZipCode,
       })
     );
-    formData.append("category", JSON.stringify(propertyData.propertyCategory));
+
+    const selectedCategoryId = USER_ADDED_PROPERTY_CATEGORIES.find(
+      (cat) => cat.value === propertyData.propertyCategory.value
+    )?._id;
+
+    formData.append("categoryId", selectedCategoryId || "");
     // Check if the reference ID is changed
     if (originalReferenceId.current !== propertyData.referenceId) {
       formData.append("referenceId", propertyData.referenceId);
@@ -145,7 +150,10 @@ const EditUserProperty = () => {
       formData.append("image", propertyData.propertyImage);
     }
 
-    return userDetailsAPIs.updatePropertyDetails(formData);
+    return userDetailsAPIs.updatePropertyDetails({
+      formData,
+      userId,
+    });
   };
 
   // Use Tanstack's react-query to add a new property

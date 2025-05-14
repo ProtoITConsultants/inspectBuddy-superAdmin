@@ -191,11 +191,11 @@ export const userDetailsAPIs = {
     }
   },
   // Update Specific Property Data
-  updatePropertyDetails: async (params) => {
+  updatePropertyDetails: async ({ formData, userId }) => {
     try {
       const response = await axiosInstance.put(
-        USER_DETAILS_ENDPOINTS.UPDATE_PROPERTY_DETAILS_URL,
-        params,
+        USER_DETAILS_ENDPOINTS.UPDATE_PROPERTY_DETAILS_URL({ userId }),
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",

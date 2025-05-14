@@ -26,7 +26,8 @@ const FETCH_USER_ADDED_PROPERTY_CATEGORIES_URL = ({ userId }) =>
   `/getUserPropertyCategories?id=${encodeURIComponent(userId)}`;
 const FETCH_PROPERTY_DETAILS_URL = ({ propertyId }) =>
   `/getPropertyById/${encodeURIComponent(propertyId)}`;
-const UPDATE_PROPERTY_DETAILS_URL = "/editExistingProperty";
+const UPDATE_PROPERTY_DETAILS_URL = ({ userId }) =>
+  `/editExistingProperty?id=${encodeURIComponent(userId)}`;
 const FETCH_USER_ADDED_PROPERTIES_URL = ({ userId }) =>
   `/getCompleteProperties?id=${encodeURIComponent(userId)}`;
 const ADD_NEW_USER_PROPERTY_URL = ({ userId }) =>
