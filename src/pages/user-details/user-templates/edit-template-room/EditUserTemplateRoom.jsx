@@ -213,6 +213,7 @@ const EditUserTemplateRoom = () => {
                     elementId={element._id}
                     elementQuestions={element.checklist}
                     imageRequired={element.imageRequired}
+                    makeInputsDisabled={true}
                   />
                 </SortableItemsList.RoomElement>
               ))}
