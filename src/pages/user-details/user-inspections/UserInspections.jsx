@@ -339,7 +339,7 @@ const UserInspections = () => {
         >
           {userInspections?.isPending ? (
             <TableSkeleton />
-          ) : userInspections?.data?.inspections.length < 1 ? (
+          ) : userInspections?.data?.inspections?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
               <p className="text-[14px] font-medium text-dark-gray text-center">
                 No Inspections Found! <br /> Add a new Inspection to get
