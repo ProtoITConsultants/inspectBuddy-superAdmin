@@ -48,7 +48,7 @@ const Dashboard = () => {
                 statCount: `${stat.statCount}${
                   stat.label === "Total Users" || stat.label === "Active Users"
                     ? stat.statCount > 1000
-                      ? "K"
+                      ? "k"
                       : ""
                     : "k"
                 }`,
