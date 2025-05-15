@@ -10,6 +10,7 @@ import IconLink from "../../../../components/ui/IconLink";
 import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
 import Button from "../../../../components/ui/Button";
 import { GENERATE_REPORT_ICON } from "../../../../assets/icons/DynamicIcons";
+import { INSPECTION_LOGS_ICON } from "../../../../assets/icons/InspectionLogs";
 
 const ViewInspectionDetails = () => {
   // Hooks
@@ -99,7 +100,7 @@ const ViewInspectionDetails = () => {
         <IconLink
           href={`inspection-logs`}
           icon={
-            <EDIT_DETAILS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
+            <INSPECTION_LOGS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
           }
           label="Inspection Logs"
           className="whitespace-nowrap"

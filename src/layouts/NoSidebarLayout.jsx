@@ -10,6 +10,7 @@ import Button from "../components/ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { userInspectionsAPIs } from "../features/user-details/api/user-inspections";
+import { INSPECTION_LOGS_ICON } from "../assets/icons/InspectionLogs";
 
 const NoSidebarLayout = () => {
   const { pageTitle } = useNavbarTitle();
@@ -71,7 +72,7 @@ const NoSidebarLayout = () => {
               <IconLink
                 href={`${inspectionId}/inspection-logs`}
                 icon={
-                  <EDIT_DETAILS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
+                  <INSPECTION_LOGS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
                 }
                 label="Inspection Logs"
               />
