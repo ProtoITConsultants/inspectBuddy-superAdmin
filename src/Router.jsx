@@ -32,6 +32,7 @@ import AddNewUser from "./pages/users-list/add-new-user/AddNewUser";
 import AddNewUserLayout from "./layouts/AddNewUserLayout";
 import RestoreRequests from "./pages/restore-requests/RestoreRequests";
 import RestoreRequestDetail from "./pages/restore-requests/request-details/RestoreRequestDetail";
+import InspectionLogs from "./pages/user-details/user-inspections/inspection-logs/InspectionLogs";
 
 export const router = createBrowserRouter([
   {
@@ -198,6 +199,10 @@ export const router = createBrowserRouter([
           {
             path: ":inspectionId",
             element: <ViewInspectionDetails />,
+          },
+          {
+            path: ":inspectionId/inspection-logs",
+            element: <InspectionLogs />,
           },
           {
             path: ":inspectionId/edit-details",
