@@ -37,6 +37,12 @@ export const INSPECTIONS_TABLE_HEADINGS = [
   { key: "status", value: "Status" },
 ];
 
+export const INSPECTION_LOGS_TABLE_HEADINGS = [
+  { key: "createdOn", value: "Created On" },
+  { key: "createdBy", value: "Created By" },
+  { key: "reportName", value: "Report Name" },
+];
+
 // User Requests Tables Headings - User Requests page
 export const USER_REQUESTS_TABLE_HEADINGS = [
   { key: "serialNo", value: "S#NO" },

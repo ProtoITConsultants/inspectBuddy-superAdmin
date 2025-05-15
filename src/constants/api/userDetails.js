@@ -123,6 +123,10 @@ const UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL =
   "/InspectionChangeElementName";
 const UPDATE_ROOM_ELEMENT_IMAGE_URL = ({ userId }) =>
   `/InspectionSaveElementImage?id=${encodeURIComponent(userId)}`;
+const FETCH_INSPECTION_LOGS_URL = ({ userId, inspectionId, page }) =>
+  `/getReportsByInspectionId?id=${encodeURIComponent(
+    userId
+  )}&inspectionId=${encodeURIComponent(inspectionId)}&page=${page}&limit=10`;
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -189,6 +193,7 @@ const USER_DETAILS_ENDPOINTS = {
   GENERATE_INSPECTION_PDF_URL,
   UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL,
   UPDATE_ROOM_ELEMENT_IMAGE_URL,
+  FETCH_INSPECTION_LOGS_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;

@@ -518,4 +518,23 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Fetch Inspection Logs - Prev Created Inspection Reports
+  fetchInspectionLogs: async ({ userId, inspectionId, page }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.FETCH_INSPECTION_LOGS_URL({
+          userId,
+          inspectionId,
+          page,
+        })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Inspection Logs", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching Inspection Logs"
+      );
+    }
+  },
 };
