@@ -1,6 +1,6 @@
 // API Endpoints
 const INSPECTION_AND_PROPERTIES_ANALYTICS = "/getSuperAdminAnalytics";
-const GRAPHICAL_ANALYTICS = "/getGraphicalAnalytics";
+const GRAPHICAL_ANALYTICS = "/getDashBoardGraphsData";
 
 const DASHBOARD_ENDPOINTS = {
   INSPECTION_AND_PROPERTIES_ANALYTICS,

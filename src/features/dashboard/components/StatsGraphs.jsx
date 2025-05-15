@@ -22,7 +22,7 @@ const GraphCardTitle = ({ cardData }) => {
       <div className="flex justify-between items-center w-full">
         <div>
           <p className="text-[24px] font-bold text-dark-blue">
-            {cardData.statCount}k
+            {cardData.statCount}
           </p>
           <p className="text-[16px] text-dark-grays">{cardData.label}</p>
         </div>
@@ -37,7 +37,7 @@ const Graph = ({ graphData }) => {
   return (
     <div className="flex-1 flex flex-col gap-[16px] w-full">
       <div className="flex items-center">
-        {graphData.statPercentage > 0 ? (
+        {graphData.statPercentage > 0 || graphData.statPercentage === "∞" ? (
           <img src={positiveIcon} alt="positive-icon" />
         ) : (
           <img src={negativeIcon} alt="positive-icon" />
@@ -46,13 +46,15 @@ const Graph = ({ graphData }) => {
         <p className="text-[14px]">
           <span
             className={`${
-              graphData.statPercentage > 0 ? "text-[#27AE60]" : "text-[#EB5757]"
+              graphData.statPercentage > 0 || graphData.statPercentage === "∞"
+                ? "text-[#27AE60]"
+                : "text-[#EB5757]"
             }`}
           >
             {graphData.statPercentage}%
           </span>
           &nbsp;<span className="uppercase text-dark-gray">VS PREV.</span>
-          &nbsp;<span className="text-dark-blue uppercase">28 DAYS</span>
+          &nbsp;<span className="text-dark-blue">Month</span>
         </p>
       </div>
       <LineChart
@@ -60,12 +62,12 @@ const Graph = ({ graphData }) => {
         data={graphData.chartData}
         series={[
           {
-            name: "temperature",
+            name: "count",
             label: graphData.chartLabel,
             color: graphData.chartColor,
           },
         ]}
-        dataKey="date"
+        dataKey="label"
         withDots={false}
         strokeWidth={3}
         curveType="natural"

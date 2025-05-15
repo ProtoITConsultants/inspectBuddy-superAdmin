@@ -40,12 +40,18 @@ const Dashboard = () => {
   return (
     <>
       <DashboardGraphs.Root>
-        {graphicalAnalytics?.data?.map((stat) => (
-          <DashboardGraphs.GraphCard key={stat._id}>
+        {graphicalAnalytics?.data?.map((stat, index) => (
+          <DashboardGraphs.GraphCard key={index}>
             <DashboardGraphs.GraphCardTitle
               cardData={{
                 label: stat.label,
-                statCount: stat.statCount,
+                statCount: `${stat.statCount}${
+                  stat.label === "Total Users" || stat.label === "Active Users"
+                    ? stat.statCount > 1000
+                      ? "K"
+                      : ""
+                    : "k"
+                }`,
                 icon: stat.icon,
               }}
             />
