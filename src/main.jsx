@@ -40,6 +40,8 @@ createRoot(document.getElementById("root")).render(
       style={{
         fontFamily: "Plus Jakarta Sans",
       }}
+      duration={3000}
+      richColors={true}
     />
   </MantineProvider>
 );
