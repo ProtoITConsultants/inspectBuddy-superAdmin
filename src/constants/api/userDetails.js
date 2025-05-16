@@ -127,6 +127,7 @@ const FETCH_INSPECTION_LOGS_URL = ({ userId, inspectionId, page }) =>
   `/getReportsByInspectionId?id=${encodeURIComponent(
     userId
   )}&inspectionId=${encodeURIComponent(inspectionId)}&page=${page}&limit=10`;
+const SAVE_INSPECTION_AS_DRAFT_URL = `/saveInspectionDraft`;
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -194,6 +195,7 @@ const USER_DETAILS_ENDPOINTS = {
   UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL,
   UPDATE_ROOM_ELEMENT_IMAGE_URL,
   FETCH_INSPECTION_LOGS_URL,
+  SAVE_INSPECTION_AS_DRAFT_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;

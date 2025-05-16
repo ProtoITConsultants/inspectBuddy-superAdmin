@@ -537,4 +537,22 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Save Inspection as Draft
+  saveInspectionAsDraft: async ({ inspectionId }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.SAVE_INSPECTION_AS_DRAFT_URL,
+        {
+          inspectionId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error saving Inspection as Draft", error);
+      throw new Error(
+        error.response?.data?.message || "Error saving Inspection as Draft"
+      );
+    }
+  },
 };

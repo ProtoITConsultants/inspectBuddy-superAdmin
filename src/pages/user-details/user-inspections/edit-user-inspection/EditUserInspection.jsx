@@ -117,11 +117,8 @@ const EditUserInspection = () => {
 
   //  Save Inspection Draft - Mutation
   const saveInspectionDraft = useMutation({
-    mutationFn: () => {
-      setTimeout(() => {
-        return true;
-      }, 1000);
-    },
+    mutationFn: () =>
+      userInspectionsAPIs.saveInspectionAsDraft({ inspectionId }),
 
     onSuccess: () => {
       navigate(`/user-details/${userId}/inspections/details/${inspectionId}`, {
