@@ -40,7 +40,7 @@ const InspectionLogs = () => {
 
   const rows = data?.reports?.map((report) => {
     return (
-      <React.Fragment key={report.id}>
+      <React.Fragment key={report._id}>
         <Table.ItemRoot className="md:grid hidden">
           <Table.SingleColumn>
             <p className="text-[14px] font-medium text-tertiary">
