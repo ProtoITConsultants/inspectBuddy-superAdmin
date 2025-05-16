@@ -36,9 +36,9 @@ const AuthMiddleware = ({ children }) => {
     };
   }, [data, setIsAuthenticated, setUser]);
 
-  if (isPending) {
-    return <LoadingBackdrop />;
-  }
+  // if (isPending) {
+  //   return <LoadingBackdrop />;
+  // }
   if (isError) {
     toast.error("Authentication Failed!", {
       description: error.message || "User Authentication failed!",
@@ -47,7 +47,12 @@ const AuthMiddleware = ({ children }) => {
     return <Navigate to="/login" />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {isPending && <LoadingBackdrop />}
+      {children}
+    </>
+  );
 };
 
 export default AuthMiddleware;
