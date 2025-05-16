@@ -63,6 +63,11 @@ const EditUserInspection = () => {
         description: "Room order updated successfully.",
         duration: 3000,
       });
+
+      // Invalidate Queries
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionDetailsQuery", inspectionId],
+      });
     },
 
     onError: (error) => {
@@ -81,6 +86,11 @@ const EditUserInspection = () => {
         roomName: newRoomName,
       }),
     onSuccess: (data) => {
+      // Invalidate Queries
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionDetailsQuery", inspectionId],
+      });
+
       //  Add Element Count in newly added room
       const newRoomData = {
         elementCount: 0,
@@ -142,6 +152,9 @@ const EditUserInspection = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["inspectionroomsData", inspectionId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionDetailsQuery", inspectionId],
       });
 
       const updatedRooms = inspectionRooms.filter(
