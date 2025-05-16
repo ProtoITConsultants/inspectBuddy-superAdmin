@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import LogoIcon from "../../assets/logo-icon.svg";
-import notificationIcon from "../../assets/icons/notification-icon.svg";
-import { Divider, Indicator } from "@mantine/core";
+// import notificationIcon from "../../assets/icons/notification-icon.svg";
+// import { Divider, Indicator } from "@mantine/core";
 import UserNavMenu from "./UserNavMenu";
 import { cn } from "../../utils/cn";
 import SidebarMobileVersion from "../Sidebar/SidebarMobileVersion";
@@ -37,7 +37,7 @@ const Navbar = ({ withSidebar = false }) => {
         </p>
       </div>
       <div className="flex items-center md:space-x-[24px] space-x-[16px]">
-        <button className="bg-[#F3F8FF] rounded-[8px] w-[40px] h-[40px] flex justify-center items-center">
+        {/* <button className="bg-[#F3F8FF] rounded-[8px] w-[40px] h-[40px] flex justify-center items-center">
           <Indicator
             inline
             processing
@@ -48,13 +48,13 @@ const Navbar = ({ withSidebar = false }) => {
           >
             <img src={notificationIcon} alt="notification-icon" />
           </Indicator>
-        </button>
-        <Divider
+        </button> */}
+        {/* <Divider
           orientation="vertical"
           size="sm"
           color="#000929"
           className="opacity-10 !h-[40px] md:block hidden !self-auto"
-        />
+        /> */}
         <UserNavMenu />
         {window.innerWidth < 768 && <SidebarMobileVersion />}
       </div>
