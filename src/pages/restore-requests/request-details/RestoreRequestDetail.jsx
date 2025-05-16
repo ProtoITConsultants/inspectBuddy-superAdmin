@@ -392,6 +392,19 @@ const RestoreRequestDetail = () => {
     }
   }, [requestsData]);
 
+  const checkIfRequestArraysAreEmpty = () => {
+    const requestedTemplates = restoreRequestForm.values.selectedTemplateIds;
+    const requestedInspections =
+      restoreRequestForm.values.selectedInspectionIds;
+    const requestedProperties = restoreRequestForm.values.selectedPropertyIds;
+
+    return (
+      requestedTemplates.length === 0 &&
+      requestedInspections.length === 0 &&
+      requestedProperties.length === 0
+    );
+  };
+
   return (
     <RequestDetailsRoot className="!overflow-hidden max-w-[1220px]">
       <Tabs
@@ -458,6 +471,7 @@ const RestoreRequestDetail = () => {
                   className="w-fit text-[16px] !font-semibold"
                   buttonType="contained"
                   onClick={restoreSelectedRequests.mutate}
+                  disabled={checkIfRequestArraysAreEmpty()}
                 />
               </div>
             </Table.Header>
@@ -559,6 +573,7 @@ const RestoreRequestDetail = () => {
                   className="w-fit text-[16px] !font-semibold"
                   buttonType="contained"
                   onClick={restoreSelectedRequests.mutate}
+                  disabled={checkIfRequestArraysAreEmpty()}
                 />
               </div>
             </Table.Header>
@@ -663,6 +678,7 @@ const RestoreRequestDetail = () => {
                   className="w-fit text-[16px] !font-semibold"
                   buttonType="contained"
                   onClick={restoreSelectedRequests.mutate}
+                  disabled={checkIfRequestArraysAreEmpty()}
                 />
               </div>
             </Table.Header>
