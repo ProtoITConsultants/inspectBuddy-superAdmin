@@ -1,5 +1,6 @@
 import companyLogoIcon from "../../assets/icons/company-logo.svg";
 import { useState } from "react";
+import compressImageFile from "../../utils/compressImageFile";
 
 const BusinessLogoInput = ({
   title,
@@ -9,17 +10,26 @@ const BusinessLogoInput = ({
 }) => {
   const [selectedImage, setSelectedImage] = useState();
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const inputFile = e.target;
+
+    if (!file) {
+      console.log("No file selected");
+      return;
     }
 
-    return onUploadBusinessLogo(file);
+    const compressedFile = await compressImageFile(file);
+    // Reset the input field value so onChange can be triggered again if the same image is uploaded
+    inputFile.value = null;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedImage(reader.result);
+    };
+    reader.readAsDataURL(compressedFile);
+
+    return onUploadBusinessLogo(compressedFile);
   };
 
   return (

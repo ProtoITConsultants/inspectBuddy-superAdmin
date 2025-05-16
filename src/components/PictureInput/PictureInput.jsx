@@ -1,6 +1,7 @@
 import companyLogoIcon from "../../assets/icons/company-logo.svg";
 import avatarIcon from "../../assets/icons/default-profile.svg";
 import { useState } from "react";
+import compressImageFile from "../../utils/compressImageFile";
 
 const PictureInput = ({
   section,
@@ -12,21 +13,31 @@ const PictureInput = ({
 }) => {
   const [selectedImage, setSelectedImage] = useState();
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const inputFile = e.target;
+
+    if (!file) {
+      console.log("No file selected");
+      return;
     }
+
+    const compressedFile = await compressImageFile(file);
+
+    // Reset the input field value so onChange can be triggered again if the same image is uploaded
+    inputFile.value = null;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedImage(reader.result);
+    };
+    reader.readAsDataURL(compressedFile);
 
     if (section === "personalInfo") {
-      return onUploadPersonalAvatar(file);
+      return onUploadPersonalAvatar(compressedFile);
     }
 
-    return onUploadBusinessLogo(file);
+    return onUploadBusinessLogo(compressedFile);
   };
 
   return (
@@ -41,7 +52,7 @@ const PictureInput = ({
               : pictureURL || companyLogoIcon)
           }
           alt="avatar-icon"
-          className={`w-[100px] h-[100px] ${
+          className={`w-[100px] h-[100px] object-cover object-top ${
             section === "personalInfo" ? "rounded-full" : "rounded-[4px]"
           }`}
         />

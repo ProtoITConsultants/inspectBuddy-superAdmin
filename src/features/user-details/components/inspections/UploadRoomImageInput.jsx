@@ -6,10 +6,10 @@ import { ADD_ICON } from "../../../../assets/icons/AddIcon";
 import UPLOAD_ICON from "../../../../assets/icons/UploadIcon";
 import Button from "../../../../components/ui/Button";
 import { toast } from "sonner";
-import imageCompression from "browser-image-compression";
 import { userInspectionsAPIs } from "./../../api/user-inspections";
 import RED_CROSS_ICON from "../../../../assets/icons/RedCrossIcon";
 import LoadingBackdrop from "./../../../../components/ui/LoadingBackdrop";
+import compressImageFile from "./../../../../utils/compressImageFile";
 
 const UploadRoomImageInput = ({ roomImages }) => {
   // Hooks
@@ -28,27 +28,21 @@ const UploadRoomImageInput = ({ roomImages }) => {
       const imageFile = e.target.files[0];
       const inputFile = e.target;
 
-      // Image Compression Options
-      const options = {
-        maxSizeMB: 0.5,
-        maxWidthOrHeight: 1920,
-        useWebWorker: true,
-      };
-
-      try {
-        const compressedFile = await imageCompression(imageFile, options);
-
-        // Reset the input field value so onChange can be triggered again if the same image is uploaded
-        inputFile.value = null;
-
-        return userInspectionsAPIs.uploadSpecificRoomImageInInspection({
-          inspectionId,
-          roomId,
-          image: compressedFile,
-        });
-      } catch (error) {
-        console.log("Error in Compression: ", error);
+      if (!imageFile) {
+        console.log("No file selected");
+        throw new Error("No file selected");
       }
+
+      const compressedFile = await compressImageFile(imageFile);
+
+      // Reset the input field value so onChange can be triggered again if the same image is uploaded
+      inputFile.value = null;
+
+      return userInspectionsAPIs.uploadSpecificRoomImageInInspection({
+        inspectionId,
+        roomId,
+        image: compressedFile,
+      });
     },
     onSuccess: (data) => {
       // Update the local state

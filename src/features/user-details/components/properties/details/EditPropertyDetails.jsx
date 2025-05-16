@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { cn } from "../../../../../utils/cn";
 import RED_CROSS_ICON from "../../../../../assets/icons/RedCrossIcon";
 import UPLOAD_ICON from "../../../../../assets/icons/UploadIcon";
+import compressImageFile from "../../../../../utils/compressImageFile";
 
 const Root = ({ children, className = "", heading }) => (
   <div className={cn("w-full flex flex-col gap-[24px]", className)}>
@@ -22,31 +23,46 @@ const ImageInput = ({
   const [propertyImage, setPropertyImage] = useState(imageURL || null);
   const [objectURL, setObjectURL] = useState(null);
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
+
     if (file && file.type.startsWith("image/")) {
       const url = URL.createObjectURL(file);
+
+      const compressedFile = await compressImageFile(file);
+
       setPropertyImage(url);
       setObjectURL(url);
-      onImageUpload(file);
+      onImageUpload(compressedFile);
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPropertyImage(url);
-      setObjectURL(url);
-      onImageUpload(file);
+    const inputFile = e.target;
+
+    if (!file) {
+      console.log("No file selected");
+      return;
     }
+
+    const url = URL.createObjectURL(file);
+
+    const compressedFile = await compressImageFile(file);
+
+    // Reset the input field value so onChange can be triggered again if the same image is uploaded
+    inputFile.value = null;
+
+    setPropertyImage(url);
+    setObjectURL(url);
+    onImageUpload(compressedFile);
   };
 
   useEffect(() => {
     // Check if imageURL is file then convert it to URL first
     if (imageURL) {
-      if (imageURL instanceof File) {
+      if (imageURL instanceof Blob) {
         const url = URL.createObjectURL(imageURL);
         setPropertyImage(url);
       } else {

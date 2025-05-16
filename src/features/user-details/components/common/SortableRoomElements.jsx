@@ -36,12 +36,12 @@ import { cn } from "../../../../utils/cn";
 import ElementQuestion from "../inspections/details/ElementQuestion";
 import { useInspectionStore } from "../../../../store/inspectionStore";
 import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
-import imageCompression from "browser-image-compression";
 import { useMutation } from "@tanstack/react-query";
 import { userInspectionsAPIs } from "../../api/user-inspections";
 import { useParams } from "react-router";
 import LoadingBackdrop from "../../../../components/ui/LoadingBackdrop";
 import debounce from "lodash.debounce";
+import compressImageFile from "../../../../utils/compressImageFile";
 
 const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
@@ -277,30 +277,23 @@ const ElementDetail = ({
       const imageFile = e.target.files[0];
       const inputFile = e.target;
 
-      // Image Compression Options
-      const options = {
-        maxSizeMB: 0.5,
-        maxWidthOrHeight: 1920,
-        useWebWorker: true,
-      };
-
-      try {
-        const compressedFile = await imageCompression(imageFile, options);
-
-        // Reset the input field value so onChange can be triggered again if the same image is uploaded
-        inputFile.value = null;
-
-        return userInspectionsAPIs.updateRoomElementImage({
-          userId,
-          inspectionId,
-          roomId,
-          elementId,
-          image: compressedFile,
-        });
-      } catch (error) {
-        console.log("Error in Compression: ", error);
-        throw new Error("Image compression failed");
+      if (!imageFile) {
+        console.log("No file selected");
+        throw new Error("No file selected");
       }
+
+      const compressedFile = await compressImageFile(imageFile);
+
+      // Reset the input field value so onChange can be triggered again if the same image is uploaded
+      inputFile.value = null;
+
+      return userInspectionsAPIs.updateRoomElementImage({
+        userId,
+        inspectionId,
+        roomId,
+        elementId,
+        image: compressedFile,
+      });
     },
 
     onSuccess: (data) => {
