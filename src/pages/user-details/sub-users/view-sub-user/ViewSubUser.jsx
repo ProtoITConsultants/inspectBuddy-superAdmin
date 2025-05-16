@@ -10,7 +10,7 @@ import {
   UserDetailsGrid,
   UserDetailsItem,
 } from "../../../../features/user-details/components/sub-users/details/ViewDetailsForm";
-import SubUserDetailsSkeleton from "../../../../features/user-details/components/sub-users/details/subUserDetailsSkeleton";
+import SubUserDetailsSkeleton from "../../../../features/user-details/components/sub-users/details/SubUserDetailsSkeleton";
 
 const ViewSubUser = () => {
   // Hooks

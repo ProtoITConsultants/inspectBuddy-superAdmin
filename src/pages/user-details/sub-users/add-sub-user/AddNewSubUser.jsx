@@ -1,6 +1,6 @@
 import { useForm } from "@mantine/form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import SubUserDetailsSkeleton from "../../../../features/user-details/components/sub-users/details/subUserDetailsSkeleton";
+import SubUserDetailsSkeleton from "../../../../features/user-details/components/sub-users/details/SubUserDetailsSkeleton";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";

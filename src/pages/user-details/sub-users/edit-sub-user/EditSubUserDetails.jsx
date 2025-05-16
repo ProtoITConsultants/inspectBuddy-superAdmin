@@ -5,7 +5,7 @@ import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { useForm } from "@mantine/form";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
-import SubUserDetailsSkeleton from "../../../../features/user-details/components/sub-users/details/subUserDetailsSkeleton";
+import SubUserDetailsSkeleton from "../../../../features/user-details/components/sub-users/details/SubUserDetailsSkeleton";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import {
   SubUserActions,
