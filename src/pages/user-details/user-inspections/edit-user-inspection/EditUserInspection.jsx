@@ -272,7 +272,7 @@ const EditUserInspection = () => {
           />
           <EditInspection.EditActions>
             <Link
-              to={`/user-details/${userId}/inspections/finalize-inspection/${inspectionId}`}
+              to={`/user-details/${userId}/inspections/details/${inspectionId}/finalize-inspection`}
               id="continue-to-finalize-inspection"
               className={`px-6 py-3 h-12 rounded-lg flex items-center justify-center sm:w-[216px] w-full font-bold text-white ${
                 inspectionRooms.length === 0 ||
