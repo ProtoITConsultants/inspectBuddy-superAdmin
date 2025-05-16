@@ -4,7 +4,7 @@ import { useInspectionStore } from "../../../../store/inspectionStore";
 import { useTemplateStore } from "../../../../store/templateStore";
 import { useNavigate, useParams } from "react-router";
 import { useForm } from "@mantine/form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userInspectionsAPIs } from "./../../../../features/user-details/api/user-inspections";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import EditRoomDetails from "../../../../features/user-details/components/common/EditRoomDetails";
@@ -25,6 +25,7 @@ const EditUserInspectionRoom = () => {
   // hooks
   const { inspectionId, roomId, userId } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // Global States
   const selectedInspectionRoomElements = useInspectionStore(
@@ -174,6 +175,12 @@ const EditUserInspectionRoom = () => {
         duration: 3000,
         richColors: true,
       });
+
+      // Invalidate Queries
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionDetailsQuery", inspectionId],
+      });
+
       navigate(-1);
     },
     onError: (error) => {
@@ -215,6 +222,12 @@ const EditUserInspectionRoom = () => {
         duration: 3000,
         richColors: true,
       });
+
+      // Invalidate Queries
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionDetailsQuery", inspectionId],
+      });
+
       navigate(-1);
     },
 
