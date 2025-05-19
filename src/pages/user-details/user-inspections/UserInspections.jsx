@@ -199,7 +199,11 @@ const UserInspections = () => {
         <Table.DoubleColumn>
           <Table.ItemActions>
             <IconLink
-              href={`details/${inspection._id}`}
+              href={
+                inspection?.isInspectionCompleted
+                  ? `/user-details/${userId}/completed-inspection/details/${inspection._id}`
+                  : `details/${inspection._id}`
+              }
               icon={<VIEW_DETAIL_ICON className="h-[16px]" />}
               label={
                 <>
