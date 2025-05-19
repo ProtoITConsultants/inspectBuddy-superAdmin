@@ -555,4 +555,22 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Fetch Inspection Details for Completed Inspection
+  getCompleteInspectionDetails: async ({ inspectionId }) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_DETAILS_ENDPOINTS.GET_COMPLETED_INSPECTION_DETAILS_URL({
+          inspectionId,
+        })
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Inspection Details", error);
+      throw new Error(
+        error.response?.data?.message || "Error fetching Inspection Details"
+      );
+    }
+  },
 };

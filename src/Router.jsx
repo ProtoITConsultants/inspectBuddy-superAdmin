@@ -34,6 +34,8 @@ import RestoreRequests from "./pages/restore-requests/RestoreRequests";
 import RestoreRequestDetail from "./pages/restore-requests/request-details/RestoreRequestDetail";
 import InspectionLogs from "./pages/user-details/user-inspections/inspection-logs/InspectionLogs";
 import FinalizeUserInspection from "./pages/user-details/user-inspections/finzalize-inspection/FinalizeUserInspection";
+import CompletedInspectionDetails from "./pages/user-details/user-inspections/completed-inspection-details/CompletedInspectionDetails";
+import CompletedInspectionDetailsRoot from "./layouts/CompletedInspectionDetailsRoot";
 
 export const router = createBrowserRouter([
   {
@@ -189,6 +191,17 @@ export const router = createBrowserRouter([
           {
             path: ":propertyId/edit-property",
             element: <EditUserProperty />,
+          },
+        ],
+      },
+
+      {
+        path: ":userId/completed-inspection/details",
+        element: <CompletedInspectionDetailsRoot />,
+        children: [
+          {
+            path: ":inspectionId",
+            element: <CompletedInspectionDetails />,
           },
         ],
       },

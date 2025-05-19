@@ -15,6 +15,7 @@ import { RouterProvider } from "react-router";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/charts/styles.css";
+import "@mantine/carousel/styles.css";
 
 // Importing Mantine Provider
 import { MantineProvider, createTheme } from "@mantine/core";
