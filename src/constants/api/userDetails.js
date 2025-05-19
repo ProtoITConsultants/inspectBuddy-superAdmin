@@ -130,6 +130,7 @@ const FETCH_INSPECTION_LOGS_URL = ({ userId, inspectionId, page }) =>
 const SAVE_INSPECTION_AS_DRAFT_URL = `/saveInspectionDraft`;
 const GET_COMPLETED_INSPECTION_DETAILS_URL = ({ inspectionId }) =>
   `/getCompleteInspection/${encodeURIComponent(inspectionId)}`;
+const RE_EDIT_INSPECTION_REPORT_URL = "/reEditInspection";
 
 const USER_DETAILS_ENDPOINTS = {
   // User Details
@@ -199,6 +200,7 @@ const USER_DETAILS_ENDPOINTS = {
   FETCH_INSPECTION_LOGS_URL,
   SAVE_INSPECTION_AS_DRAFT_URL,
   GET_COMPLETED_INSPECTION_DETAILS_URL,
+  RE_EDIT_INSPECTION_REPORT_URL,
 };
 
 export default USER_DETAILS_ENDPOINTS;

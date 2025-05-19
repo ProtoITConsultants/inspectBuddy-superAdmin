@@ -20,8 +20,6 @@ const CompletedInspectionDetails = () => {
       userInspectionsAPIs.getCompleteInspectionDetails({ inspectionId }),
   });
 
-  console.log("inspectionDetails", inspectionDetails);
-
   if (isPending) {
     return <div>Loading...</div>;
   }

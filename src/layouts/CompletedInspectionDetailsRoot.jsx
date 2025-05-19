@@ -1,10 +1,10 @@
-import { Outlet, useParams } from "react-router";
+import { Outlet, useNavigate, useParams } from "react-router";
 import Navbar from "../components/Navbar/Navbar";
 import React from "react";
 import NoSidebarBackButton from "../components/ui/NoSidebarBackButton";
 import Button from "../components/ui/Button";
 import { EDIT_DETAILS_ICON } from "../assets/icons/EditIcon";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GENERATE_REPORT_ICON } from "../assets/icons/DynamicIcons";
 import { toast } from "sonner";
 import { userInspectionsAPIs } from "../features/user-details/api/user-inspections";
@@ -12,10 +12,38 @@ import { Group } from "@mantine/core";
 
 const CompletedInspectionDetailsRoot = () => {
   // Hooks
+  const queryClient = useQueryClient();
   const { userId, inspectionId } = useParams();
+  const navigate = useNavigate();
 
   // Generate Report PDF - Mutation
-  const reEditInspectionReport = useMutation({});
+  const reEditInspectionReport = useMutation({
+    mutationFn: () =>
+      userInspectionsAPIs.reEditInspectionReport({ inspectionId }),
+
+    onSuccess: () => {
+      toast.success("Inspection report re-edited successfully", {
+        description: "You can now edit the inspection report.",
+      });
+      const filtersData = {};
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionsQuery", filtersData, userId],
+      });
+
+      navigate(
+        `/user-details/${userId}/inspections/details/${inspectionId}/edit-details`,
+        {
+          replace: true,
+        }
+      );
+    },
+
+    onError: (error) => {
+      toast.error("Error re-editing inspection report", {
+        description: error?.message || "Something went wrong",
+      });
+    },
+  });
 
   // Generate Report PDF - Mutation
   // Generate Report PDF - Mutation

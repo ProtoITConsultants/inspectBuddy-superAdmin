@@ -573,4 +573,22 @@ export const userInspectionsAPIs = {
       );
     }
   },
+
+  // Re-Edit Inspection Report
+  reEditInspectionReport: async ({ inspectionId }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.RE_EDIT_INSPECTION_REPORT_URL,
+        {
+          inspectionId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error re-editing Inspection Report", error);
+      throw new Error(
+        error.response?.data?.message || "Error re-editing Inspection Report"
+      );
+    }
+  },
 };

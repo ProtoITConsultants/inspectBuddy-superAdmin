@@ -6,7 +6,9 @@ import { DEFAULT_ELEMENT_IMAGE } from "./../../../../../assets/icons/DefaultElem
 const Header = ({ heading, createdAt, updatedAt }) => {
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="text-[32px] font-bold text-dark-blue">{heading}</h1>
+      <h1 className="sm:text-[32px] text-[24px] font-bold text-dark-blue">
+        {heading}
+      </h1>
       <p className="text-[16px] text-dark-blue opacity-50">
         Created on: {convertDateFormate.inspectionDetails(createdAt)}
       </p>
@@ -19,7 +21,7 @@ const Header = ({ heading, createdAt, updatedAt }) => {
 
 const Root = ({ children }) => {
   return (
-    <div className="space-y-[16px] p-[20px] bg-white rounded-[16px] shadow-sm shadow-gray-100">
+    <div className="space-y-[16px] sm:p-[20px] p-[12px] bg-white rounded-[16px] shadow-sm shadow-gray-100">
       {children}
     </div>
   );
@@ -175,7 +177,7 @@ const ElementChecklist = ({ checkListQuestions }) => {
                         question.answer === option.option && "bg-primary"
                       } w-full rounded-[8px] p-[8px] ${
                         option.option === question?.answer && "text-white"
-                      } text-[12px]`}
+                      } text-[12px] text-center`}
                     >
                       {option.iconId ? (
                         QUESTIONS_ICONS_LIST.find(
