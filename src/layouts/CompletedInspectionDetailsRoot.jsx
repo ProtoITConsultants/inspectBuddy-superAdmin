@@ -9,6 +9,7 @@ import { GENERATE_REPORT_ICON } from "../assets/icons/DynamicIcons";
 import { toast } from "sonner";
 import { userInspectionsAPIs } from "../features/user-details/api/user-inspections";
 import { Group } from "@mantine/core";
+import LoadingBackdrop from "../components/ui/LoadingBackdrop";
 
 const CompletedInspectionDetailsRoot = () => {
   // Hooks
@@ -76,6 +77,7 @@ const CompletedInspectionDetailsRoot = () => {
 
   return (
     <main className="App overflow-x-hidden">
+      {reEditInspectionReport.isPending && <LoadingBackdrop />}
       <section className="fixed top-0 z-[10] flex">
         <Navbar withSidebar={false} />
       </section>

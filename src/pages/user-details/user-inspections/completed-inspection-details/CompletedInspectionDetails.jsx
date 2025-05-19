@@ -4,6 +4,7 @@ import { userInspectionsAPIs } from "./../../../../features/user-details/api/use
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import CompletedInspection from "../../../../features/user-details/components/inspections/details/CompletedInspectionDetails";
 import { toast } from "sonner";
+import CompletedInspectionSkeleton from "../../../../features/user-details/components/inspections/CompletedInspectionSkeleton";
 
 const CompletedInspectionDetails = () => {
   // Hooks
@@ -21,7 +22,7 @@ const CompletedInspectionDetails = () => {
   });
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <CompletedInspectionSkeleton />;
   }
 
   if (isError) {
