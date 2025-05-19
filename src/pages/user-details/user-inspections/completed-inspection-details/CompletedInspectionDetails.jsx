@@ -1,15 +1,22 @@
-import { useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userInspectionsAPIs } from "./../../../../features/user-details/api/user-inspections";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import CompletedInspection from "../../../../features/user-details/components/inspections/details/CompletedInspectionDetails";
 import { toast } from "sonner";
 import CompletedInspectionSkeleton from "../../../../features/user-details/components/inspections/CompletedInspectionSkeleton";
+import { Group } from "@mantine/core";
+import Button from "../../../../components/ui/Button";
+import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
+import { GENERATE_REPORT_ICON } from "../../../../assets/icons/DynamicIcons";
 
 const CompletedInspectionDetails = () => {
   // Hooks
-  const { inspectionId } = useParams();
+  const { inspectionId, userId } = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
+  // Fetch Inspection Details - Query
   const {
     data: inspectionDetails,
     isPending,
@@ -19,6 +26,63 @@ const CompletedInspectionDetails = () => {
     queryKey: ["completed-inspection-details", inspectionId],
     queryFn: () =>
       userInspectionsAPIs.getCompleteInspectionDetails({ inspectionId }),
+  });
+
+  // Re-edit Inspection - Mutation
+  const reEditInspectionReport = useMutation({
+    mutationFn: () =>
+      userInspectionsAPIs.reEditInspectionReport({ inspectionId }),
+
+    onSuccess: () => {
+      toast.success("Inspection report re-edited successfully", {
+        description: "You can now edit the inspection report.",
+      });
+      const filtersData = {};
+      queryClient.invalidateQueries({
+        queryKey: ["inspectionsQuery", filtersData, userId],
+      });
+
+      navigate(
+        `/user-details/${userId}/inspections/details/${inspectionId}/edit-details`,
+        {
+          replace: true,
+        }
+      );
+    },
+
+    onError: (error) => {
+      toast.error("Error re-editing inspection report", {
+        description: error?.message || "Something went wrong",
+      });
+    },
+  });
+
+  // Generate Report PDF - Mutation
+  const generateInspectionPDF = useMutation({
+    mutationFn: () =>
+      toast.promise(
+        userInspectionsAPIs.generateInspectionPDF({
+          inspectionId,
+          userId,
+        }),
+        {
+          loading: "Generating PDF file...",
+          success: async (data) => {
+            const { url } = data;
+            const link = document.createElement("a");
+            link.href = url;
+            link.target = "_blank"; // Open in new tab
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            return "PDF generated successfully!";
+          },
+          error: "Error generating PDF file.",
+          duration: 3000,
+          richColors: true,
+        }
+      ),
   });
 
   if (isPending) {
@@ -32,6 +96,26 @@ const CompletedInspectionDetails = () => {
   }
   return (
     <DetailPagesRoot className="!overflow-hidden !h-full !space-y-[24px]">
+      <Group className="sm:!hidden !flex !justify-end">
+        <Button
+          icon={
+            <EDIT_DETAILS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
+          }
+          buttonType="iconButton"
+          onClick={() => reEditInspectionReport.mutate()}
+          label="Re-Edit Report"
+          className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium whitespace-nowrap"
+        />
+        <Button
+          icon={
+            <GENERATE_REPORT_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
+          }
+          buttonType="iconButton"
+          onClick={() => generateInspectionPDF.mutate()}
+          label="Generate Report"
+          className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium whitespace-nowrap"
+        />
+      </Group>
       <CompletedInspection.Header
         heading={inspectionDetails?.reportName}
         createdAt={inspectionDetails?.creationDate}

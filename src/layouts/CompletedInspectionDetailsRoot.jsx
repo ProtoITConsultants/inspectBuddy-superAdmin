@@ -17,7 +17,7 @@ const CompletedInspectionDetailsRoot = () => {
   const { userId, inspectionId } = useParams();
   const navigate = useNavigate();
 
-  // Generate Report PDF - Mutation
+  // Re-edit Inspection - Mutation
   const reEditInspectionReport = useMutation({
     mutationFn: () =>
       userInspectionsAPIs.reEditInspectionReport({ inspectionId }),
@@ -46,7 +46,6 @@ const CompletedInspectionDetailsRoot = () => {
     },
   });
 
-  // Generate Report PDF - Mutation
   // Generate Report PDF - Mutation
   const generateInspectionPDF = useMutation({
     mutationFn: () =>
@@ -83,7 +82,7 @@ const CompletedInspectionDetailsRoot = () => {
       </section>
       <React.Fragment>
         <NoSidebarBackButton>
-          <Group>
+          <Group className="sm:!flex !hidden">
             <Button
               icon={
                 <EDIT_DETAILS_ICON className="h-[16px] w-[16px] text-[#9EA3AE]" />
