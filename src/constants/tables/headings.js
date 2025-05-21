@@ -9,7 +9,7 @@ export const USERS_TABLE_HEADINGS = [
 // Sub Users Tables Headings - Sub Users page
 export const SUBUSERS_TABLE_HEADINGS = [
   { key: "addedOn", value: "Added On" },
-  { key: "userName", value: "User Name" },
+  { key: "userName", value: "Name" },
   { key: "lastOnline", value: "Last Online" },
   { key: "assignedCategories", value: "Assigned Categories" },
 ];

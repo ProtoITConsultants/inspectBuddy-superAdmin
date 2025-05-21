@@ -63,7 +63,13 @@ const EditSubUserDetails = () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["updateSubUserMutation"] });
 
-      navigate(`/user-details/${userId}/sub-users/details/${subUserId}`);
+      toast.success("Success!", {
+        description: `Sub User updated successfully.`,
+      });
+
+      navigate(`/user-details/${userId}/sub-users`, {
+        replace: true,
+      });
     },
     onError: (error) => {
       toast.error("Error!", {
