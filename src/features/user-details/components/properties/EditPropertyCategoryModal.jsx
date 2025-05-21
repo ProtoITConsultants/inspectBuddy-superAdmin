@@ -11,7 +11,6 @@ import ElementQuestionModal from "../common/AddElementQuestionComponents";
 import { ARROW_RIGHT_ICON } from "../../../../assets/icons/ArrowRightIcon";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
-import { PROPERTY_CATEGORY_ICONS } from "../../../../constants/propertyCategoryIcons";
 
 const EditPropertyCategoryModal = ({
   isModalOpen,
@@ -46,7 +45,8 @@ const EditPropertyCategoryModal = ({
     mutationFn: () =>
       userPropertiesAPIs.updatePropertyCategory({
         value: form.values.propertyCategory,
-        iconId: form.values.propertyCategoryIconId,
+        // Send Icon id as a string
+        iconId: form.values.propertyCategoryIconId.toString(),
         categoryId: categoryData?.categoryId,
         userId: userId,
       }),
@@ -62,9 +62,9 @@ const EditPropertyCategoryModal = ({
       onCloseModal();
       form.reset();
     },
-    onError: () => {
-      toast.error("Error!", {
-        description: `Couldn't create Property Category.`,
+    onError: (error) => {
+      toast.error("Couldn't update Property Category.", {
+        description: error?.message || "Something went wrong!",
         duration: 3000,
         richColors: true,
       });
@@ -96,14 +96,14 @@ const EditPropertyCategoryModal = ({
 
       formRef.current.setFieldValue(
         "propertyCategoryIconId",
-        categoryData?.iconId || ""
+        parseInt(categoryData?.iconId) || ""
       );
     }
   }, [categoryData, isModalOpen]);
 
-  const SELECTED_ICON = PROPERTY_CATEGORY_ICONS?.find(
+  const SELECTED_ICON = QUESTIONS_ICONS_LIST?.find(
     (icon) => icon.id === form.values.propertyCategoryIconId
-  )?.Icon;
+  )?.icon;
 
   return (
     <ModalRoot
@@ -126,7 +126,7 @@ const EditPropertyCategoryModal = ({
       >
         <Stepper.Step id="category-name-input">
           <h2 className="font-bold md:text-[18px] text-[16px] text-dark-blue mb-[16px]">
-            Add Property Category
+            Update Property Category
           </h2>
           <div className="flex flex-col gap-[5px] w-full">
             <div className="flex items-center gap-[12px] border border-[#CCE2FF] rounded-[12px_8px] p-[8px]">
@@ -147,7 +147,7 @@ const EditPropertyCategoryModal = ({
                   <p className={`text-[#6C727F] text-[14px] font-semibold`}>
                     Icon:
                   </p>
-                  {<SELECTED_ICON />}
+                  {SELECTED_ICON}
                   <Divider orientation="vertical" color="#CCE2FF" />
                   <Button
                     id="edit-property-category-icon"
@@ -192,7 +192,7 @@ const EditPropertyCategoryModal = ({
                   return;
                 }
               }}
-              label="Add Category"
+              label="Update"
               buttonColor="#FF613E"
               className="!font-bold hover:!bg-warning-red-dark"
             />
