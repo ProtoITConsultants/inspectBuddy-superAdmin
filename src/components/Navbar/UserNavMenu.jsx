@@ -2,9 +2,27 @@ import { Menu } from "@mantine/core";
 import logoutIcon from "../../assets/icons/logout-icon.svg";
 import arrowDownIcon from "../../assets/icons/arrowDown-icon.svg";
 import { useAuthStore } from "../../store/authStore";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const UserNavMenu = () => {
+  // Global State
   const user = useAuthStore((state) => state.user);
+
+  const logoutUser = useMutation({
+    mutationFn: () => {
+      window.location.reload();
+    },
+    onSuccess: () => {
+      // Optionally, you can add a success message or redirect here
+      window.location.replace("/login");
+    },
+    onError: (error) => {
+      toast.error("Could not log out!", {
+        description: error?.message,
+      });
+    },
+  });
 
   return (
     <Menu id="userProfileDropDownNavbar" shadow="md" position="top-end">
@@ -44,7 +62,7 @@ const UserNavMenu = () => {
               style={{ width: 20, height: 20 }}
             />
           }
-          onClick={() => {}}
+          onClick={() => logoutUser.mutate()}
         >
           Logout
         </Menu.Item>
