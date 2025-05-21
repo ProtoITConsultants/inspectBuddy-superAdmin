@@ -4,7 +4,7 @@ import useUserAddedPropertyCategories from "../../../../hooks/useUserAddedProper
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userDetailsAPIs } from "../../../../features/user-details/api";
 import { toast } from "sonner";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DetailPagesRoot from "../../../../features/user-details/components/DetailPagesRoot";
 import EditPropertyForm from "../../../../features/user-details/components/properties/details/EditPropertyDetails";
 import { TextInput } from "@mantine/core";
@@ -12,6 +12,7 @@ import CountryInput from "../../../../features/user-details/components/propertie
 import PropertyCategorySelect from "../../../../features/user-details/components/properties/PropertyCategorySelect";
 import Button from "../../../../components/ui/Button";
 import EditPropertySkeletion from "../../../../features/user-details/components/properties/details/EditPropertySkeletion";
+import AddPropertyCategoryModal from "../../../../features/user-details/components/properties/AddPropertyCategoryModal";
 
 // const PROPERTY_CATEGORIES = [
 //   { _id: 1, value: "Residential", iconId: "2" },
@@ -29,6 +30,10 @@ const EditUserProperty = () => {
 
   // Local States
   const [showCustomCategoryInput, setShowCustomCategoryInput] = useState(false);
+
+  // Local States
+  const [showAddPropertyCategoryModal, setShowAddPropertyCategoryModal] =
+    useState(false);
 
   //Local Variable to Store original Reference ID
   const originalReferenceId = useRef("");
@@ -193,137 +198,141 @@ const EditUserProperty = () => {
     });
   }
   return (
-    <DetailPagesRoot className="!h-full !overflow-hidden">
-      <EditPropertyForm.Root heading="Property Details">
-        <EditPropertyForm.ImageInput
-          imageURL={form.values.propertyImage}
-          inputLabel="Property Image"
-          onImageUpload={(imageFile) =>
-            form.setFieldValue("propertyImage", imageFile)
-          }
-          onImageRemove={() => form.setFieldValue("propertyImage", "")}
-          error={form.errors.propertyImage}
-        />
-        <EditPropertyForm.Form
-          onSubmit={form.onSubmit((values) =>
-            mutationUpdatePropertyDetails.mutate(values)
-          )}
-        >
-          <EditPropertyForm.DoubleColumnGrid>
-            <TextInput
-              label="Name"
-              placeholder="Enter property name"
-              {...form.getInputProps("propertyName")}
-              className="w-full font-medium"
-            />
-
-            <TextInput
-              label="House/Unit Number"
-              placeholder="Unit number"
-              {...form.getInputProps("propertyUnitNumber")}
-              className="w-full font-medium"
-            />
-
-            <TextInput
-              label="Street Address"
-              placeholder="Enter Street Address"
-              {...form.getInputProps("propertyStreetAddress")}
-              className="w-full font-medium"
-            />
-            <CountryInput
-              selectedCountry={form.values.propertyCountry}
-              onCountrySelect={(value) =>
-                form.setFieldValue("propertyCountry", value)
-              }
-              error={form.errors.propertyCountry}
-            />
-          </EditPropertyForm.DoubleColumnGrid>
-          <EditPropertyForm.TripleColumnGrid>
-            <TextInput
-              label="City"
-              placeholder="Enter City"
-              {...form.getInputProps("propertyCity")}
-              className="w-full font-medium"
-            />
-
-            <TextInput
-              label="State/Province"
-              placeholder="State/Province"
-              {...form.getInputProps("propertyState")}
-              className="w-full font-medium"
-            />
-
-            <TextInput
-              label="Zip/Postal Code"
-              placeholder="Zip/Postal Code"
-              {...form.getInputProps("propertyZipCode")}
-              className="w-full font-medium md:col-span-1 col-span-2"
-            />
-          </EditPropertyForm.TripleColumnGrid>
-          <EditPropertyForm.DoubleColumnGrid>
-            <PropertyCategorySelect
-              options={USER_ADDED_PROPERTY_CATEGORIES}
-              value={form.values.propertyCategory}
-              error={form.errors.propertyCategory}
-              onChange={(value) => {
-                if (value === "add-category") {
-                  // Handle the custom action when "Add a Category" is selected
-                  setShowCustomCategoryInput(true); // For example, showing a custom input for adding a new category
-                  form.setFieldValue("propertyCategory", {
-                    value: "",
-                    iconId: "",
-                  });
-                } else {
-                  setShowCustomCategoryInput(false);
-                  form.setFieldValue("propertyCategory", {
-                    value: value,
-                    iconId: USER_ADDED_PROPERTY_CATEGORIES.find(
-                      (cat) => cat.value === value
-                    )?.iconId,
-                  });
-                }
-              }}
-            />
-            <TextInput
-              label="Reference ID"
-              placeholder="Enter Reference ID"
-              {...form.getInputProps("referenceId")}
-              className="w-full font-medium"
-            />
-
-            {showCustomCategoryInput && (
+    <React.Fragment>
+      <AddPropertyCategoryModal
+        isModalOpen={showAddPropertyCategoryModal}
+        onCloseModal={() => {
+          setShowAddPropertyCategoryModal(false);
+        }}
+      />
+      <DetailPagesRoot className="!h-full !overflow-hidden">
+        <EditPropertyForm.Root heading="Property Details">
+          <EditPropertyForm.ImageInput
+            imageURL={form.values.propertyImage}
+            inputLabel="Property Image"
+            onImageUpload={(imageFile) =>
+              form.setFieldValue("propertyImage", imageFile)
+            }
+            onImageRemove={() => form.setFieldValue("propertyImage", "")}
+            error={form.errors.propertyImage}
+          />
+          <EditPropertyForm.Form
+            onSubmit={form.onSubmit((values) =>
+              mutationUpdatePropertyDetails.mutate(values)
+            )}
+          >
+            <EditPropertyForm.DoubleColumnGrid>
               <TextInput
-                placeholder="Please Enter Category Here"
-                value={form.values.propertyCategory.value}
-                onChange={(e) => {
-                  form.setFieldValue("propertyCategory", {
-                    value: e.target.value,
-                    iconId: "",
-                  });
-                }}
+                label="Name"
+                placeholder="Enter property name"
+                {...form.getInputProps("propertyName")}
                 className="w-full font-medium"
               />
-            )}
-          </EditPropertyForm.DoubleColumnGrid>
-          <EditPropertyForm.ActionButtons>
-            <Button
-              id="update-property"
-              label="Update Property"
-              type="submit"
-              className="sm:!w-[216px] w-full font-bold !py-[12px]"
-              buttonType="contained"
-            />
-            <Link
-              to={-1}
-              id="cancel-property-update"
-              className="sm:w-[216px] w-full font-bold text-[#FF613E] hover:text-white hover:bg-[#FF613E] py-[12px] flex items-center justify-center border rounded-[8px]"
-            >
-              Cancel
-            </Link>
-          </EditPropertyForm.ActionButtons>
-        </EditPropertyForm.Form>
-      </EditPropertyForm.Root>
-    </DetailPagesRoot>
+
+              <TextInput
+                label="House/Unit Number"
+                placeholder="Unit number"
+                {...form.getInputProps("propertyUnitNumber")}
+                className="w-full font-medium"
+              />
+
+              <TextInput
+                label="Street Address"
+                placeholder="Enter Street Address"
+                {...form.getInputProps("propertyStreetAddress")}
+                className="w-full font-medium"
+              />
+              <CountryInput
+                selectedCountry={form.values.propertyCountry}
+                onCountrySelect={(value) =>
+                  form.setFieldValue("propertyCountry", value)
+                }
+                error={form.errors.propertyCountry}
+              />
+            </EditPropertyForm.DoubleColumnGrid>
+            <EditPropertyForm.TripleColumnGrid>
+              <TextInput
+                label="City"
+                placeholder="Enter City"
+                {...form.getInputProps("propertyCity")}
+                className="w-full font-medium"
+              />
+
+              <TextInput
+                label="State/Province"
+                placeholder="State/Province"
+                {...form.getInputProps("propertyState")}
+                className="w-full font-medium"
+              />
+
+              <TextInput
+                label="Zip/Postal Code"
+                placeholder="Zip/Postal Code"
+                {...form.getInputProps("propertyZipCode")}
+                className="w-full font-medium md:col-span-1 col-span-2"
+              />
+            </EditPropertyForm.TripleColumnGrid>
+            <EditPropertyForm.DoubleColumnGrid>
+              <PropertyCategorySelect
+                options={USER_ADDED_PROPERTY_CATEGORIES}
+                value={form.values.propertyCategory}
+                error={form.errors.propertyCategory}
+                onChange={(value) => {
+                  if (value === "add-category") {
+                    setShowAddPropertyCategoryModal(true);
+                    form.setFieldValue("propertyCategory", {});
+                  } else {
+                    setShowCustomCategoryInput(false);
+                    form.setFieldValue("propertyCategory", {
+                      value: value,
+                      iconId: USER_ADDED_PROPERTY_CATEGORIES.find(
+                        (cat) => cat.value === value
+                      )?.iconId,
+                    });
+                  }
+                }}
+              />
+              <TextInput
+                label="Reference ID"
+                placeholder="Enter Reference ID"
+                {...form.getInputProps("referenceId")}
+                className="w-full font-medium"
+              />
+
+              {showCustomCategoryInput && (
+                <TextInput
+                  placeholder="Please Enter Category Here"
+                  value={form.values.propertyCategory.value}
+                  onChange={(e) => {
+                    form.setFieldValue("propertyCategory", {
+                      value: e.target.value,
+                      iconId: "",
+                    });
+                  }}
+                  className="w-full font-medium"
+                />
+              )}
+            </EditPropertyForm.DoubleColumnGrid>
+            <EditPropertyForm.ActionButtons>
+              <Button
+                id="update-property"
+                label="Update Property"
+                type="submit"
+                className="sm:!w-[216px] w-full font-bold !py-[12px]"
+                buttonType="contained"
+              />
+              <Link
+                to={-1}
+                id="cancel-property-update"
+                className="sm:w-[216px] w-full font-bold text-[#FF613E] hover:text-white hover:bg-[#FF613E] py-[12px] flex items-center justify-center border rounded-[8px]"
+              >
+                Cancel
+              </Link>
+            </EditPropertyForm.ActionButtons>
+          </EditPropertyForm.Form>
+        </EditPropertyForm.Root>
+      </DetailPagesRoot>
+    </React.Fragment>
   );
 };
 
