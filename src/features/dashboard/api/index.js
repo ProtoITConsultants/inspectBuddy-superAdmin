@@ -47,7 +47,7 @@ export const dashboardServices = {
           chartColor: "#0A82FD",
         },
         {
-          label: "Current Month Sell",
+          label: "Current Month Sales",
           statCount: 3.34,
           icon: monthlySellIcon,
           statPercentage: 125,
@@ -89,7 +89,7 @@ export const dashboardServices = {
           chartColor: "#EF5DA8",
         },
         {
-          label: "Total Sell",
+          label: "Total Sales",
           statCount: 0.34,
           icon: totalSellIcon,
           statPercentage: 125,

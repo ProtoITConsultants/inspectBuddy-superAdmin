@@ -1,6 +1,6 @@
 const planConfig = {
   FREETIER: {
-    status: "Free Plan",
+    status: "Free Tier",
     bgColor: "rgba(205,192,81,0.14)",
     textColor: "#CDC051",
   },
@@ -10,12 +10,12 @@ const planConfig = {
     textColor: "#5AA63F",
   },
   STANDARDTIER: {
-    status: "Standard Plan",
+    status: "Standard Tier",
     bgColor: "rgba(115,63,166,0.14)",
     textColor: "#733FA6",
   },
   TOPTIER: {
-    status: "Top Tier Plan",
+    status: "Top Tier",
     bgColor: "rgba(63,141,166,0.14)",
     textColor: "#3F8DA6",
   },

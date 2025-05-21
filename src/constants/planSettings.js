@@ -8,7 +8,7 @@ const PLAN_FIELDS = [
   { name: "propertyLimit", label: "Properties Limit" },
   { name: "roomLimit", label: "Rooms Limit per Inspection" },
   { name: "elementLimit", label: "Elements Limit per Room" },
-  { name: "monthlyPDFLimit", label: "PDF Export Limit (Per Month)" },
+  { name: "monthlyPDFLimit", label: "PDF Export Limit (per month)" },
 ];
 
 // Plan Sections

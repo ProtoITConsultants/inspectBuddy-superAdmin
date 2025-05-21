@@ -114,6 +114,32 @@ const UserTemplates = () => {
     },
   });
 
+  // Clone Template - Mutation
+  const cloneTemplate = useMutation({
+    mutationFn: (templateId) =>
+      userTemplatesAPIs.cloneTemplate({
+        templateId: templateId,
+        userId: userId,
+      }),
+    onSuccess: () => {
+      setTemplateToDeleteData({ openModal: false, templateId: "" });
+      queryClient.invalidateQueries({
+        queryKey: ["templatesQuery", filtersData, userId],
+      });
+      toast.success("Template Cloned Successfully!", {
+        duration: 3000,
+        richColors: true,
+      });
+    },
+    onError: () => {
+      toast.error("Error!", {
+        description: "Couldn't clone Template!",
+        duration: 3000,
+        richColors: true,
+      });
+    },
+  });
+
   if (isError) {
     return toast.error("Error!", {
       description: error.message || "Couldn't fetch user's Templates!",
@@ -158,7 +184,7 @@ const UserTemplates = () => {
               buttonType="iconButton"
               icon={<CLONE_ICON className="text-[#9EA3AE] h-[16px] w-[16px]" />}
               type="button"
-              onClick={() => {}}
+              onClick={() => cloneTemplate.mutate(template._id)}
               className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#E5E6EB] w-fit !text-dark-blue !text-[12px] h-fit !font-medium"
             />
             <Button
@@ -305,8 +331,8 @@ const UserTemplates = () => {
               : "w1150:!h-[calc(100%-139.59px)] lg:h-[calc(100%-115.59px)] h-[calc(100%-112.69px)]"
           }`}
         >
-          {isPending ? (
-            <TableSkeleton />
+          {isPending || cloneTemplate.isPending ? (
+            <TableSkeleton itemsLength={4} />
           ) : data?.templates?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
               <p className="text-[14px] font-medium text-[#6C727F] text-center">

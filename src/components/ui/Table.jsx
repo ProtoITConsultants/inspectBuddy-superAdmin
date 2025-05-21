@@ -1,6 +1,6 @@
 import { cn } from "../../utils/cn";
-import filledArrowDown from "../../assets/icons/filledArrowDown.svg";
-import filledArrowUp from "../../assets/icons/filledArrowUp.svg";
+// import filledArrowDown from "../../assets/icons/filledArrowDown.svg";
+// import filledArrowUp from "../../assets/icons/filledArrowUp.svg";
 import { Link } from "react-router";
 import { NEXT_ICON, PREVIOUS_ICON } from "./../../assets/icons/DynamicIcons";
 
@@ -54,7 +54,7 @@ const HeaderItem = ({ heading }) => {
   return (
     <div className="flex items-center gap-[8px]">
       <h2 className="font-bold text-[16px] text-dark-blue">{heading}</h2>
-      <div className="flex flex-col justify-center gap-[4px] h-[8px]">
+      {/* <div className="flex flex-col justify-center gap-[4px] h-[8px]">
         <img
           src={filledArrowUp}
           alt="Filled Arrow Up"
@@ -67,7 +67,7 @@ const HeaderItem = ({ heading }) => {
           className="hover:cursor-pointer"
           onClick={() => {}}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

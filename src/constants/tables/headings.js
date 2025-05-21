@@ -46,8 +46,8 @@ export const INSPECTION_LOGS_TABLE_HEADINGS = [
 // User Requests Tables Headings - User Requests page
 export const USER_REQUESTS_TABLE_HEADINGS = [
   { key: "serialNo", value: "S#NO" },
-  { key: "userName", value: "User Name" },
-  { key: "userEmail", value: "User Email" },
+  { key: "userName", value: "Name" },
+  { key: "userEmail", value: "Email" },
 ];
 export const USER_REQUESTS_FOR_INSPECTIONS_TABLE_HEADINGS = [
   { key: "reportName", value: "Report Name" },

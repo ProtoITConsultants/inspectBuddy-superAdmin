@@ -73,6 +73,26 @@ export const userTemplatesAPIs = {
     }
   },
 
+  // Clone Template
+  cloneTemplate: async ({ templateId, userId }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_DETAILS_ENDPOINTS.CLONE_TEMPLATE_URL({
+          userId,
+        }),
+        {
+          templateId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error cloning Template", error);
+      throw new Error(
+        error.response?.data?.message || "Error cloning Template"
+      );
+    }
+  },
+
   // Delete Questions from a Room Element in a Template
   deleteQuestionsFromElement: async ({
     templateId,

@@ -484,11 +484,11 @@ const RestoreRequestDetail = () => {
               }`}
             >
               {requestsData?.isPending ? (
-                <TableSkeleton />
+                <TableSkeleton itemsLength={4} />
               ) : requestsData?.requestedTemplates?.requests?.length < 1 ? (
                 <div className="flex justify-center items-center h-full">
                   <p className="text-[14px] font-medium text-[#6C727F] text-center">
-                    No Request Found for restoring templates.
+                    No request found for restoring templates.
                   </p>
                 </div>
               ) : (
@@ -586,11 +586,11 @@ const RestoreRequestDetail = () => {
               }`}
             >
               {requestsData?.isPending ? (
-                <TableSkeleton />
+                <TableSkeleton itemsLength={4} />
               ) : requestsData?.requestedInspections?.requests?.length < 1 ? (
                 <div className="flex justify-center items-center h-full">
                   <p className="text-[14px] font-medium text-[#6C727F] text-center">
-                    No Request Found for restoring Inspections.
+                    No request found for restoring inspections.
                   </p>
                 </div>
               ) : (
@@ -691,11 +691,11 @@ const RestoreRequestDetail = () => {
               }`}
             >
               {requestsData?.isPending ? (
-                <TableSkeleton />
+                <TableSkeleton itemsLength={4} />
               ) : requestsData?.requestedProperties?.requests.length < 1 ? (
                 <div className="flex justify-center items-center h-full">
                   <p className="text-[14px] font-medium text-[#6C727F] text-center">
-                    No User Request Found for restoring properties.
+                    No request found for restoring properties.
                   </p>
                 </div>
               ) : (

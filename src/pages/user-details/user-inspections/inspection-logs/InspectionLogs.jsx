@@ -107,7 +107,7 @@ const InspectionLogs = () => {
           } overflow-auto md:px-[12px] md:pt-[24px]`}
         >
           {isPending ? (
-            <TableSkeleton />
+            <TableSkeleton itemsLength={4} />
           ) : data?.reports?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
               <p className="text-[14px] font-medium text-dark-gray text-center">

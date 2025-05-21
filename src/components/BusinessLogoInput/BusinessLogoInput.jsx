@@ -39,7 +39,7 @@ const BusinessLogoInput = ({
         <img
           src={selectedImage || pictureURL || companyLogoIcon}
           alt="avatar-icon"
-          className={`w-[100px] h-[100px] rounded-[4px]`}
+          className={`w-[100px] h-[100px] rounded-[4px] object-cover`}
         />
 
         {showUploadBtn && (

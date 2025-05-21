@@ -87,7 +87,7 @@ const AddNewUser = () => {
           <UserDetailsForm.UserDetailsFormRow>
             <TextInput
               label="Name"
-              placeholder="Enter Fullname"
+              placeholder="Enter Full name"
               {...newUserForm.getInputProps("fullname")}
               className="w-full font-medium"
             />

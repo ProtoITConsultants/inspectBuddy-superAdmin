@@ -53,7 +53,7 @@ const Graph = ({ graphData }) => {
           >
             {graphData.statPercentage}%
           </span>
-          &nbsp;<span className="uppercase text-dark-gray">VS PREV.</span>
+          &nbsp;<span className="text-dark-gray">vs PREV.</span>
           &nbsp;<span className="text-dark-blue">Month</span>
         </p>
       </div>

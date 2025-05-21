@@ -327,7 +327,7 @@ const ViewUserDetails = () => {
             disabled={!editingUserDetails}
           />
           <TextInput
-            label="Adress"
+            label="Address"
             placeholder="Enter Business Address"
             {...form.getInputProps("businessAddress")}
             value={form.values.businessAddress}

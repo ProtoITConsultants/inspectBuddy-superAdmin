@@ -220,7 +220,7 @@ const UsersList = () => {
           }`}
         >
           {isPending ? (
-            <TableSkeleton />
+            <TableSkeleton itemsLength={4} />
           ) : data?.users?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
               <p className="text-[14px] font-medium text-[#6C727F] text-center">

@@ -54,6 +54,8 @@ const DELETE_USER_PROPERTY_CATEGORY_URL = ({ userId, categoryId }) =>
 // Templates
 const CREATE_NEW_TEMPLATE_URL = ({ userId }) =>
   `/createInspectionTemplateDraft?id=${encodeURIComponent(userId)}`;
+const CLONE_TEMPLATE_URL = ({ userId }) =>
+  `/cloneInspectionTemplate?id=${encodeURIComponent(userId)}`;
 const DELETE_USER_TEMPLATE_URL = ({ userId, templateId }) =>
   `/deleteTemplate/${encodeURIComponent(templateId)}?id=${encodeURIComponent(
     userId
@@ -155,6 +157,7 @@ const USER_DETAILS_ENDPOINTS = {
   FETCH_LINKED_PROPERTY_INSPECTIONS_URL,
   // Templates
   CREATE_NEW_TEMPLATE_URL,
+  CLONE_TEMPLATE_URL,
   DELETE_USER_TEMPLATE_URL,
   FETCH_USER_ADDED_TEMPLATES_URL,
   FETCH_TEMPLATE_DETAILS_URL,

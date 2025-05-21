@@ -342,7 +342,7 @@ const UserInspections = () => {
           } pt-[12px]`}
         >
           {userInspections?.isPending ? (
-            <TableSkeleton />
+            <TableSkeleton itemsLength={4} />
           ) : userInspections?.data?.inspections?.length < 1 ? (
             <div className="flex justify-center items-center h-full">
               <p className="text-[14px] font-medium text-dark-gray text-center">
