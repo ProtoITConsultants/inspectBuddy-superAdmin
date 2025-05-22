@@ -26,7 +26,6 @@
     "browser-image-compression": "^2.0.2",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
-    "js-cookie": "^3.0.5",
     "lodash.debounce": "^4.0.8",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
