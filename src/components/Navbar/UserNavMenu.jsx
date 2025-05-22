@@ -4,21 +4,28 @@ import arrowDownIcon from "../../assets/icons/arrowDown-icon.svg";
 import { useAuthStore } from "../../store/authStore";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
+import { authServices } from "../../features/auth/services/authServices";
 
 const UserNavMenu = () => {
+  const navigate = useNavigate();
+
   // Global State
   const user = useAuthStore((state) => state.user);
 
   const logoutUser = useMutation({
-    mutationFn: () => {
-      window.location.reload();
-    },
+    mutationFn: () => authServices.logout(),
     onSuccess: () => {
-      // Optionally, you can add a success message or redirect here
-      window.location.replace("/login");
+      navigate("/login", {
+        replace: true,
+      });
+
+      toast.success("Logout Successfully!", {
+        description: "You have been logged out successfully.",
+      });
     },
     onError: (error) => {
-      toast.error("Could not log out!", {
+      toast.error("Logout Failed!", {
         description: error?.message,
       });
     },

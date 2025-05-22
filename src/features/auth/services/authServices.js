@@ -1,5 +1,6 @@
 import axiosInstance from "../../../utils/axiosInstance";
 import AUTH_ENDPOINTS from "../../../constants/api/auth";
+import axios from "axios";
 
 export const authServices = {
   login: async ({ email, password }) => {
@@ -14,6 +15,21 @@ export const authServices = {
     } catch (error) {
       console.error("Login failed:", error);
       throw new Error(error.response?.data?.message || "Login failed");
+    }
+  },
+  logout: async () => {
+    try {
+      const response = await axios.post(
+        "https://api.inspectbuddy.app/api/auth/logout",
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Logout failed:", error);
+      throw new Error(error.response?.data?.message || "Logout failed");
     }
   },
   checkAuthStatus: async () => {
