@@ -55,7 +55,7 @@ const DeletePropertyCategoryModal = ({
     >
       <div className="flex flex-col gap-2">
         <h2 className="font-bold md:text-[18px] text-[16px] text-dark-blue mb-[16px]">
-          Add Property Category
+          Delete Property Category
         </h2>
         <p className="text-gray-500 text-[14px]">
           Are you sure you want to delete this <b>({categoryData?.name})</b>
