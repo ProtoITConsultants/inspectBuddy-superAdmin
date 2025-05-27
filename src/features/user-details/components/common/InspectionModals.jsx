@@ -343,7 +343,12 @@ const AddQuestion = ({
     updateElementQuestions: (data) => {
       const shouldSaveQuestion = newQuestionForm.values.shouldSave;
       if (shouldSaveQuestion) {
-        setSavedQuestions(data.newSavedQuestions[0]);
+        const updatedSavedQuestions = [
+          ...savedQuestions,
+          data.newSavedQuestions[0],
+        ];
+
+        setSavedQuestions(updatedSavedQuestions);
       }
       if (elementCategory === "inspection") {
         const updatedElements = selectedInspectionRoomElements?.map(
@@ -855,6 +860,10 @@ const AddQuestion = ({
                   ]}
                   onSelect={(answerType) => {
                     questionToPreviewForm.setFieldValue("type", answerType);
+                    setQuestionToPreview({
+                      ...questionToPreview,
+                      type: answerType,
+                    });
                   }}
                   error={questionToPreviewForm.errors.type}
                   value={questionToPreviewForm.values.type}

@@ -27,12 +27,7 @@ const PropertyCategorySelect = ({ options, value, error, onChange }) => {
           );
         }
 
-        const PROPERTY_CATEGORIES = [
-          { _id: 1, value: "Residential", iconId: "2" },
-          { _id: 2, value: "Commercial", iconId: "5" },
-        ];
-
-        const iconId = PROPERTY_CATEGORIES.find(
+        const iconId = options.find(
           (cat) => cat.value === category.option.value
         )?.iconId;
 
