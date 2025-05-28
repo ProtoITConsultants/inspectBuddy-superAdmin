@@ -17,6 +17,7 @@ import { userRestoreRequestsAPIs } from "./../../../features/user-requests/api/i
 import Button from "./../../../components/ui/Button";
 import RequestStatusCard from "../../../features/user-requests/components/RequestStatusCard";
 import { toast } from "sonner";
+import LoadingBackdrop from "./../../../components/ui/LoadingBackdrop";
 
 const RestoreRequestDetail = () => {
   // Local States
@@ -406,323 +407,331 @@ const RestoreRequestDetail = () => {
   };
 
   return (
-    <RequestDetailsRoot className="!overflow-hidden max-w-[1220px]">
-      <Tabs
-        value={activeTab}
-        onChange={(value) => setActiveTab(value)}
-        keepMounted={false}
-        color="#2A85FF"
-        classNames={{
-          root: "h-full",
-          list: "w-fit",
-          panel: "h-[calc(100%-60px)]",
-        }}
-      >
-        <Tabs.List className="mb-[24px]">
-          <Tabs.Tab value="TEMPLATE">For Templates</Tabs.Tab>
-          <Tabs.Tab value="INSPECTION">For Inspections</Tabs.Tab>
-          <Tabs.Tab value="PROPERTY">For Properties</Tabs.Tab>
-        </Tabs.List>
-        <Tabs.Panel value="TEMPLATE">
-          {/* User Requests Table - Templates*/}
-          <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
-            {/* Table Header */}
-            <Table.Header className="!py-[8px]">
-              {USER_REQUESTS_FOR_TEMPLATES_TABLE_HEADINGS.map((heading) => (
-                <div
-                  className="col-span-3 flex items-center gap-[12px]"
-                  key={heading.key}
-                >
-                  <Checkbox
-                    id="select-all-templates"
-                    value={restoreRequestForm.values.selectAllTemplates}
-                    onChange={(event) => {
-                      restoreRequestForm.setFieldValue(
-                        "selectAllTemplates",
-                        event.currentTarget.checked
-                      );
-                      if (event.currentTarget.checked) {
-                        // Select all templates
-                        const allTemplateIds =
-                          requestsData?.requestedTemplates?.requests?.map(
-                            (template) => template._id
+    <React.Fragment>
+      {restoreSelectedRequests.isPending && <LoadingBackdrop />}
+      <RequestDetailsRoot className="!overflow-hidden max-w-[1220px]">
+        <Tabs
+          value={activeTab}
+          onChange={(value) => setActiveTab(value)}
+          keepMounted={false}
+          color="#2A85FF"
+          classNames={{
+            root: "h-full",
+            list: "w-fit",
+            panel: "h-[calc(100%-60px)]",
+          }}
+        >
+          <Tabs.List className="mb-[24px]">
+            <Tabs.Tab value="TEMPLATE">For Templates</Tabs.Tab>
+            <Tabs.Tab value="INSPECTION">For Inspections</Tabs.Tab>
+            <Tabs.Tab value="PROPERTY">For Properties</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value="TEMPLATE">
+            {/* User Requests Table - Templates*/}
+            <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
+              {/* Table Header */}
+              <Table.Header className="!py-[8px]">
+                {USER_REQUESTS_FOR_TEMPLATES_TABLE_HEADINGS.map((heading) => (
+                  <div
+                    className="col-span-3 flex items-center gap-[12px]"
+                    key={heading.key}
+                  >
+                    <Checkbox
+                      id="select-all-templates"
+                      value={restoreRequestForm.values.selectAllTemplates}
+                      onChange={(event) => {
+                        restoreRequestForm.setFieldValue(
+                          "selectAllTemplates",
+                          event.currentTarget.checked
+                        );
+                        if (event.currentTarget.checked) {
+                          // Select all templates
+                          const allTemplateIds =
+                            requestsData?.requestedTemplates?.requests?.map(
+                              (template) => template._id
+                            );
+                          restoreRequestForm.setFieldValue(
+                            "selectedTemplateIds",
+                            allTemplateIds
                           );
-                        restoreRequestForm.setFieldValue(
-                          "selectedTemplateIds",
-                          allTemplateIds
-                        );
-                      } else {
-                        // Deselect all templates
-                        restoreRequestForm.setFieldValue(
-                          "selectedTemplateIds",
-                          []
-                        );
-                      }
+                        } else {
+                          // Deselect all templates
+                          restoreRequestForm.setFieldValue(
+                            "selectedTemplateIds",
+                            []
+                          );
+                        }
+                      }}
+                    />
+                    <Table.HeaderItem heading={heading.value} />
+                  </div>
+                ))}
+                <div className="col-span-4 flex justify-end">
+                  <Button
+                    id="approve-requests-button"
+                    type="button"
+                    label="Approve Selected"
+                    className="w-fit text-[16px] !font-semibold"
+                    buttonType="contained"
+                    onClick={restoreSelectedRequests.mutate}
+                    disabled={checkIfRequestArraysAreEmpty()}
+                  />
+                </div>
+              </Table.Header>
+              {/* Table Body */}
+              <Table.Body
+                className={`${
+                  requestsData?.requestedTemplates?.totalPages < 2
+                    ? "h-[calc(100%-88.8px)]"
+                    : "h-[calc(100%-98.8px)]"
+                }`}
+              >
+                {requestsData?.isPending ? (
+                  <TableSkeleton itemsLength={4} />
+                ) : requestsData?.requestedTemplates?.requests?.length < 1 ? (
+                  <div className="flex justify-center items-center h-full">
+                    <p className="text-[14px] font-medium text-[#6C727F] text-center">
+                      No request found for restoring templates.
+                    </p>
+                  </div>
+                ) : (
+                  TEMPLATE_ROWS
+                )}
+              </Table.Body>
+
+              {requestsData?.requestedTemplates &&
+                requestsData?.requestedTemplates?.totalPages > 0 && (
+                  <Table.Pagination
+                    filtersData={filtersData}
+                    setFiltersData={(value) =>
+                      setFiltersData((prev) => ({
+                        ...prev,
+                        templatesPage: value.page,
+                      }))
+                    }
+                    paginationData={{
+                      totalPages: requestsData?.requestedTemplates?.totalPages,
+                      currentPage:
+                        requestsData?.requestedTemplates?.currentPage,
+                      totalItems:
+                        requestsData?.requestedTemplates?.totalRequests,
                     }}
                   />
-                  <Table.HeaderItem heading={heading.value} />
-                </div>
-              ))}
-              <div className="col-span-4 flex justify-end">
-                <Button
-                  id="approve-requests-button"
-                  type="button"
-                  label="Approve Selected"
-                  className="w-fit text-[16px] !font-semibold"
-                  buttonType="contained"
-                  onClick={restoreSelectedRequests.mutate}
-                  disabled={checkIfRequestArraysAreEmpty()}
-                />
-              </div>
-            </Table.Header>
-            {/* Table Body */}
-            <Table.Body
-              className={`${
-                requestsData?.requestedTemplates?.totalPages < 2
-                  ? "h-[calc(100%-88.8px)]"
-                  : "h-[calc(100%-98.8px)]"
-              }`}
-            >
-              {requestsData?.isPending ? (
-                <TableSkeleton itemsLength={4} />
-              ) : requestsData?.requestedTemplates?.requests?.length < 1 ? (
-                <div className="flex justify-center items-center h-full">
-                  <p className="text-[14px] font-medium text-[#6C727F] text-center">
-                    No request found for restoring templates.
-                  </p>
-                </div>
-              ) : (
-                TEMPLATE_ROWS
-              )}
-            </Table.Body>
+                )}
+            </Table.Root>
+          </Tabs.Panel>
 
-            {requestsData?.requestedTemplates &&
-              requestsData?.requestedTemplates?.totalPages > 0 && (
-                <Table.Pagination
-                  filtersData={filtersData}
-                  setFiltersData={(value) =>
-                    setFiltersData((prev) => ({
-                      ...prev,
-                      templatesPage: value.page,
-                    }))
-                  }
-                  paginationData={{
-                    totalPages: requestsData?.requestedTemplates?.totalPages,
-                    currentPage: requestsData?.requestedTemplates?.currentPage,
-                    totalItems: requestsData?.requestedTemplates?.totalRequests,
-                  }}
-                />
-              )}
-          </Table.Root>
-        </Tabs.Panel>
-
-        <Tabs.Panel value="INSPECTION">
-          {/* User Requests Table - Inspections*/}
-          <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
-            {/* Table Header */}
-            <Table.Header className="!py-[8px]">
-              {USER_REQUESTS_FOR_INSPECTIONS_TABLE_HEADINGS.map((heading) =>
-                heading.key === "reportName" ? (
-                  <div
-                    key={heading.key}
-                    className="col-span-2 flex items-center gap-[12px]"
-                  >
-                    <Checkbox
-                      id="select-all-inspections"
-                      value={restoreRequestForm.values.selectAllInspections}
-                      onChange={(event) => {
-                        restoreRequestForm.setFieldValue(
-                          "selectAllInspections",
-                          event.currentTarget.checked
-                        );
-                        if (event.currentTarget.checked) {
-                          // Select all inspections
-                          const allInspectionIds =
-                            requestsData?.requestedInspections?.requests?.map(
-                              (inspection) => inspection._id
+          <Tabs.Panel value="INSPECTION">
+            {/* User Requests Table - Inspections*/}
+            <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
+              {/* Table Header */}
+              <Table.Header className="!py-[8px]">
+                {USER_REQUESTS_FOR_INSPECTIONS_TABLE_HEADINGS.map((heading) =>
+                  heading.key === "reportName" ? (
+                    <div
+                      key={heading.key}
+                      className="col-span-2 flex items-center gap-[12px]"
+                    >
+                      <Checkbox
+                        id="select-all-inspections"
+                        value={restoreRequestForm.values.selectAllInspections}
+                        onChange={(event) => {
+                          restoreRequestForm.setFieldValue(
+                            "selectAllInspections",
+                            event.currentTarget.checked
+                          );
+                          if (event.currentTarget.checked) {
+                            // Select all inspections
+                            const allInspectionIds =
+                              requestsData?.requestedInspections?.requests?.map(
+                                (inspection) => inspection._id
+                              );
+                            restoreRequestForm.setFieldValue(
+                              "selectedInspectionIds",
+                              allInspectionIds
                             );
-                          restoreRequestForm.setFieldValue(
-                            "selectedInspectionIds",
-                            allInspectionIds
-                          );
-                        } else {
-                          // Deselect all inspections
-                          restoreRequestForm.setFieldValue(
-                            "selectedInspectionIds",
-                            []
-                          );
-                        }
-                      }}
-                    />
-                    <Table.HeaderItem heading={heading.value} />
+                          } else {
+                            // Deselect all inspections
+                            restoreRequestForm.setFieldValue(
+                              "selectedInspectionIds",
+                              []
+                            );
+                          }
+                        }}
+                      />
+                      <Table.HeaderItem heading={heading.value} />
+                    </div>
+                  ) : (
+                    <div
+                      key={heading.key}
+                      className="col-span-2 flex items-center"
+                    >
+                      <Table.HeaderItem heading={heading.value} />
+                    </div>
+                  )
+                )}
+                <div className="col-span-3 flex justify-end">
+                  <Button
+                    id="approve-requests-button"
+                    type="button"
+                    label="Approve Selected"
+                    className="w-fit text-[16px] !font-semibold"
+                    buttonType="contained"
+                    onClick={restoreSelectedRequests.mutate}
+                    disabled={checkIfRequestArraysAreEmpty()}
+                  />
+                </div>
+              </Table.Header>
+              {/* Table Body */}
+              <Table.Body
+                className={`${
+                  requestsData?.requestedInspections?.totalPages < 2
+                    ? "h-[calc(100%-88.8px)]"
+                    : "h-[calc(100%-98.8px)]"
+                }`}
+              >
+                {requestsData?.isPending ? (
+                  <TableSkeleton itemsLength={4} />
+                ) : requestsData?.requestedInspections?.requests?.length < 1 ? (
+                  <div className="flex justify-center items-center h-full">
+                    <p className="text-[14px] font-medium text-[#6C727F] text-center">
+                      No request found for restoring inspections.
+                    </p>
                   </div>
                 ) : (
-                  <div
-                    key={heading.key}
-                    className="col-span-2 flex items-center"
-                  >
-                    <Table.HeaderItem heading={heading.value} />
-                  </div>
-                )
-              )}
-              <div className="col-span-3 flex justify-end">
-                <Button
-                  id="approve-requests-button"
-                  type="button"
-                  label="Approve Selected"
-                  className="w-fit text-[16px] !font-semibold"
-                  buttonType="contained"
-                  onClick={restoreSelectedRequests.mutate}
-                  disabled={checkIfRequestArraysAreEmpty()}
-                />
-              </div>
-            </Table.Header>
-            {/* Table Body */}
-            <Table.Body
-              className={`${
-                requestsData?.requestedInspections?.totalPages < 2
-                  ? "h-[calc(100%-88.8px)]"
-                  : "h-[calc(100%-98.8px)]"
-              }`}
-            >
-              {requestsData?.isPending ? (
-                <TableSkeleton itemsLength={4} />
-              ) : requestsData?.requestedInspections?.requests?.length < 1 ? (
-                <div className="flex justify-center items-center h-full">
-                  <p className="text-[14px] font-medium text-[#6C727F] text-center">
-                    No request found for restoring inspections.
-                  </p>
-                </div>
-              ) : (
-                INSPECTION_ROWS
-              )}
-            </Table.Body>
+                  INSPECTION_ROWS
+                )}
+              </Table.Body>
 
-            {requestsData?.requestedInspections &&
-              requestsData?.requestedInspections?.totalPages > 0 && (
-                <Table.Pagination
-                  filtersData={filtersData}
-                  setFiltersData={(value) =>
-                    setFiltersData((prev) => ({
-                      ...prev,
-                      inspectionsPage: value.page,
-                    }))
-                  }
-                  paginationData={{
-                    totalPages: requestsData?.requestedInspections?.totalPages,
-                    currentPage:
-                      requestsData?.requestedInspections?.currentPage,
-                    totalItems:
-                      requestsData?.requestedInspections?.totalRequests,
-                  }}
-                />
-              )}
-          </Table.Root>
-        </Tabs.Panel>
+              {requestsData?.requestedInspections &&
+                requestsData?.requestedInspections?.totalPages > 0 && (
+                  <Table.Pagination
+                    filtersData={filtersData}
+                    setFiltersData={(value) =>
+                      setFiltersData((prev) => ({
+                        ...prev,
+                        inspectionsPage: value.page,
+                      }))
+                    }
+                    paginationData={{
+                      totalPages:
+                        requestsData?.requestedInspections?.totalPages,
+                      currentPage:
+                        requestsData?.requestedInspections?.currentPage,
+                      totalItems:
+                        requestsData?.requestedInspections?.totalRequests,
+                    }}
+                  />
+                )}
+            </Table.Root>
+          </Tabs.Panel>
 
-        <Tabs.Panel value="PROPERTY">
-          {/* User Requests Table - Properties*/}
-          <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
-            {/* Table Header */}
-            <Table.Header className="!py-[8px]">
-              {USER_REQUESTS_FOR_PROPERTIES_TABLE_HEADINGS.map((heading) =>
-                heading.key === "propertyCategory" ? (
-                  <div
-                    key={heading.key}
-                    className="col-span-2 flex items-center gap-[12px]"
-                  >
-                    <Checkbox
-                      id="select-all-properties"
-                      value={restoreRequestForm.values.selectAllProperties}
-                      onChange={(event) => {
-                        restoreRequestForm.setFieldValue(
-                          "selectAllProperties",
-                          event.currentTarget.checked
-                        );
-                        if (event.currentTarget.checked) {
-                          // Select all properties
-                          const allPropertyIds =
-                            requestsData?.requestedProperties?.requests?.map(
-                              (property) => property._id
+          <Tabs.Panel value="PROPERTY">
+            {/* User Requests Table - Properties*/}
+            <Table.Root className="lg:p-[16px] h-full user-requests-table-root">
+              {/* Table Header */}
+              <Table.Header className="!py-[8px]">
+                {USER_REQUESTS_FOR_PROPERTIES_TABLE_HEADINGS.map((heading) =>
+                  heading.key === "propertyCategory" ? (
+                    <div
+                      key={heading.key}
+                      className="col-span-2 flex items-center gap-[12px]"
+                    >
+                      <Checkbox
+                        id="select-all-properties"
+                        value={restoreRequestForm.values.selectAllProperties}
+                        onChange={(event) => {
+                          restoreRequestForm.setFieldValue(
+                            "selectAllProperties",
+                            event.currentTarget.checked
+                          );
+                          if (event.currentTarget.checked) {
+                            // Select all properties
+                            const allPropertyIds =
+                              requestsData?.requestedProperties?.requests?.map(
+                                (property) => property._id
+                              );
+                            restoreRequestForm.setFieldValue(
+                              "selectedPropertyIds",
+                              allPropertyIds
                             );
-                          restoreRequestForm.setFieldValue(
-                            "selectedPropertyIds",
-                            allPropertyIds
-                          );
-                        } else {
-                          // Deselect all properties
-                          restoreRequestForm.setFieldValue(
-                            "selectedPropertyIds",
-                            []
-                          );
-                        }
-                      }}
-                    />
-                    <Table.HeaderItem heading={heading.value} />
+                          } else {
+                            // Deselect all properties
+                            restoreRequestForm.setFieldValue(
+                              "selectedPropertyIds",
+                              []
+                            );
+                          }
+                        }}
+                      />
+                      <Table.HeaderItem heading={heading.value} />
+                    </div>
+                  ) : (
+                    <div
+                      key={heading.key}
+                      className="col-span-2 flex items-center"
+                    >
+                      <Table.HeaderItem heading={heading.value} />
+                    </div>
+                  )
+                )}
+
+                <div className="col-span-3 flex justify-end">
+                  <Button
+                    id="approve-requests-button"
+                    type="button"
+                    label="Approve Selected"
+                    className="w-fit text-[16px] !font-semibold"
+                    buttonType="contained"
+                    onClick={restoreSelectedRequests.mutate}
+                    disabled={checkIfRequestArraysAreEmpty()}
+                  />
+                </div>
+              </Table.Header>
+              {/* Table Body */}
+              <Table.Body
+                className={`${
+                  requestsData?.requestedTemplates?.totalPages < 2
+                    ? "h-[calc(100%-88.8px)]"
+                    : "h-[calc(100%-98.8px)]"
+                }`}
+              >
+                {requestsData?.isPending ? (
+                  <TableSkeleton itemsLength={4} />
+                ) : requestsData?.requestedProperties?.requests.length < 1 ? (
+                  <div className="flex justify-center items-center h-full">
+                    <p className="text-[14px] font-medium text-[#6C727F] text-center">
+                      No request found for restoring properties.
+                    </p>
                   </div>
                 ) : (
-                  <div
-                    key={heading.key}
-                    className="col-span-2 flex items-center"
-                  >
-                    <Table.HeaderItem heading={heading.value} />
-                  </div>
-                )
-              )}
-
-              <div className="col-span-3 flex justify-end">
-                <Button
-                  id="approve-requests-button"
-                  type="button"
-                  label="Approve Selected"
-                  className="w-fit text-[16px] !font-semibold"
-                  buttonType="contained"
-                  onClick={restoreSelectedRequests.mutate}
-                  disabled={checkIfRequestArraysAreEmpty()}
-                />
-              </div>
-            </Table.Header>
-            {/* Table Body */}
-            <Table.Body
-              className={`${
-                requestsData?.requestedTemplates?.totalPages < 2
-                  ? "h-[calc(100%-88.8px)]"
-                  : "h-[calc(100%-98.8px)]"
-              }`}
-            >
-              {requestsData?.isPending ? (
-                <TableSkeleton itemsLength={4} />
-              ) : requestsData?.requestedProperties?.requests.length < 1 ? (
-                <div className="flex justify-center items-center h-full">
-                  <p className="text-[14px] font-medium text-[#6C727F] text-center">
-                    No request found for restoring properties.
-                  </p>
-                </div>
-              ) : (
-                PROPERTIES_ROWS
-              )}
-            </Table.Body>
-            {requestsData?.requestedProperties &&
-              requestsData?.requestedProperties?.totalPages > 0 && (
-                <Table.Pagination
-                  filtersData={filtersData}
-                  setFiltersData={(value) =>
-                    setFiltersData((prev) => ({
-                      ...prev,
-                      propertiesPage: value.page,
-                    }))
-                  }
-                  paginationData={{
-                    totalPages: requestsData.requestedProperties?.totalPages,
-                    currentPage: requestsData.requestedProperties?.currentPage,
-                    totalItems: requestsData.requestedProperties?.totalRequests,
-                  }}
-                />
-              )}
-          </Table.Root>
-        </Tabs.Panel>
-      </Tabs>
-    </RequestDetailsRoot>
+                  PROPERTIES_ROWS
+                )}
+              </Table.Body>
+              {requestsData?.requestedProperties &&
+                requestsData?.requestedProperties?.totalPages > 0 && (
+                  <Table.Pagination
+                    filtersData={filtersData}
+                    setFiltersData={(value) =>
+                      setFiltersData((prev) => ({
+                        ...prev,
+                        propertiesPage: value.page,
+                      }))
+                    }
+                    paginationData={{
+                      totalPages: requestsData.requestedProperties?.totalPages,
+                      currentPage:
+                        requestsData.requestedProperties?.currentPage,
+                      totalItems:
+                        requestsData.requestedProperties?.totalRequests,
+                    }}
+                  />
+                )}
+            </Table.Root>
+          </Tabs.Panel>
+        </Tabs>
+      </RequestDetailsRoot>
+    </React.Fragment>
   );
 };
 
