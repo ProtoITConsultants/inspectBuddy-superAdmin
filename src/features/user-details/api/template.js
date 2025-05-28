@@ -179,4 +179,26 @@ export const userTemplatesAPIs = {
       );
     }
   },
+
+  // Update Specific Room in a Template
+  updateSpecificRoomDetails: async ({ userId, templateId, roomData }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.UPDATE_SPECIFIC_ROOM_IN_TEMPLATE_URL({
+          userId,
+        }),
+        {
+          templateId,
+          roomData,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating Specific Room in Template", error);
+      throw new Error(
+        error.response?.data?.message ||
+          "Error updating Specific Room in Template"
+      );
+    }
+  },
 };

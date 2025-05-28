@@ -42,6 +42,7 @@ import { useParams } from "react-router";
 import LoadingBackdrop from "../../../../components/ui/LoadingBackdrop";
 import debounce from "lodash.debounce";
 import compressImageFile from "../../../../utils/compressImageFile";
+import { useTemplateStore } from "../../../../store/templateStore";
 
 const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
@@ -246,6 +247,13 @@ const ElementDetail = ({
     (state) => state.setSelectedInspectionRoomElements
   );
 
+  const selectedTemplateRoomElements = useTemplateStore(
+    (state) => state.selectedTemplateRoomElements
+  );
+  const setSelectedTemplateRoomElements = useTemplateStore(
+    (state) => state.setSelectedTemplateRoomElements
+  );
+
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
 
@@ -426,7 +434,29 @@ const ElementDetail = ({
             <Checkbox
               label="Make it Required"
               checked={elementForm.values.elementImageIsRequired}
-              {...elementForm.getInputProps("elementImageIsRequired")}
+              value={elementForm.values.elementImageIsRequired}
+              onChange={(e) => {
+                elementForm.setFieldValue(
+                  "elementImageIsRequired",
+                  e.target.checked
+                );
+
+                if (elementCategory !== "inspection") {
+                  const updatedRoomElements = selectedTemplateRoomElements.map(
+                    (element) => {
+                      if (element._id === elementId) {
+                        return {
+                          ...element,
+                          imageRequired: e.target.checked,
+                        };
+                      }
+                      return element;
+                    }
+                  );
+
+                  setSelectedTemplateRoomElements(updatedRoomElements);
+                }
+              }}
             />
           )}
         </div>
