@@ -18,6 +18,14 @@ const AddRoomItem = ({ onCancel, onSaveNewItem, placeholder }) => {
           id="new-item-input-field"
           name="new-item-input-field"
           onChange={(e) => setNewItemName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              if (newItemName.length > 2) {
+                return onSaveNewItem(newItemName);
+              }
+              return e.preventDefault();
+            }
+          }}
           value={newItemName}
           placeholder={placeholder}
           autoFocus
