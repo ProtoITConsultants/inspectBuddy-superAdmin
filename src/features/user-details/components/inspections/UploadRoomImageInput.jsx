@@ -137,7 +137,8 @@ const UploadRoomImageInput = ({ roomImages }) => {
       />
       <div className="flex flex-col gap-[8px]">
         <h2 className="text-dark-blue text-[14px] font-medium">
-          Room Images&nbsp;<span className="text-[#808494]">(2/10)</span>
+          Room Images&nbsp;
+          <span className="text-[#808494]">({roomImages?.length || 0}/10)</span>
         </h2>
         <div className="rounded-[8px] bg-[#F3F8FF] w-full h-[200px] flex justify-center p-[12px]">
           <div className="relative flex justify-center items-center w-full h-full">
