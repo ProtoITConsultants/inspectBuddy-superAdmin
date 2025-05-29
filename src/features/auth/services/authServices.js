@@ -18,7 +18,7 @@ export const authServices = {
   },
   logout: async () => {
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosInstance.get(
         "https://api.inspectbuddy.app/api/auth/logout"
       );
 
