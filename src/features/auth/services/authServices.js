@@ -1,6 +1,5 @@
 import axiosInstance from "../../../utils/axiosInstance";
 import AUTH_ENDPOINTS from "../../../constants/api/auth";
-import axios from "axios";
 
 export const authServices = {
   login: async ({ email, password }) => {
@@ -19,11 +18,8 @@ export const authServices = {
   },
   logout: async () => {
     try {
-      const response = await axios.post(
-        "https://api.inspectbuddy.app/api/auth/logout",
-        {
-          withCredentials: true,
-        }
+      const response = await axiosInstance.post(
+        "https://api.inspectbuddy.app/api/auth/logout"
       );
 
       return response.data;
