@@ -97,7 +97,7 @@ const TemplateRoomImageInput = ({ isChecked, onChange }) => (
           className={` font-medium text-[14px] border-2 flex items-center justify-center gap-[8px] rounded-[8px] h-fit px-[20px] py-[12px] z-1 max-h-[45px] text-white border-[#DEDEDE] bg-[#CBCBCB]`}
         >
           <UPLOAD_ICON />
-          <span>Click or drop image</span>
+          <span>Select Image</span>
         </div>
       </div>
     </div>
