@@ -147,7 +147,7 @@ const UploadRoomImageInput = ({ roomImages }) => {
                 className="text-darkBlue font-medium text-[14px] bg-white border-2 border-[#CCE2FF] flex items-center justify-center gap-[8px] rounded-[8px] cursor-pointer h-fit px-[20px] py-[12px] z-1 max-h-[45px]"
               >
                 <UPLOAD_ICON />
-                <span>Click or drop image</span>
+                <span>Select Image</span>
               </label>
             ) : (
               <div className="flex gap-[10px] items-center w-full">
