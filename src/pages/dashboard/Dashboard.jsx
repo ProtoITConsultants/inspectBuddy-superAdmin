@@ -45,13 +45,7 @@ const Dashboard = () => {
             <DashboardGraphs.GraphCardTitle
               cardData={{
                 label: stat.label,
-                statCount: `${stat.statCount}${
-                  stat.label === "Total Users" || stat.label === "Active Users"
-                    ? stat.statCount > 1000
-                      ? "k"
-                      : ""
-                    : "k"
-                }`,
+                statCount: parseFloat(stat.statCount),
                 icon: stat.icon,
               }}
             />

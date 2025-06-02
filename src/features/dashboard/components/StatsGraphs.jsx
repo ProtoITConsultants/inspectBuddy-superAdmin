@@ -17,12 +17,27 @@ const GraphCard = ({ children }) => {
 };
 
 const GraphCardTitle = ({ cardData }) => {
+  const formatNumber = (num) => {
+    if (num >= 1_000_000_000) {
+      return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, "") + "B";
+    } else if (num >= 1_000_000) {
+      return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+    } else if (num >= 1_000) {
+      return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+    }
+    return num.toString();
+  };
+
   return (
     <div className="flex flex-col gap-[10px] items-center w-full">
       <div className="flex justify-between items-center w-full">
         <div>
           <p className="text-[24px] font-bold text-dark-blue">
-            {cardData.statCount}
+            {cardData.label === "Total Sales" ||
+            cardData.label === "Current Month Sales"
+              ? "$"
+              : ""}
+            {formatNumber(cardData.statCount)}
           </p>
           <p className="text-[16px] text-dark-grays">{cardData.label}</p>
         </div>
