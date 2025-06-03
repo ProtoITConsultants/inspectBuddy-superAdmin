@@ -23,7 +23,9 @@ import { MantineProvider, createTheme } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 
+// Creating a new Query Client Instance
 const queryClient = new QueryClient();
+
 const theme = createTheme({
   cursorType: "pointer",
 });
