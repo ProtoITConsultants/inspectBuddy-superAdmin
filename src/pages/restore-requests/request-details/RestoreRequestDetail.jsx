@@ -501,14 +501,19 @@ const RestoreRequestDetail = () => {
 
               {requestsData?.requestedTemplates &&
                 requestsData?.requestedTemplates?.totalPages > 0 && (
-                  <Table.Pagination
-                    filtersData={filtersData}
-                    setFiltersData={(value) =>
+                  <Table.RestoreRequestsPagination
+                    onClickNextBtn={() => {
                       setFiltersData((prev) => ({
                         ...prev,
-                        templatesPage: value.page,
-                      }))
-                    }
+                        templatesPage: prev.templatesPage + 1,
+                      }));
+                    }}
+                    onClickPreviousBtn={() => {
+                      setFiltersData((prev) => ({
+                        ...prev,
+                        templatesPage: prev.templatesPage - 1,
+                      }));
+                    }}
                     paginationData={{
                       totalPages: requestsData?.requestedTemplates?.totalPages,
                       currentPage:
@@ -605,14 +610,19 @@ const RestoreRequestDetail = () => {
 
               {requestsData?.requestedInspections &&
                 requestsData?.requestedInspections?.totalPages > 0 && (
-                  <Table.Pagination
-                    filtersData={filtersData}
-                    setFiltersData={(value) =>
+                  <Table.RestoreRequestsPagination
+                    onClickNextBtn={() => {
                       setFiltersData((prev) => ({
                         ...prev,
-                        inspectionsPage: value.page,
-                      }))
-                    }
+                        inspectionsPage: prev.inspectionsPage + 1,
+                      }));
+                    }}
+                    onClickPreviousBtn={() => {
+                      setFiltersData((prev) => ({
+                        ...prev,
+                        inspectionsPage: prev.inspectionsPage - 1,
+                      }));
+                    }}
                     paginationData={{
                       totalPages:
                         requestsData?.requestedInspections?.totalPages,
@@ -710,14 +720,19 @@ const RestoreRequestDetail = () => {
               </Table.Body>
               {requestsData?.requestedProperties &&
                 requestsData?.requestedProperties?.totalPages > 0 && (
-                  <Table.Pagination
-                    filtersData={filtersData}
-                    setFiltersData={(value) =>
+                  <Table.RestoreRequestsPagination
+                    onClickNextBtn={() => {
                       setFiltersData((prev) => ({
                         ...prev,
-                        propertiesPage: value.page,
-                      }))
-                    }
+                        propertiesPage: prev.propertiesPage + 1,
+                      }));
+                    }}
+                    onClickPreviousBtn={() => {
+                      setFiltersData((prev) => ({
+                        ...prev,
+                        propertiesPage: prev.propertiesPage - 1,
+                      }));
+                    }}
                     paginationData={{
                       totalPages: requestsData.requestedProperties?.totalPages,
                       currentPage:

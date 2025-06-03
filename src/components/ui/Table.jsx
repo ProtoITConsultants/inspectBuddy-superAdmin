@@ -193,6 +193,62 @@ const Pagination = ({ filtersData, setFiltersData, paginationData }) => {
   );
 };
 
+const RestoreRequestsPagination = ({
+  onClickNextBtn,
+  onClickPreviousBtn,
+  paginationData,
+}) => {
+  return (
+    <div
+      id="pagination-div"
+      className={`flex justify-between items-center pt-[10px]`}
+    >
+      <p
+        className={`text-dark-blue font-medium text-[14px] ${
+          paginationData?.totalItems < 1 ? "hidden" : "block"
+        }`}
+      >
+        {(paginationData?.currentPage - 1) * 10 + 1}-
+        {paginationData?.currentPage * 10 > paginationData?.totalItems
+          ? paginationData?.totalItems
+          : paginationData?.currentPage * 10}
+        &nbsp;of&nbsp;{paginationData?.totalItems}
+      </p>
+      <div
+        className={`flex items-center space-x-[24px] ${
+          paginationData?.totalPages < 2 ? "hidden" : "block"
+        }`}
+      >
+        <p className={`text-dark-blue font-medium text-[14px]`}>
+          {paginationData?.currentPage} of {paginationData?.totalPages}
+        </p>
+        <div className={`flex gap-[16px] items-center`}>
+          <PaginationButton
+            onClick={() => {
+              // setFiltersData({ ...filtersData, page: filtersData.page - 1 });
+              onClickPreviousBtn();
+            }}
+            icon={<PREVIOUS_ICON />}
+            className={``}
+            disabled={paginationData?.currentPage === 1}
+          />
+          <PaginationButton
+            onClick={() => {
+              // setFiltersData({ ...filtersData, page: filtersData.page + 1 });
+              onClickNextBtn();
+            }}
+            icon={<NEXT_ICON />}
+            className={``}
+            disabled={
+              paginationData?.currentPage === paginationData?.totalPages
+            }
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Table = {
   Root,
   Header,
@@ -204,6 +260,7 @@ const Table = {
   ItemRoot,
   ItemActions,
   Pagination,
+  RestoreRequestsPagination,
 };
 
 export default Table;
