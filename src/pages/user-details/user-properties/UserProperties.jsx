@@ -185,6 +185,7 @@ const UserProperties = () => {
           <DateRangeFilter
             filtersData={filtersData}
             setFiltersData={setFiltersData}
+            tooltipLabel="Select Date Range - Filter by 'Added on'"
           />
         </Group>
         <Group gap="sm" className="md:col-span-1 col-span-2">
@@ -199,6 +200,7 @@ const UserProperties = () => {
             filtersData={filtersData}
             setFiltersData={setFiltersData}
             className="md:flex hidden"
+            tooltipLabel="Select Date Range - Filter by 'Added on'"
           />
         </Group>
       </FiltersTopbar>
