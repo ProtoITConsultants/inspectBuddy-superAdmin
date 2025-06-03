@@ -48,10 +48,10 @@ export const dashboardServices = {
         },
         {
           label: "Current Month Sales",
-          statCount: 3.34,
+          statCount: response.data.currentMonthRevenue || 0,
           icon: monthlySellIcon,
-          statPercentage: 125,
-          chartData: [
+          statPercentage: response.data.revenuePercentageChange || 0,
+          chartData: response.data.revenuePerMonth || [
             { label: "Jan", count: -25 },
             { label: "Feb", count: -10 },
             { label: "Mar", count: 5 },
@@ -90,10 +90,10 @@ export const dashboardServices = {
         },
         {
           label: "Total Sales",
-          statCount: 0.34,
+          statCount: response.data.totalRevenueTillDate || 0,
           icon: totalSellIcon,
-          statPercentage: 125,
-          chartData: [
+          statPercentage: response.data.totalRevenuePercentageChange || 0,
+          chartData: response.data.totalRevenueTillEveryMonth || [
             { label: "Jan", count: -25 },
             { label: "Feb", count: -10 },
             { label: "Mar", count: 5 },
