@@ -111,6 +111,10 @@ const UsersList = () => {
         <Table.SingleColumn>
           <p className="text-[14px] font-medium text-[#6C727F]">
             ${user.subscriptionAmount}
+            {user.subscriptionType === "YEAR" ||
+            user.subscriptionType === "YEARLY"
+              ? "/year"
+              : "/month"}
           </p>
         </Table.SingleColumn>
         <Table.DoubleColumn>
