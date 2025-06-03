@@ -27,6 +27,7 @@ import {
   useAddExistingQuestionToRoomElement,
   useAddQuestionToRoomElement,
   useDeleteRoomElementQuestions,
+  useDeleteSavedQuestion,
   useUpdateSavedQuestion,
 } from "../../hooks/inspectionMutations";
 
@@ -190,6 +191,9 @@ const AddQuestion = ({
   // state to save the selectedIcon for the option
   const [iconOptionIndex, setIconOptionIndex] = useState();
   const [selectedIcon, setSelectedIcon] = useState("");
+
+  // State to save the question to be deleted
+  const [questionToBeDeleted, setQuestionToBeDeleted] = useState({});
 
   // State to check if the previewed question is being edited or not
   const [isQuestionBeingEdited, setIsQuestionBeingEdited] = useState(false);
@@ -381,48 +385,20 @@ const AddQuestion = ({
     },
   });
 
-  // const createNewQuestion = useMutation({
-  //   mutationFn: () =>
-  //     userTemplatesAPIs.createNewQuestion({
-  //       templateId: templateId,
-  //       roomId: roomId,
-  //       userId: userId,
-  //       elementId: currentElementId,
-  //       questions: [newQuestionForm.values],
-  //     }),
+  const deleteSavedQuestion = useDeleteSavedQuestion({
+    id: questionToBeDeleted._id,
+    userId,
+    updateElementQuestions: () => {
+      //   Remove the deleted question from the saved questions store
+      const updatedQuestions = savedQuestions.filter(
+        (question) => question._id !== questionToBeDeleted._id
+      );
 
-  //   onSuccess: (data) => {
-  //     const shouldSaveQuestion = newQuestionForm.values.shouldSave;
+      setSavedQuestions(updatedQuestions);
 
-  //     if (shouldSaveQuestion) {
-  //       setSavedQuestions(data.newSavedQuestions[0]);
-  //     }
-
-  //     const updatedElements = selectedTemplateRoomElements.map((element) => {
-  //       if (element._id === currentElementId) {
-  //         return {
-  //           ...element,
-  //           checklist: [...element.checklist, ...data.newChecklistItems],
-  //         };
-  //       }
-  //       return element;
-  //     });
-
-  //     setSelectedTemplateRoomElements(updatedElements);
-  //     newQuestionForm.reset();
-  //     toast.success("Success!", {
-  //       description: "Questions added successfully.",
-  //       duration: 3000,
-  //     });
-  //     onCloseModal();
-  //   },
-  //   onError: (error) => {
-  //     toast.error("Error!", {
-  //       description: error.message || "Couldn't create new Question.",
-  //       duration: 3000,
-  //     });
-  //   },
-  // });
+      setActive(0);
+    },
+  });
 
   const updatePreviewedQuestion = useUpdateSavedQuestion({
     userId: userId,
@@ -588,6 +564,7 @@ const AddQuestion = ({
       id="add-template-question-modal"
       openModal={isModalOpen}
       onClose={() => {
+        setActive(0);
         onCloseModal();
         setIsLoadingQuestions(false);
       }}
@@ -595,7 +572,8 @@ const AddQuestion = ({
         isLoadingQuestions ||
         addSelectedQuestionsToElement.isPending ||
         createNewQuestion.isPending ||
-        updatePreviewedQuestion.isPending
+        updatePreviewedQuestion.isPending ||
+        deleteSavedQuestion.isPending
       }
     >
       <Stepper
@@ -630,6 +608,10 @@ const AddQuestion = ({
                   isDefault: question.isDefault,
                 });
                 setActive(3);
+              }}
+              onClickDeleteSavedQuestion={(question) => {
+                setActive(4);
+                setQuestionToBeDeleted(question);
               }}
             />
             <ElementQuestionModal.Actions>
@@ -976,6 +958,33 @@ const AddQuestion = ({
               </ElementQuestionModal.Actions>
             </PreviewQuestion.Root>
           </ElementQuestionModal.Root>
+        </Stepper.Step>
+        <Stepper.Step id="delete-saved-question-confirmation">
+          <ElementQuestionModal.Header title="Confirmation" />
+          <p className="text-[14px] text-gray-500">
+            Are you sure you want to delete this question? This action cannot be
+            undone.
+          </p>
+
+          <ElementQuestionModal.Actions>
+            <Button
+              id="delete-saved-question"
+              type="button"
+              onClick={deleteSavedQuestion.mutate}
+              buttonType="contained"
+              label="Confirm"
+              className="sm:w-[208px] w-full"
+            />
+            <Button
+              id="cancel-add-selected-questions"
+              label="Cancel"
+              className="!text-primary sm:w-[208px] w-full hover:!bg-[#FF613E] hover:!border-[#FF613E]"
+              type="button"
+              buttonType="outlined"
+              borderColor="#CCE2FF"
+              onClick={() => setActive(0)}
+            />
+          </ElementQuestionModal.Actions>
         </Stepper.Step>
       </Stepper>
     </ModalRoot>

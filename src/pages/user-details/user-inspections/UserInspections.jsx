@@ -299,6 +299,7 @@ const UserInspections = () => {
           <DateRangeFilter
             filtersData={filtersData}
             setFiltersData={setFiltersData}
+            tooltipLabel="Select Date Range - Filter by 'Updated on'"
           />
         </Group>
       </FiltersTopbar>

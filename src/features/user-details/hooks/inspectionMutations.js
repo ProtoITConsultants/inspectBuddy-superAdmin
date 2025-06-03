@@ -156,6 +156,34 @@ export const useAddQuestionToRoomElement = ({
     },
   });
 
+// Delete Saved Question - Mutation
+export const useDeleteSavedQuestion = ({
+  id,
+  userId,
+  updateElementQuestions,
+}) =>
+  useMutation({
+    mutationFn: () =>
+      userTemplatesAPIs.deleteSavedQuestion({
+        questionId: id,
+        userId,
+      }),
+
+    onSuccess: (data) => {
+      updateElementQuestions(data);
+      toast.success("Success!", {
+        description: "Questions deleted successfully.",
+        duration: 3000,
+      });
+    },
+    onError: (error) => {
+      toast.error("Error!", {
+        description: error.message || "Couldn't delete Question.",
+        duration: 3000,
+      });
+    },
+  });
+
 // Add Existing Question to Room Element - Mutation
 export const useAddExistingQuestionToRoomElement = ({
   id,

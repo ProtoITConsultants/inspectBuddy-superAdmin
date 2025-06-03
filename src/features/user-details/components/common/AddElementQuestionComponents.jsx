@@ -2,6 +2,7 @@ import { Checkbox, Radio, RadioGroup } from "@mantine/core";
 import { VIEW_QUESTION_DETAILS_ICON } from "./../../../../assets/icons/ViewQuestionDetails";
 import AddNewItemButton from "./AddNewItemButton";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
+import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
 
 // Add Question Modals Root
 const Root = ({ children, className }) => {
@@ -31,6 +32,7 @@ const SavedQuestionsList = ({
   onAddNewQuestionBtnClick,
   setSelectedQuestions,
   onPreviewQuestionDetail,
+  onClickDeleteSavedQuestion,
 }) => {
   return (
     <div className="flex flex-col gap-[16px]">
@@ -56,12 +58,20 @@ const SavedQuestionsList = ({
                 setSelectedQuestions((prev) => [...prev, question]);
               }}
             />
-            <button
-              type="button"
-              onClick={() => onPreviewQuestionDetail(question)}
-            >
-              <VIEW_QUESTION_DETAILS_ICON />
-            </button>
+            <div className="flex items-center gap-[12px]">
+              <button
+                type="button"
+                onClick={() => onPreviewQuestionDetail(question)}
+              >
+                <VIEW_QUESTION_DETAILS_ICON />
+              </button>
+              <button
+                type="button"
+                onClick={() => onClickDeleteSavedQuestion(question)}
+              >
+                <DELETE_ICON className="text-gray-500 w-[20px]" />
+              </button>
+            </div>
           </div>
         ))}
       </div>

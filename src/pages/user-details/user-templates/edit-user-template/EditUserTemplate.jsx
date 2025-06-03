@@ -59,6 +59,9 @@ const EditUserTemplate = () => {
     },
 
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["templateDetailsQuery", templateId],
+      });
       toast.success("Success!", {
         description: "Room order updated successfully.",
         duration: 3000,
@@ -81,6 +84,10 @@ const EditUserTemplate = () => {
         roomName: newRoomName,
       }),
     onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["templateDetailsQuery", templateId],
+      });
+
       setTemplateRooms([...templateRooms, data]);
       setAddingRoom(false);
       toast.success("Success!", {
@@ -186,7 +193,7 @@ const EditUserTemplate = () => {
                 onSave={handleUpdateRoomOrder.mutate}
                 onCancel={() => setRearrangingRooms(false)}
               />
-            ) : data?.length > 1 ? (
+            ) : templateRooms?.length > 1 ? (
               <EditInspection.RearrangeElementsBtn
                 onClick={() => {
                   setRearrangingRooms(true);
