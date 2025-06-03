@@ -82,6 +82,10 @@ const CREATE_NEW_QUESTION_IN_ELEMENT_URL = ({ userId }) =>
   `/templateAddChecklistItem?id=${encodeURIComponent(userId)}`;
 const DELETE_QUESTIONS_FROM_ELEMENT_URL = "/templateDeleteChecklistItem";
 const UPDATE_ROOM_ELEMENT_NAME_IN_TEMPLATE_URL = `/templateChangeElementName`;
+const DELETE_SAVED_QUESTION = ({ userId, questionId }) =>
+  `/deleteSavedQuestion/${encodeURIComponent(
+    questionId
+  )}?id=${encodeURIComponent(userId)}`;
 
 // Inspections
 const FETCH_USER_ADDED_INSPECTIONS_URL = ({ userId }) =>
@@ -177,6 +181,7 @@ const USER_DETAILS_ENDPOINTS = {
   CREATE_NEW_QUESTION_IN_ELEMENT_URL,
   DELETE_QUESTIONS_FROM_ELEMENT_URL,
   UPDATE_ROOM_ELEMENT_NAME_IN_TEMPLATE_URL,
+  DELETE_SAVED_QUESTION,
   // Inspections
   FETCH_USER_ADDED_INSPECTIONS_URL,
   FETCH_USER_INSPECTION_STATS_URL,

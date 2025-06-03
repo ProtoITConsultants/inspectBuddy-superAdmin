@@ -201,4 +201,19 @@ export const userTemplatesAPIs = {
       );
     }
   },
+
+  // Delete Saved Question
+  deleteSavedQuestion: async ({ userId, questionId }) => {
+    try {
+      const response = await axiosInstance.delete(
+        USER_DETAILS_ENDPOINTS.DELETE_SAVED_QUESTION({ userId, questionId })
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting Saved Question", error);
+      throw new Error(
+        error.response?.data?.message || "Error deleting Saved Question"
+      );
+    }
+  },
 };
