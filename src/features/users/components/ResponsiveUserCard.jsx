@@ -32,7 +32,7 @@ const ResponsiveUserCard = ({ userData: user, onClickDeleteUserButton }) => {
             className="!w-fit !h-fit !bg-transparent !p-0"
           />
         </div>
-        <p className="font-bold text-primary opacity-50">$120</p>
+        <p className="font-bold text-[#6C727F]">${user?.subscriptionAmount}</p>
       </div>
     </div>
   );

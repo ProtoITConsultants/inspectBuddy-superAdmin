@@ -89,9 +89,11 @@ const UsersList = () => {
   // Create Rows of the Table
   const rows = data?.users?.map((user, index) => (
     <React.Fragment key={user._id}>
-      <Table.ItemRoot className="w1150:grid hidden">
+      <Table.ItemRoot className="w1150:grid hidden grid-cols-8">
         <Table.SingleColumn>
-          <p className="text-[14px] font-medium text-[#6C727F]">{index + 1}</p>
+          <p className="text-[14px] font-medium text-[#6C727F]">
+            {10 * (data?.currentPage - 1) + index + 1}
+          </p>
         </Table.SingleColumn>
         <Table.SingleColumn>
           <p className="text-[14px] font-medium text-[#6C727F]">
@@ -105,6 +107,11 @@ const UsersList = () => {
         </Table.DoubleColumn>
         <Table.SingleColumn>
           <UserSubscriptionCard subscriptionPlan={user.role} />
+        </Table.SingleColumn>
+        <Table.SingleColumn>
+          <p className="text-[14px] font-medium text-[#6C727F]">
+            ${user.subscriptionAmount}
+          </p>
         </Table.SingleColumn>
         <Table.DoubleColumn>
           <Table.ItemActions>
@@ -189,6 +196,7 @@ const UsersList = () => {
           showAddButton={true}
           addButtonLabel="Add New User"
           addButtonLink="/add-new-user"
+          className="grid-cols-8"
         >
           {USERS_TABLE_HEADINGS.map((heading) =>
             heading.key === "userEmail" ? (
