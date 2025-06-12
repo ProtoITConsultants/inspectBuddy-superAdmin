@@ -9,8 +9,31 @@ import { userPropertiesAPIs } from "../../api/user-properties";
 import { useEffect, useRef, useState } from "react";
 import ElementQuestionModal from "../common/AddElementQuestionComponents";
 import { ARROW_RIGHT_ICON } from "../../../../assets/icons/ArrowRightIcon";
-import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 import { EDIT_DETAILS_ICON } from "../../../../assets/icons/EditIcon";
+import { PROPERTY_CATEGORY_ICONS } from "../../../../constants/propertyCategoryIcons";
+
+const IconsList = ({ selectedIcon, onIconSelect }) => (
+  <div className="flex flex-col gap-[12px]">
+    <p className="text-[16px] font-medium text-dark-blue">Select Icons</p>
+    <div className="flex items-center gap-[8px] flex-wrap mt-[12px]">
+      {PROPERTY_CATEGORY_ICONS.map(({ id, Icon }) => {
+        const isSelected = selectedIcon === id;
+
+        return (
+          <button
+            key={id}
+            className={`hover:bg-[#DFECFF] p-[4px] h-[35px] w-[35px] flex items-center justify-center ${
+              isSelected ? "bg-[#DFECFF]" : "bg-white"
+            }`}
+            onClick={() => onIconSelect(id)} // use id instead of icon component
+          >
+            <Icon className="text-dark-blue w-[20px] h-[20px]" />
+          </button>
+        );
+      })}
+    </div>
+  </div>
+);
 
 const EditPropertyCategoryModal = ({
   isModalOpen,
@@ -73,12 +96,8 @@ const EditPropertyCategoryModal = ({
 
   // Handle Save Option Icon
   const handleSaveOptionIcon = () => {
-    const selectedIconId = QUESTIONS_ICONS_LIST.find(
-      (icon) => icon.icon === selectedIcon
-    ).id;
-
     // Update the newQuestionData with the new options
-    form.setFieldValue("propertyCategoryIconId", selectedIconId);
+    form.setFieldValue("propertyCategoryIconId", selectedIcon);
 
     setActive(0);
     setSelectedIcon("");
@@ -101,9 +120,9 @@ const EditPropertyCategoryModal = ({
     }
   }, [categoryData, isModalOpen]);
 
-  const SELECTED_ICON = QUESTIONS_ICONS_LIST?.find(
-    (icon) => icon.id === form.values.propertyCategoryIconId
-  )?.icon;
+  const SELECTED_ICON = PROPERTY_CATEGORY_ICONS?.find(
+    (icon) => icon.id === form.values.propertyCategoryIconId.toString()
+  )?.Icon;
 
   return (
     <ModalRoot
@@ -147,7 +166,7 @@ const EditPropertyCategoryModal = ({
                   <p className={`text-[#6C727F] text-[14px] font-semibold`}>
                     Icon:
                   </p>
-                  {SELECTED_ICON}
+                  <SELECTED_ICON />
                   <Divider orientation="vertical" color="#CCE2FF" />
                   <Button
                     id="edit-property-category-icon"
@@ -222,7 +241,7 @@ const EditPropertyCategoryModal = ({
               className="!w-fit !font-semibold !h-fit !text-[18px]"
             />
             <Divider className="w-full !border-t-[1.5px]" color="#E4F0FF" />
-            <ElementQuestionModal.OptionIconsList
+            <IconsList
               selectedIcon={selectedIcon}
               onIconSelect={(icon) => setSelectedIcon(icon)}
             />
