@@ -45,6 +45,7 @@ export const PropertyDetailsBody = ({ children }) => {
 export const PropertyDetails = ({ propertyDetails }) => {
   // Hooks
   const navigate = useNavigate();
+  const { userId } = useParams();
 
   // Local States
   const [openDeletePropertyModal, setOpenDeletePropertyModal] = useState(false);
@@ -56,9 +57,9 @@ export const PropertyDetails = ({ propertyDetails }) => {
           setOpenDeletePropertyModal(false);
         }}
         propertyToDelete={propertyDetails}
-        onDeleteSuccess={() => navigate(-1)}
+        onDeleteSuccess={() => navigate(`/user-details/${userId}/properties`)}
       />
-      <div className="md:flex items-center justify-between lg:px-[32px]">
+      <div className="md:flex items-center justify-between gap-8 lg:px-[32px]">
         <div className="text-dark-blue">
           <h1 className="lg:text-[32px] md:text-[28px] text-[20px] font-bold">
             {propertyDetails?.name}
@@ -71,7 +72,7 @@ export const PropertyDetails = ({ propertyDetails }) => {
         <div className="flex md:gap-[8px] gap-[16px] md:mt-0 mt-[24px]">
           <Link
             to={`edit-property`}
-            className="px-[10px] py-[8px] rounded-[8px] border-[1.5px] border-[#cce2ff] flex items-center justify-center gap-[8px] md:w-fit w-full"
+            className="px-[10px] py-[8px] rounded-[8px] border-[1.5px] border-[#cce2ff] flex items-center justify-center gap-[8px] md:w-fit w-full whitespace-nowrap"
           >
             <EDIT_DETAILS_ICON className="text-[#9EA3AE] h-[20px] w-[20px]" />
             <p className="text-dark-blue font-medium text-[14px]">
@@ -85,7 +86,7 @@ export const PropertyDetails = ({ propertyDetails }) => {
             icon={<DELETE_ICON className="text-[#FF613E] h-[20px] w-[20px]" />}
             type="button"
             onClick={() => setOpenDeletePropertyModal(true)}
-            className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#FF613E] md:w-fit w-full !text-[#FF613E] !text-[14px] h-fit !font-medium"
+            className="flex items-center !gap-[8px] !p-[8px_10px] border-[1.5px] rounded-[8px] !border-[#FF613E] md:w-fit w-full !text-[#FF613E] !text-[14px] h-fit !font-medium whitespace-nowrap"
           />
         </div>
       </div>

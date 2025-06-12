@@ -12,6 +12,7 @@ const DeletePropertyModal = ({
   isModalOpen = false,
   onCloseModal,
   propertyToDelete,
+  onDeleteSuccess,
 }) => {
   // Hooks
   const queryClient = useQueryClient();
@@ -40,6 +41,7 @@ const DeletePropertyModal = ({
     onSuccess: () => {
       onCloseModal();
       queryClient.invalidateQueries(["propertiesQuery"]);
+      onDeleteSuccess();
       setActive(0);
       toast.success("Success!", {
         description: "Property deleted successfully.",
