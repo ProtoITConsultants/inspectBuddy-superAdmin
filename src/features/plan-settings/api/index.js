@@ -17,13 +17,22 @@ export const planSettingsAPIs = {
       );
     }
   },
-  updatePlanSettings: async ({ planType, planData }) => {
+  updatePlanSettings: async ({
+    planType,
+    planData,
+    applyToExistingSubscribers,
+    shouldChangeMonthlyPrice,
+    shouldChangeYearlyPrice,
+  }) => {
     try {
       const response = await axiosInstance.patch(
         PLAN_SETTINGS_ENDPOINTS.UPDATE_SETTINGS_URL,
         {
-          planType: planType,
-          planData: planData,
+          planType,
+          planData,
+          applyToExistingSubscribers,
+          shouldChangeMonthlyPrice,
+          shouldChangeYearlyPrice,
         }
       );
       return response.data;

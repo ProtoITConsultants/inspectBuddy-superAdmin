@@ -6,7 +6,7 @@ const WarningModal = ({
   loadingOverlay,
   isModalOpen,
   onClose,
-  onSaveAnyways,
+  onUpdate,
 }) => {
   return (
     <ModalRoot
@@ -22,27 +22,34 @@ const WarningModal = ({
             Warning!
           </h1>
           <p className="md:text-[16px] text-[14px] text-dark-blue opacity-80">
-            Subscriptions will be cancelled for all the users who bought the
-            subscription on old prices and will not be renewed automatically, If
-            you change the subscription Model. <br />
-            Users will also be informed about the subscription plan changes!
+            You are about to change the subscription model for your plan.
+            <br />
+            <br />➤ If you click <strong>&quot;For All Users&quot;</strong>, the
+            new subscription model will apply to both existing and new users.
+            <br />➤ If you click <strong>&quot;New Users Only&quot;</strong>,
+            only new users will see and use the updated subscription model —
+            current subscriptions will continue as is.
+            <br />
+            <br />
+            All affected users will be notified about the changes to their
+            plans.
           </p>
         </div>
         <div className="flex items-center justify-center md:gap-[24px] gap-[16px]">
           <Button
             id="save-subscription-plan-change"
-            label="Save Anyways"
+            label="For All Users"
             buttonType="contained"
             type="button"
-            onClick={onSaveAnyways}
+            onClick={() => onUpdate(true)}
           />
           <Button
             id="save-subscription-plan-change"
-            label="Cancel"
+            label="New Users Only"
             buttonType="outlined"
             type="button"
             borderColor="#FF613E"
-            onClick={onClose}
+            onClick={() => onUpdate(false)}
             className="!text-[#FF613E] hover:!text-white hover:!bg-[#FF613E]"
           />
         </div>
