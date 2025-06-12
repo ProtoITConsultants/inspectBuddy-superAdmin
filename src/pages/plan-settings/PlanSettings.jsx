@@ -61,7 +61,7 @@ const PlanSettings = () => {
 
   // Update plan settings - Mutation
   const updatePlanSettingsMutation = useMutation({
-    mutationFn: () => {
+    mutationFn: ({ applyToExistingSubscribers = false }) => {
       const planData = {
         ...PLAN_SETTINGS.PLAN_FIELDS.reduce((acc, field) => {
           acc[field.name] = planForm.values.unlimitedValues[field.name]
@@ -72,9 +72,30 @@ const PlanSettings = () => {
         monthlyPrice: parseInt(planForm.values.monthlyPlanPrice),
         yearlyPrice: parseInt(planForm.values.yearlyPlanPrice),
       };
+
+      // Check if Monthly Price has changed/
+      const shouldChangeMonthlyPrice =
+        initialValuesRef.current.monthlyPlanPrice !==
+        planForm.values.monthlyPlanPrice;
+      // Check if Yearly Price has changed
+      const shouldChangeYearlyPrice =
+        initialValuesRef.current.yearlyPlanPrice !==
+        planForm.values.yearlyPlanPrice;
+
+      console.log("API Methods", {
+        planType: activeTab,
+        planData: planData,
+        applyToExistingSubscribers: applyToExistingSubscribers,
+        shouldChangeMonthlyPrice: shouldChangeMonthlyPrice,
+        shouldChangeYearlyPrice: shouldChangeYearlyPrice,
+      });
+
       return planSettingsAPIs.updatePlanSettings({
         planType: activeTab,
         planData,
+        applyToExistingSubscribers,
+        shouldChangeMonthlyPrice,
+        shouldChangeYearlyPrice,
       });
     },
     onSuccess: () => {
@@ -87,6 +108,8 @@ const PlanSettings = () => {
       setEditDetails(false);
     },
     onError: (error) => {
+      setModalLoadingOverlay(false);
+      setOpenWarningModal(false);
       toast.error("Error updating Plan Settings", {
         description: error.message,
         duration: 3000,
@@ -134,9 +157,9 @@ const PlanSettings = () => {
         return setOpenWarningModal(true);
       }
 
-      updatePlanSettingsMutation.mutate();
-
-      updatePlanSettingsMutation.mutate();
+      updatePlanSettingsMutation.mutate({
+        applyToExistingSubscribers: false,
+      });
     }
   };
 
@@ -159,9 +182,11 @@ const PlanSettings = () => {
           id="planSettingsWarningModal"
           isModalOpen={openWarningModal}
           onClose={() => setOpenWarningModal(false)}
-          onSaveAnyways={() => {
+          onUpdate={(value) => {
             setModalLoadingOverlay(true);
-            updatePlanSettingsMutation.mutate();
+            updatePlanSettingsMutation.mutate({
+              applyToExistingSubscribers: value,
+            });
           }}
           loadingOverlay={modalLoadingOverlay}
         />

@@ -42,12 +42,6 @@ export const usersListAPIs = {
       API_DATA.append("image", userDetails.personalImage);
     }
 
-    // Print Form Data
-    // Print the FormData entries
-    for (let [key, value] of API_DATA.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-
     try {
       const response = await axiosInstance.post(
         USERS_ENDPOINTS.CREATE_NEW_USER_URL,
