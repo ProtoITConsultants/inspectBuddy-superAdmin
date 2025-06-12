@@ -15,6 +15,7 @@ import Button from "./../../../components/ui/Button";
 import ChangeUserPlanConfirmationModal from "../../../features/user-details/components/ChangeUserPlanConfirmationModal";
 import { planSettingsAPIs } from "../../../features/plan-settings/api";
 import LoadingBackdrop from "./../../../components/ui/LoadingBackdrop";
+import CannotUpdateUserPlanModal from "../../../features/user-details/components/CannotUpdateUserPlanModal";
 
 const ViewUserDetails = () => {
   const navigate = useNavigate();
@@ -33,6 +34,10 @@ const ViewUserDetails = () => {
   // Local States
   const [updateUserPlanModalData, setUpdateUserPlanModalData] = useState({
     isOpen: false,
+  });
+  const [cannotUpdateUserModalData, setCannotUpdateUserModalData] = useState({
+    isOpen: false,
+    reason: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -328,18 +333,11 @@ const ViewUserDetails = () => {
       userProfile?.data?.subscriptionSource === "REVENUECAT" &&
       userProfile?.data?.role !== newPlanName
     ) {
-      return toast.error("Error!", {
-        description:
-          "You cannot change the plan as the subscription source is RevenueCat.",
-        duration: 3000,
-      });
-    }
-
-    // Open the confirmation modal - if no card is added
-    else if (!userProfile.data.defaultPaymentMethodExists) {
       setLoading(false);
-      return setUpdateUserPlanModalData({
+      return setCannotUpdateUserModalData({
         isOpen: true,
+        reason:
+          "You cannot Update User's Profile. As User has purchased the subscription through REVENUECAT, hence you cannot update this user's subscription plan from here!",
       });
     }
 
@@ -363,25 +361,34 @@ const ViewUserDetails = () => {
           totalInspectionLimit !== -999 &&
           currentInspectionCount > totalInspectionLimit
         ) {
-          return toast.error("Inspection Limit Exceeded!", {
-            description: `You will need to delete extra inspections to downgrade the plan.`,
-            duration: 3000,
+          return setCannotUpdateUserModalData({
+            isOpen: true,
+            reason:
+              "User's Inspection Limit Exceeded! You will need to delete extra inspections to downgrade the plan.",
           });
         } else if (
           totalPropertyLimit !== -999 &&
           currentPropertyCount > totalPropertyLimit
         ) {
-          return toast.error("Properties Limit Exceeded!", {
-            description: `User will need to delete extra properties to downgrade the plan.`,
-            duration: 3000,
+          return setCannotUpdateUserModalData({
+            isOpen: true,
+            reason:
+              "User's Properties Limit Exceeded! You will need to delete extra properties to downgrade the plan.",
           });
         } else if (
           totalTemplateLimit !== -999 &&
           currentTemplateCount > totalTemplateLimit
         ) {
-          return toast.error("Templates Limit Exceeded!", {
-            description: `User will need to delete extra templates to downgrade the plan.`,
-            duration: 3000,
+          return setCannotUpdateUserModalData({
+            isOpen: true,
+            reason:
+              "User's Templates Limit Exceeded! You will need to delete extra templates to downgrade the plan.",
+          });
+        }
+        // Open the confirmation modal - if no card is added
+        else if (!userProfile.data.defaultPaymentMethodExists) {
+          return setUpdateUserPlanModalData({
+            isOpen: true,
           });
         } else {
           return updateProfileMutation.mutate();
@@ -394,6 +401,12 @@ const ViewUserDetails = () => {
       } finally {
         setLoading(false);
       }
+    } // Open the confirmation modal - if no card is added
+    else if (!userProfile.data.defaultPaymentMethodExists) {
+      setLoading(false);
+      return setUpdateUserPlanModalData({
+        isOpen: true,
+      });
     }
 
     // If not downgrading, just update the profile
@@ -405,6 +418,17 @@ const ViewUserDetails = () => {
   return (
     <React.Fragment>
       {(loading || updateProfileMutation.isPending) && <LoadingBackdrop />}
+
+      <CannotUpdateUserPlanModal
+        isModalOpen={cannotUpdateUserModalData.isOpen}
+        onClose={() =>
+          setCannotUpdateUserModalData({
+            isOpen: false,
+            reason: "",
+          })
+        }
+        reasonMessage={cannotUpdateUserModalData.reason}
+      />
 
       <ChangeUserPlanConfirmationModal
         isModalOpen={updateUserPlanModalData.isOpen}
