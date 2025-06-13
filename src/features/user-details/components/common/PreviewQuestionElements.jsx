@@ -1,3 +1,4 @@
+import React from "react";
 import { QUESTIONS_ICONS_LIST } from "../../../../constants/QuestionsIcons";
 
 const Root = ({ children }) => (
@@ -27,10 +28,16 @@ const OptionCard = ({ optionNumber, optionData }) => (
       {optionData.iconId ? (
         <div className="flex items-center gap-[8px]">
           <p className={`text-[#6C727F] text-[14px] font-semibold`}>Icon:</p>
-          {
+          {/* {
             QUESTIONS_ICONS_LIST.find((icon) => icon.id == optionData.iconId)
               .icon
-          }
+          } */}
+
+          {React.cloneElement(
+            QUESTIONS_ICONS_LIST.find((icon) => icon.id == optionData.iconId)
+              .icon,
+            { className: "h-[24px] w-[24px]" }
+          )}
         </div>
       ) : (
         <p className="text-[14px] font-medium text-[#6c727f]">No Icon</p>
