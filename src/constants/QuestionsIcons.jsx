@@ -41,6 +41,12 @@ import {
   ICON_40,
   ICON_41,
   ICON_42,
+  ICON_43,
+  ICON_44,
+  ICON_45,
+  ICON_46,
+  ICON_47,
+  ICON_48,
 } from "../assets/icons/ElementQuestionIcons";
 
 export const QUESTIONS_ICONS_LIST = [
@@ -86,4 +92,10 @@ export const QUESTIONS_ICONS_LIST = [
   { id: 40, icon: <ICON_40 /> },
   { id: 41, icon: <ICON_41 /> },
   { id: 42, icon: <ICON_42 /> },
+  { id: 43, icon: <ICON_43 /> },
+  { id: 44, icon: <ICON_44 /> },
+  { id: 45, icon: <ICON_45 /> },
+  { id: 46, icon: <ICON_46 /> },
+  { id: 47, icon: <ICON_47 /> },
+  { id: 48, icon: <ICON_48 /> },
 ];
