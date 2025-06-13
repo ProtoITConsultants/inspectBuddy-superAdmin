@@ -150,7 +150,7 @@ const NewQuestionOptionsList = ({
 const OptionIconsList = ({ selectedIcon, onIconSelect }) => (
   <div className="flex flex-col gap-[12px]">
     <p className="text-[16px] font-medium text-dark-blue">Select Icons</p>
-    <div className="flex items-center gap-[8px] flex-wrap mt-[12px]">
+    <div className="flex items-center gap-[8px] flex-wrap mt-[12px] h-full max-h-[175px] overflow-auto">
       {QUESTIONS_ICONS_LIST.map(({ id, icon }) => (
         <button
           key={id}

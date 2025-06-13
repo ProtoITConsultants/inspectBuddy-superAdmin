@@ -5,7 +5,7 @@ import {
 } from "../../../../assets/icons/TickIcon";
 import { QUESTIONS_ICONS_LIST } from "./../../../../constants/QuestionsIcons";
 import { DELETE_ICON } from "./../../../../assets/icons/DynamicIcons";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const ExistingOption = ({
   optionNumber,
@@ -24,10 +24,15 @@ const ExistingOption = ({
         {optionData.iconId ? (
           <div className="flex items-center gap-[8px]">
             <p className={`text-[#6C727F] text-[14px] font-semibold`}>Icon:</p>
-            {
+            {/* {
               QUESTIONS_ICONS_LIST.find((icon) => icon.id == optionData.iconId)
                 .icon
-            }
+            } */}
+            {React.cloneElement(
+              QUESTIONS_ICONS_LIST.find((icon) => icon.id == optionData.iconId)
+                .icon,
+              { className: "h-[24px] w-[24px]" }
+            )}
           </div>
         ) : (
           <button

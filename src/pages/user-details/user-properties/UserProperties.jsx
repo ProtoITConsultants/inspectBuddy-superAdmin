@@ -128,6 +128,7 @@ const UserProperties = () => {
             setPropertyToDelete({});
           }}
           propertyToDelete={propertyToDelete}
+          onDeleteSuccess={() => {}}
         />
       )}
       {/* Filters Topbar */}

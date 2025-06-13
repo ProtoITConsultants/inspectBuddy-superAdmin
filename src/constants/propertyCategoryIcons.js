@@ -5,7 +5,12 @@ import {
   CATEGORY_APARTMENT_ICON,
   CATEGORY_TOWNHOUSE_ICON,
   CATEGORY_DORM_ICON,
-  CATEGORY_ADD_ICON,
+  CATEGORY_ICON_7,
+  CATEGORY_ICON_8,
+  CATEGORY_ICON_9,
+  CATEGORY_ICON_10,
+  CATEGORY_ICON_11,
+  CATEGORY_ICON_12,
 } from "../assets/icons/PropertyCategoryIcons";
 
 export const PROPERTY_CATEGORY_ICONS = [
@@ -15,5 +20,10 @@ export const PROPERTY_CATEGORY_ICONS = [
   { id: "4", Icon: CATEGORY_APARTMENT_ICON },
   { id: "5", Icon: CATEGORY_TOWNHOUSE_ICON },
   { id: "6", Icon: CATEGORY_DORM_ICON },
-  { id: "7", Icon: CATEGORY_ADD_ICON },
+  { id: "7", Icon: CATEGORY_ICON_7 },
+  { id: "8", Icon: CATEGORY_ICON_8 },
+  { id: "9", Icon: CATEGORY_ICON_9 },
+  { id: "10", Icon: CATEGORY_ICON_10 },
+  { id: "11", Icon: CATEGORY_ICON_11 },
+  { id: "12", Icon: CATEGORY_ICON_12 },
 ];
