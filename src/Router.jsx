@@ -36,6 +36,7 @@ import InspectionLogs from "./pages/user-details/user-inspections/inspection-log
 import FinalizeUserInspection from "./pages/user-details/user-inspections/finzalize-inspection/FinalizeUserInspection";
 import CompletedInspectionDetails from "./pages/user-details/user-inspections/completed-inspection-details/CompletedInspectionDetails";
 import CompletedInspectionDetailsRoot from "./layouts/CompletedInspectionDetailsRoot";
+import AppInformation from "./pages/app-information/AppInformation";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
       {
         path: "restore-requests",
         element: <RestoreRequests />,
+      },
+      {
+        path: "app-info",
+        element: <AppInformation />,
       },
     ],
   },
