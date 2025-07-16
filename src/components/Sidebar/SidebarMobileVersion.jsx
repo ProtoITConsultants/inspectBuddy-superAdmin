@@ -3,7 +3,6 @@ import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 import { SIDEBAR_LINKS } from "./../../constants/sidebarItems";
-import useNavbarTitle from "../../hooks/useNavbarTitle";
 
 const SideBarItem = ({ title, Icon, link, activeLink, onClick }) => {
   const isActive = activeLink === link;
@@ -37,7 +36,6 @@ const SidebarMobileVersion = () => {
   const [opened, setOpened] = useState(false);
 
   const toggleMenu = () => setOpened((prev) => !prev);
-  const { pageTitle } = useNavbarTitle();
 
   // Memoize sidebar items to avoid unnecessary re-renders
   const sidebarItems = useMemo(() => {
@@ -54,33 +52,31 @@ const SidebarMobileVersion = () => {
   }, [location.pathname]);
 
   return (
-    pageTitle !== "User's Details" && (
-      <div className="bg-white md:hidden block">
-        <Burger
-          opened={opened}
-          onClick={toggleMenu}
-          aria-label="Toggle navigation"
-          size={18}
-        />
+    <div className="bg-white md:hidden block">
+      <Burger
+        opened={opened}
+        onClick={toggleMenu}
+        aria-label="Toggle navigation"
+        size={18}
+      />
+      <div
+        className={clsx(
+          "absolute left-0 right-0 top-[72px] bg-white transition-all duration-300 ease-in-out overflow-auto z-[10]",
+          opened ? "h-[calc(100vh-72px)]" : "h-0"
+        )}
+      >
         <div
           className={clsx(
-            "absolute left-0 right-0 top-[72px] bg-white transition-all duration-300 ease-in-out overflow-auto z-[10]",
-            opened ? "h-[calc(100vh-72px)]" : "h-0"
+            "p-[20px] transition-opacity duration-300 ease-in-out",
+            opened ? "opacity-100 block" : "opacity-0 hidden"
           )}
         >
-          <div
-            className={clsx(
-              "p-[20px] transition-opacity duration-300 ease-in-out",
-              opened ? "opacity-100 block" : "opacity-0 hidden"
-            )}
-          >
-            <div className="lg:p-[24px] py-[16px] px-[12px] space-y-[16px] sticky md:top-[96px] top-[72px] w-full">
-              {sidebarItems}
-            </div>
+          <div className="lg:p-[24px] py-[16px] px-[12px] space-y-[16px] sticky md:top-[96px] top-[72px] w-full">
+            {sidebarItems}
           </div>
         </div>
       </div>
-    )
+    </div>
   );
 };
 

@@ -36,7 +36,7 @@ const Navbar = ({ withSidebar = false }) => {
           {pageTitle}
         </p>
       </div>
-      <div className="flex items-center md:space-x-[24px] space-x-[16px]">
+      <div className="flex items-center md:gap-[24px] gap-[16px]">
         {/* <button className="bg-[#F3F8FF] rounded-[8px] w-[40px] h-[40px] flex justify-center items-center">
           <Indicator
             inline
@@ -56,7 +56,7 @@ const Navbar = ({ withSidebar = false }) => {
           className="opacity-10 !h-[40px] md:block hidden !self-auto"
         /> */}
         <UserNavMenu />
-        {window.innerWidth < 768 && <SidebarMobileVersion />}
+        <SidebarMobileVersion />
       </div>
     </nav>
   );
