@@ -1,4 +1,5 @@
 import {
+  AppInfoIcon,
   DashboardIcon,
   MyTeamIcon,
   PlanSettingsIcon,
@@ -31,6 +32,11 @@ export const SIDEBAR_LINKS = [
     title: "Restore Requests",
     Icon: RestoreRequestsIcon,
     link: "/restore-requests",
+  },
+  {
+    title: "App Information",
+    Icon: AppInfoIcon,
+    link: "/app-info",
   },
 ];
 
