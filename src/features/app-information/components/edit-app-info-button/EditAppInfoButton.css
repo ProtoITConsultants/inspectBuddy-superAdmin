@@ -1,0 +1,17 @@
+#edit-app-info-button-container {
+  width: 100%;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 1294px) {
+  #edit-app-info-button-container {
+    width: fit-content;
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+  }
+}
