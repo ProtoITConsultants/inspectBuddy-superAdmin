@@ -8,6 +8,7 @@ const ROUTES = [
   { path: "/plan-settings", title: "Plan Settings" },
   { path: "/report-settings", title: "Report Settings" },
   { path: "/restore-requests", title: "Restore Requests" },
+  { path: "/app-info", title: "App Information" },
   { path: "/restore-requests/details/:requestId", title: "Request Details" },
   { path: "/user-details/:userId", title: "User's Details" },
   {
