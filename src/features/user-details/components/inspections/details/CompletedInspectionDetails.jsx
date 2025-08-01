@@ -111,7 +111,7 @@ const RoomElement = ({ children }) => {
   );
 };
 
-const RoomElementHeader = ({ elementName, elementImageURL, elementNote }) => {
+const RoomElementHeader = ({ elementName, elementImages, elementNote }) => {
   return (
     <>
       <h3 className="text-[16px] font-bold border-b border-b-[#cce2ff] p-[16px]">
@@ -120,12 +120,17 @@ const RoomElementHeader = ({ elementName, elementImageURL, elementNote }) => {
       <div className="p-[16px] flex flex-col gap-[20px]">
         <div className={`flex flex-col gap-[8px]`}>
           <p className="text-[14px] font-semibold">Element Image</p>
-          {elementImageURL ? (
-            <img
-              src={elementImageURL}
-              alt="element"
-              className="w-[100px] h-[100px] object-cover rounded-[8px]"
-            />
+          {elementImages?.length > 0 ? (
+            <div className="flex items-center gap-[10px]">
+              {elementImages.map((image) => (
+                <img
+                  key={image._id}
+                  src={image.url}
+                  alt="element"
+                  className="w-[100px] h-[100px] object-cover rounded-[8px]"
+                />
+              ))}
+            </div>
           ) : (
             <DEFAULT_ELEMENT_IMAGE />
           )}
@@ -146,69 +151,74 @@ const ElementChecklist = ({ checkListQuestions }) => {
   return (
     <div className="flex flex-col gap-[8px] pt-[4px] px-[16px] pb-[16px]">
       <p className="text-[14px] font-semibold leading-none">Checklist</p>
-      {checkListQuestions?.map((question, index) => (
-        <div
-          key={question._id}
-          className={`${
-            question.answer ? "flex" : "hidden"
-          } flex-col gap-[8px]`}
-        >
-          <p className="text-[14px]">
-            {index + 1}.&nbsp;{question.text}
-          </p>
-          <div>
-            {question.type === "dropdown" || question.type === "textArea" ? (
-              <div className="border border-[#CCE2FF] p-[12px] rounded-[8px] col-span-4">
-                <p className="text-[14px] font-medium">{question.answer}</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-4 rounded-[8px]">
-                {question.options.map((option, index) => (
-                  <div
-                    key={option._id}
-                    className={`flex flex-col items-center bg-[#2a85ff24] p-[4px] ${
-                      index === 0 && "rounded-l-[8px]"
-                    } ${
-                      index === question.options.length - 1 && "rounded-r-[8px]"
-                    }`}
-                  >
+      {checkListQuestions?.length < 1 ? (
+        <p className="text-gray-400 text-[14px]">No Checklist added.</p>
+      ) : (
+        checkListQuestions?.map((question, index) => (
+          <div
+            key={question._id}
+            className={`${
+              question.answer ? "flex" : "hidden"
+            } flex-col gap-[8px]`}
+          >
+            <p className="text-[14px]">
+              {index + 1}.&nbsp;{question.text}
+            </p>
+            <div>
+              {question.type === "dropdown" || question.type === "textArea" ? (
+                <div className="border border-[#CCE2FF] p-[12px] rounded-[8px] col-span-4">
+                  <p className="text-[14px] font-medium">{question.answer}</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-4 rounded-[8px]">
+                  {question.options.map((option, index) => (
                     <div
-                      className={`flex flex-col items-center ${
-                        question.answer === option.option && "bg-primary"
-                      } w-full rounded-[8px] p-[8px] ${
-                        option.option === question?.answer && "text-white"
-                      } text-[12px] text-center`}
+                      key={option._id}
+                      className={`flex flex-col items-center bg-[#2a85ff24] p-[4px] ${
+                        index === 0 && "rounded-l-[8px]"
+                      } ${
+                        index === question.options.length - 1 &&
+                        "rounded-r-[8px]"
+                      }`}
                     >
-                      {option.iconId ? (
-                        QUESTIONS_ICONS_LIST.find(
-                          (icon) => icon?.id === Number(option.iconId)
-                        )?.icon
-                      ) : (
-                        <div
-                          className={`border rounded-full w-[20px] h-[20px] flex justify-center items-center ${
-                            option.option === question?.answer
-                              ? "border-white text-white"
-                              : "border-gray-dark"
-                          }`}
-                        >
-                          <p className="text-[12px] font-medium leading-none">
-                            {option?.option
-                              ?.trim()
-                              .split(" ")[0]
-                              .charAt(0)
-                              .toUpperCase()}
-                          </p>
-                        </div>
-                      )}
-                      {option.option}
+                      <div
+                        className={`flex flex-col items-center ${
+                          question.answer === option.option && "bg-primary"
+                        } w-full rounded-[8px] p-[8px] ${
+                          option.option === question?.answer && "text-white"
+                        } text-[12px] text-center`}
+                      >
+                        {option.iconId ? (
+                          QUESTIONS_ICONS_LIST.find(
+                            (icon) => icon?.id === Number(option.iconId)
+                          )?.icon
+                        ) : (
+                          <div
+                            className={`border rounded-full w-[20px] h-[20px] flex justify-center items-center ${
+                              option.option === question?.answer
+                                ? "border-white text-white"
+                                : "border-gray-dark"
+                            }`}
+                          >
+                            <p className="text-[12px] font-medium leading-none">
+                              {option?.option
+                                ?.trim()
+                                .split(" ")[0]
+                                .charAt(0)
+                                .toUpperCase()}
+                            </p>
+                          </div>
+                        )}
+                        {option.option}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };
