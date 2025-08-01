@@ -484,12 +484,12 @@ export const userInspectionsAPIs = {
   },
 
   // Update Room Element Image
-  updateRoomElementImage: async ({
+  addRoomElementImage: async ({
     userId,
     inspectionId,
     roomId,
     elementId,
-    image,
+    images,
   }) => {
     try {
       // Create a FormData object
@@ -499,10 +499,10 @@ export const userInspectionsAPIs = {
       formData.append("inspectionId", inspectionId);
       formData.append("roomId", roomId);
       formData.append("elementId", elementId);
-      formData.append("image", image);
+      images.forEach((image) => formData.append("images", image));
 
       const response = await axiosInstance.post(
-        USER_DETAILS_ENDPOINTS.UPDATE_ROOM_ELEMENT_IMAGE_URL({ userId }),
+        USER_DETAILS_ENDPOINTS.ADD_ROOM_ELEMENT_IMAGE_URL({ userId }),
         formData,
         {
           headers: {
@@ -515,6 +515,35 @@ export const userInspectionsAPIs = {
       console.error("Error updating Room Element Image", error);
       throw new Error(
         error.response?.data?.message || "Error updating Room Element Image"
+      );
+    }
+  },
+
+  // Delete Room Element Image
+  deleteRoomElementImage: async ({
+    userId,
+    inspectionId,
+    roomId,
+    elementId,
+    imageId,
+  }) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_DETAILS_ENDPOINTS.DELETE_ROOM_ELEMENT_IMAGE_URL({
+          userId,
+        }),
+        {
+          inspectionId,
+          roomId,
+          elementId,
+          imageId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting Room Element Image", error);
+      throw new Error(
+        error.response?.data?.message || "Error deleting Room Element Image"
       );
     }
   },
