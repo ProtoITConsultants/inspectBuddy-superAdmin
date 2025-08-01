@@ -129,8 +129,10 @@ const GENERATE_INSPECTION_PDF_URL = ({ userId }) =>
   `/generateInspectionPDF?id=${encodeURIComponent(userId)}`;
 const UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL =
   "/InspectionChangeElementName";
-const UPDATE_ROOM_ELEMENT_IMAGE_URL = ({ userId }) =>
-  `/InspectionSaveElementImage?id=${encodeURIComponent(userId)}`;
+const ADD_ROOM_ELEMENT_IMAGE_URL = ({ userId }) =>
+  `/InspectionAddElementImage?id=${encodeURIComponent(userId)}`;
+const DELETE_ROOM_ELEMENT_IMAGE_URL = ({ userId }) =>
+  `/InspectionDeleteElementImage?id=${encodeURIComponent(userId)}`;
 const FETCH_INSPECTION_LOGS_URL = ({ userId, inspectionId, page }) =>
   `/getReportsByInspectionId?id=${encodeURIComponent(
     userId
@@ -207,7 +209,8 @@ const USER_DETAILS_ENDPOINTS = {
   UPDATE_SAVED_QUESTION,
   GENERATE_INSPECTION_PDF_URL,
   UPDATE_ROOM_ELEMENT_NAME_IN_INSPECTION_URL,
-  UPDATE_ROOM_ELEMENT_IMAGE_URL,
+  ADD_ROOM_ELEMENT_IMAGE_URL,
+  DELETE_ROOM_ELEMENT_IMAGE_URL,
   FETCH_INSPECTION_LOGS_URL,
   SAVE_INSPECTION_AS_DRAFT_URL,
   GET_COMPLETED_INSPECTION_DETAILS_URL,

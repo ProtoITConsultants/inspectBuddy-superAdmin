@@ -722,8 +722,8 @@ const AddQuestion = ({
 
             <Checkbox
               label="Answer is required"
-              {...newQuestionForm.getInputProps("isRequired")}
-              checked={newQuestionForm.values.isRequired}
+              {...newQuestionForm.getInputProps("answerRequired")}
+              checked={newQuestionForm.values.answerRequired}
             />
 
             <ElementQuestionModal.Actions>

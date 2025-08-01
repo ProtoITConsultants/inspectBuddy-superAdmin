@@ -139,9 +139,7 @@ const CompletedInspectionDetails = () => {
                 <CompletedInspection.RoomElement key={element._id}>
                   <CompletedInspection.RoomElementHeader
                     elementName={element.name}
-                    elementImageURL={
-                      element.elementImage ? element.elementImage : ""
-                    }
+                    elementImages={element?.image || []}
                     elementNote={element.note}
                   />
                   <CompletedInspection.ElementChecklist

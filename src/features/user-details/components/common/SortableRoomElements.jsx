@@ -22,8 +22,6 @@ import React, {
 } from "react";
 import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
 import { REARRANGE_ITEM_ICON } from "../../../../assets/icons/RearrangeIcon";
-// import { useTemplateStore } from "../../../../store/templateStore";
-import { DEFAULT_ELEMENT_IMAGE } from "../../../../assets/icons/DefaultElementImage";
 import { INFO_ICON } from "../../../../assets/icons/InfoIcon";
 import Button from "../../../../components/ui/Button";
 import { ADD_ICON } from "../../../../assets/icons/AddIcon";
@@ -43,6 +41,8 @@ import LoadingBackdrop from "../../../../components/ui/LoadingBackdrop";
 import debounce from "lodash.debounce";
 import compressImageFile from "../../../../utils/compressImageFile";
 import { useTemplateStore } from "../../../../store/templateStore";
+import ElementImageInput from "../inspections/details/ElementImageInput";
+import { DEFAULT_ELEMENT_IMAGE } from "../../../../assets/icons/DefaultElementImage";
 
 const Root = ({ children, items, onRearrangeItems }) => {
   // Global States
@@ -234,7 +234,7 @@ const ElementDetail = ({
   elementId,
   makeInputsDisabled,
   elementCategory,
-  elementImage,
+  elementImages,
   elementNotes,
 }) => {
   const { inspectionId, roomId, userId } = useParams();
@@ -261,7 +261,7 @@ const ElementDetail = ({
   const elementForm = useForm({
     initialValues: {
       elementNotes: "",
-      elementImage: "",
+      elementImages: "",
       elementImageIsRequired: imageRequired || false,
       elementQuestions: [],
     },
@@ -273,11 +273,12 @@ const ElementDetail = ({
     formRef.current.setFieldValue("elementQuestions", elementQuestions);
     formRef.current.setFieldValue("elementImageIsRequired", imageRequired);
     if (elementCategory === "inspection") {
-      formRef.current.setFieldValue("elementImage", elementImage || "");
+      formRef.current.setFieldValue("elementImages", elementImages || "");
       formRef.current.setFieldValue("elementNotes", elementNotes);
     }
     // clean up
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementQuestions, imageRequired, elementCategory]);
 
   const updateElementImage = useMutation({
@@ -318,7 +319,7 @@ const ElementDetail = ({
       setSelectedInspectionRoomElements(updatedElementData);
 
       // Update the form value
-      formRef.current.setFieldValue("elementImage", data?.newImage);
+      formRef.current.setFieldValue("elementImages", data?.newImage);
     },
   });
 
@@ -392,42 +393,19 @@ const ElementDetail = ({
             Element Image{imageRequired && ` *`}
           </p>
           <div className="flex items-center gap-[16px]">
-            {elementForm?.values?.elementImage?.url ? (
-              <img
-                src={elementForm.values.elementImage?.url}
-                alt="element-img"
-                className="w-[100px] h-[100px] rounded-sm object-cover"
-              />
-            ) : (
-              <DEFAULT_ELEMENT_IMAGE />
-            )}
-
             {!makeInputsDisabled ? (
-              <React.Fragment>
-                <input
-                  type="file"
-                  accept="/image/*"
-                  hidden
-                  id={`${elementId}-img`}
-                  onChange={(e) => updateElementImage.mutate(e)}
-                />
-                <label
-                  htmlFor={`${elementId}-img`}
-                  className="bg-primary font-bold px-[24px] py-[12px] md:text-[16px] text-[14px] text-white cursor-pointer rounded-[8px]"
-                >
-                  {elementForm.values.elementImage
-                    ? "Change Image"
-                    : "Add an Image"}
-                </label>
-              </React.Fragment>
+              <ElementImageInput elementId={elementId} />
             ) : (
-              <div
-                className={cn(
-                  "font-bold px-[24px] py-[12px] md:text-[16px] text-[14px] text-white hover:cursor-not-allowed rounded-[8px] bg-[#CBCBCB]"
-                )}
-              >
-                Add an Image
-              </div>
+              <>
+                <DEFAULT_ELEMENT_IMAGE />
+                <div
+                  className={cn(
+                    "font-bold px-[24px] py-[12px] md:text-[16px] text-[14px] text-white hover:cursor-not-allowed rounded-[8px] bg-[#CBCBCB]"
+                  )}
+                >
+                  Add an Image
+                </div>
+              </>
             )}
           </div>
           {makeInputsDisabled && (
