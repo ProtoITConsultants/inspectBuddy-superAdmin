@@ -278,6 +278,7 @@ const ElementDetail = ({
     }
     // clean up
     return () => {};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementQuestions, imageRequired, elementCategory]);
 
   const updateElementImage = useMutation({
