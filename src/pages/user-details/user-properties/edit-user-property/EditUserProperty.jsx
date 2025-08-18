@@ -223,10 +223,11 @@ const EditUserProperty = () => {
           >
             <EditPropertyForm.DoubleColumnGrid>
               <TextInput
-                label="Name"
-                placeholder="Enter property name"
-                {...form.getInputProps("propertyName")}
+                label="Street No."
+                placeholder="Enter Street Number"
+                {...form.getInputProps("propertyStreetAddress")}
                 className="w-full font-medium"
+                withAsterisk
               />
 
               <TextInput
@@ -234,35 +235,31 @@ const EditUserProperty = () => {
                 placeholder="Unit number"
                 {...form.getInputProps("propertyUnitNumber")}
                 className="w-full font-medium"
+                withAsterisk
               />
-
               <TextInput
-                label="Street Address"
-                placeholder="Enter Street Address"
-                {...form.getInputProps("propertyStreetAddress")}
-                className="w-full font-medium"
-              />
-              <CountryInput
-                selectedCountry={form.values.propertyCountry}
-                onCountrySelect={(value) =>
-                  form.setFieldValue("propertyCountry", value)
-                }
-                error={form.errors.propertyCountry}
+                label="Street Name"
+                placeholder="Enter Street name"
+                {...form.getInputProps("propertyName")}
+                className="w-full font-medium sm:col-span-2"
+                withAsterisk
               />
             </EditPropertyForm.DoubleColumnGrid>
-            <EditPropertyForm.TripleColumnGrid>
+            <EditPropertyForm.DoubleColumnGrid>
               <TextInput
                 label="City"
                 placeholder="Enter City"
                 {...form.getInputProps("propertyCity")}
                 className="w-full font-medium"
+                withAsterisk
               />
 
               <TextInput
                 label="State/Province"
-                placeholder="State/Province"
+                placeholder="Enter State/Province"
                 {...form.getInputProps("propertyState")}
                 className="w-full font-medium"
+                withAsterisk
               />
 
               <TextInput
@@ -270,8 +267,18 @@ const EditUserProperty = () => {
                 placeholder="Zip/Postal Code"
                 {...form.getInputProps("propertyZipCode")}
                 className="w-full font-medium md:col-span-1 col-span-2"
+                withAsterisk
               />
-            </EditPropertyForm.TripleColumnGrid>
+
+              <CountryInput
+                isRequired={true}
+                selectedCountry={form.values.propertyCountry}
+                onCountrySelect={(value) =>
+                  form.setFieldValue("propertyCountry", value)
+                }
+                error={form.errors.propertyCountry}
+              />
+            </EditPropertyForm.DoubleColumnGrid>
             <EditPropertyForm.DoubleColumnGrid>
               <PropertyCategorySelect
                 options={USER_ADDED_PROPERTY_CATEGORIES}

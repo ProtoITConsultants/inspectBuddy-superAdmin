@@ -2,7 +2,12 @@ import { Avatar, Group, Select, Text } from "@mantine/core";
 import { COUNTRIES_DATA_2 } from "../../../../../constants/countriesData2";
 import { useEffect, useState } from "react";
 
-const CountryInput = ({ error, selectedCountry, onCountrySelect }) => {
+const CountryInput = ({
+  isRequired = false,
+  error,
+  selectedCountry,
+  onCountrySelect,
+}) => {
   const [value, setValue] = useState(null);
 
   const renderCountryOptions = ({ option }) => {
@@ -52,6 +57,7 @@ const CountryInput = ({ error, selectedCountry, onCountrySelect }) => {
       nothingFoundMessage="Nothing found..."
       searchable
       clearable
+      withAsterisk={isRequired}
     />
   );
 };
