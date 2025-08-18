@@ -81,11 +81,12 @@ const UserProperties = () => {
         <Table.DoubleColumn>
           <PropertyCard
             propertyData={{
-              propertyName: property.name,
+              propertyName: property?.address?.street + ", " + property.name,
               propertyAddress: [
-                property?.address?.unit,
-                property?.address?.street,
                 property?.address?.city,
+                property?.address?.state,
+                property?.address?.zip,
+                property?.address?.country,
               ]
                 .filter(Boolean)
                 .join(", "),

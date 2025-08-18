@@ -25,6 +25,20 @@ const EditPropertySkeletion = () => {
               <Skeleton radius={"2px"} height={12} width={60} />
               <Skeleton radius={"8px"} height={48} width="100%" />
             </div>
+            <div className="flex flex-col gap-[8px] sm:col-span-2">
+              <Skeleton radius={"2px"} height={12} width={60} />
+              <Skeleton radius={"8px"} height={48} width="100%" />
+            </div>
+          </EditPropertyForm.DoubleColumnGrid>
+          <EditPropertyForm.DoubleColumnGrid>
+            <div className="flex flex-col gap-[8px]">
+              <Skeleton radius={"2px"} height={12} width={60} />
+              <Skeleton radius={"8px"} height={48} width="100%" />
+            </div>
+            <div className="flex flex-col gap-[8px]">
+              <Skeleton radius={"2px"} height={12} width={60} />
+              <Skeleton radius={"8px"} height={48} width="100%" />
+            </div>
             <div className="flex flex-col gap-[8px]">
               <Skeleton radius={"2px"} height={12} width={60} />
               <Skeleton radius={"8px"} height={48} width="100%" />
@@ -34,20 +48,6 @@ const EditPropertySkeletion = () => {
               <Skeleton radius={"8px"} height={48} width="100%" />
             </div>
           </EditPropertyForm.DoubleColumnGrid>
-          <EditPropertyForm.TripleColumnGrid>
-            <div className="flex flex-col gap-[8px]">
-              <Skeleton radius={"2px"} height={12} width={60} />
-              <Skeleton radius={"8px"} height={48} width="100%" />
-            </div>
-            <div className="flex flex-col gap-[8px]">
-              <Skeleton radius={"2px"} height={12} width={60} />
-              <Skeleton radius={"8px"} height={48} width="100%" />
-            </div>
-            <div className="flex flex-col gap-[8px]">
-              <Skeleton radius={"2px"} height={12} width={60} />
-              <Skeleton radius={"8px"} height={48} width="100%" />
-            </div>
-          </EditPropertyForm.TripleColumnGrid>
           <EditPropertyForm.DoubleColumnGrid>
             <div className="flex flex-col gap-[8px]">
               <Skeleton radius={"2px"} height={12} width={60} />
