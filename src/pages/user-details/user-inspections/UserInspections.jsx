@@ -173,11 +173,15 @@ const UserInspections = () => {
         <Table.DoubleColumn>
           <PropertyCard
             propertyData={{
-              propertyName: inspection?.property?.name,
+              propertyName:
+                inspection?.property?.address?.street +
+                ", " +
+                inspection?.property?.name,
               propertyAddress: [
-                inspection?.property?.address?.street,
                 inspection?.property?.address?.city,
                 inspection?.property?.address?.state,
+                inspection?.property?.address?.zip,
+                inspection?.property?.address?.country,
               ]
                 .filter(Boolean)
                 .join(", "),
