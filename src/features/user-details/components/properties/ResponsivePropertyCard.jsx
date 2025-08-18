@@ -23,14 +23,16 @@ const ResponsivePropertyCard = ({ propertyData }) => {
       <div className="flex flex-col justify-between md:pr-[20px] pr-[10px] md:py-[16px] py-[8px] h-full w-full">
         <div className="w-full">
           <h2 className="text-dark-blue font-semibold text-[14px]">
-            {propertyData.name}
+            {propertyData.address.street + ", " + propertyData.name}
           </h2>
           <p className="text-[#6C727F] text-[12px]">
-            {propertyData.address.unit +
+            {propertyData?.address?.city +
               ", " +
-              propertyData.address.street +
+              propertyData?.address?.state +
               ", " +
-              propertyData.address.city}
+              propertyData?.address?.zip +
+              ", " +
+              propertyData?.address?.country}
           </p>
         </div>
         <div className="flex items-center justify-between">

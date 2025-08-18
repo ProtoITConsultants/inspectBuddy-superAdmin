@@ -62,10 +62,10 @@ export const PropertyDetails = ({ propertyDetails }) => {
       <div className="md:flex items-center justify-between gap-8 lg:px-[32px]">
         <div className="text-dark-blue">
           <h1 className="lg:text-[32px] md:text-[28px] text-[20px] font-bold">
-            {propertyDetails?.name}
+            {propertyDetails?.address?.street}, {propertyDetails?.name}
           </h1>
           <p className="opacity-50 md:text-[16px] text-[14px]">
-            {`${propertyDetails?.address?.unit}, ${propertyDetails?.address?.street}, ${propertyDetails?.address?.city}, ${propertyDetails?.address?.state}, ${propertyDetails?.address?.country}`}
+            {`${propertyDetails?.address?.city}, ${propertyDetails?.address?.state}, ${propertyDetails?.address?.zip}, ${propertyDetails?.address?.country}`}
           </p>
         </div>
 
