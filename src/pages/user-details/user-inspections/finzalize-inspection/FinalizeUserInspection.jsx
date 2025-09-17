@@ -42,7 +42,14 @@ const FinalizeUserInspection = () => {
           />
           <FinalizeInspection.IconField
             label="Selected Property"
-            value={data?.property?.name}
+            value={
+              data?.property?.address?.street +
+              " " +
+              data?.property?.name +
+              (data?.property?.address.unit
+                ? "-" + data?.property?.address.unit
+                : "")
+            }
             icon={<ARROW_RIGHT_ICON className="text-[#9EA3AE] rotate-90" />}
             className="sm:col-span-1 col-span-2"
           />
