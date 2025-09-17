@@ -155,7 +155,11 @@ const AddInspectionModal = ({
             data={userPropertiesAndInspectionsQuery.userProperties?.map((p) => {
               return {
                 value: p._id,
-                label: p.name,
+                label:
+                  (p.address.unit ? p.address.unit + "-" : "") +
+                  p?.address?.street +
+                  " " +
+                  p.name,
               };
             })}
             {...newInspectionForm.getInputProps("linkedProperty")}

@@ -174,8 +174,11 @@ const UserInspections = () => {
           <PropertyCard
             propertyData={{
               propertyName:
+                (inspection?.property?.address?.unit
+                  ? inspection?.property?.address.unit + "-"
+                  : "") +
                 inspection?.property?.address?.street +
-                ", " +
+                " " +
                 inspection?.property?.name,
               propertyAddress: [
                 inspection?.property?.address?.city,
