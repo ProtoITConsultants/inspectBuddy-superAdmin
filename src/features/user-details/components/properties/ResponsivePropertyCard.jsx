@@ -11,28 +11,34 @@ const ResponsivePropertyCard = ({ propertyData }) => {
       {propertyData?.image?.url ? (
         <img
           src={propertyData?.image?.url}
-          alt="property"
-          className="md:w-[120px] w-[85px] h-full object-cover rounded-l-[8px]"
+          alt="property-image"
+          className="w-[85px] md:w-[120px] h-full object-cover rounded-l-[8px]"
         />
       ) : (
-        <div>
-          <DEFAULT_PROPERTY_ICON className="md:h-[120px] h-[85px] w-auto" />
+        <div className="w-fit h-full min-h-[85px] bg-[#DDEBFF] flex items-center justify-center rounded-l-[8px]">
+          <DEFAULT_PROPERTY_ICON className="md:w-[120px] w-[85px] h-full" />
         </div>
       )}
 
-      <div className="flex flex-col justify-between md:pr-[20px] pr-[10px] md:py-[16px] py-[8px] h-full w-full">
+      <div className="flex flex-col justify-between md:pr-[20px] pr-[10px] md:py-[16px] py-[8px] h-full w-full flex-1">
         <div className="w-full">
           <h2 className="text-dark-blue font-semibold text-[14px]">
-            {propertyData.address.street + ", " + propertyData.name}
+            {(propertyData?.address?.unit
+              ? propertyData?.address?.unit + "-"
+              : "") +
+              propertyData.address.street +
+              " " +
+              propertyData.name}
           </h2>
           <p className="text-[#6C727F] text-[12px]">
-            {propertyData?.address?.city +
-              ", " +
-              propertyData?.address?.state +
-              ", " +
-              propertyData?.address?.zip +
-              ", " +
-              propertyData?.address?.country}
+            {[
+              propertyData?.address?.city,
+              propertyData?.address?.state,
+              propertyData?.address?.zip,
+              propertyData?.address?.country,
+            ]
+              .filter(Boolean)
+              .join(", ")}
           </p>
         </div>
         <div className="flex items-center justify-between">
