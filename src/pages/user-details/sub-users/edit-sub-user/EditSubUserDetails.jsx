@@ -99,14 +99,14 @@ const EditSubUserDetails = () => {
         userEmail: !values.userEmail.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
           ? "User Email is not Valid!"
           : null,
-        userAddress:
-          values.userAddress.length < 10
-            ? "User Address should be atleast 10 characters"
-            : null,
-        userPhoneNumber:
-          values.userPhoneNumber.replace(/[\s()-]/g, "").length < 11
-            ? "User Phone Number is not Valid!"
-            : null,
+        // userAddress:
+        //   values.userAddress.length < 10
+        //     ? "User Address should be atleast 10 characters"
+        //     : null,
+        // userPhoneNumber:
+        //   values.userPhoneNumber.replace(/[\s()-]/g, "").length < 11
+        //     ? "User Phone Number is not Valid!"
+        //     : null,
       };
     },
   });
@@ -149,6 +149,7 @@ const EditSubUserDetails = () => {
           placeholder="Fullname"
           {...form.getInputProps("userName")}
           className="w-full font-medium"
+          withAsterisk
         />
         <TextInput
           label="Email"
@@ -161,6 +162,7 @@ const EditSubUserDetails = () => {
           }}
           // {...form.getInputProps("userEmail")}
           className="w-full font-medium"
+          withAsterisk
         />
         <TextInput
           label="Address"
