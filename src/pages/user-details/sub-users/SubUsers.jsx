@@ -118,6 +118,10 @@ const SubUsers = () => {
         key={member._id}
         memberData={member}
         totalCategories={USER_ADDED_PROPERTY_CATEGORIES.length}
+        onDeleteSubUser={() => {
+          setSubUserToDelete(member);
+          setShowDeleteSubUserModal(true);
+        }}
       />
     );
   });
@@ -139,10 +143,10 @@ const SubUsers = () => {
           setSubUserToDelete({});
         }}
         onConfirmDelete={() => deleteSubUser.mutate()}
-        loadingOverlay={deleteSubUser.isPending}
-        modalContent={{
-          modalTitle: "Confirmation",
-          modalDescription: `Are you sure you want to delete "${subUserToDelete.userName}"? This action cannot be undone.`,
+        isDeletingUser={deleteSubUser.isPending}
+        userToDelete={{
+          _id: subUserToDelete._id,
+          fullname: subUserToDelete.userName,
         }}
       />
 
@@ -156,7 +160,9 @@ const SubUsers = () => {
           onChange={(value) => {
             setFiltersData((prev) => ({ ...prev, keyword: value }));
           }}
-          initialValue={MEMBER_CATEGORY_FILTER[0] || null}
+          initialValue={null}
+          placeholder="Select Category..."
+          isSubUserFilter={true}
         />
         <Searchbar
           placeholder="Search users by name..."

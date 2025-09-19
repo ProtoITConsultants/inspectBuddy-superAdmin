@@ -39,10 +39,15 @@ const ViewSubUser = () => {
       <UserDetailsGrid>
         <UserDetailsItem title="Name" value={data.subUser.fullname} />
         <UserDetailsItem title="Email" value={data.subUser.email} />
-        <UserDetailsItem title="Address" value={data.subUser.address} />
+        <UserDetailsItem
+          title="Address"
+          value={data.subUser.address || "N/A"}
+        />
         <UserDetailsItem
           title="Phone Number"
-          value={"+" + data.subUser.phoneNumber}
+          value={
+            data.subUser.phoneNumber ? "+" + data.subUser.phoneNumber : "N/A"
+          }
         />
         <AssignedCategoriesSection
           assignedCategories={data.subUser.assignedCategories}

@@ -278,7 +278,7 @@ const UserTemplates = () => {
             setFiltersData((prev) => ({ ...prev, status: value }));
           }}
           initialValue={null}
-          placeholder="Select Category"
+          placeholder="Select Status..."
         />
         <Group gap="sm">
           <Searchbar

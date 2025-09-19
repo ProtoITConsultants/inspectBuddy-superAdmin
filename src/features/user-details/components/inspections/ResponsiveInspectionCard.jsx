@@ -37,7 +37,7 @@ const ResponsiveInspectionCard = ({ inspectionData }) => {
           <InspectionStatusCard
             status={
               inspectionData?.isDraft
-                ? "drafted"
+                ? "draft"
                 : inspectionData?.isInspectionCompleted
                 ? "completed"
                 : "in progress"

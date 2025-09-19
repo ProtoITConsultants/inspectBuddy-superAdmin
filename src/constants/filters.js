@@ -24,18 +24,18 @@ export const USERS_SUBSCRIPTIONS_TYPE = [
 
 // Sub users Categories Type - Sub Users Page
 export const MEMBER_CATEGORY_FILTER = [
-  {
-    _id: 1,
-    label: "All Members",
-    value: "All Members",
-  },
+  // {
+  //   _id: 1,
+  //   label: "All Members",
+  //   value: "All Members",
+  // },
+  // {
+  //   _id: 1,
+  //   label: "Unassigned",
+  //   value: "Unassigned",
+  // },
   {
     _id: 2,
-    label: "Unassigned",
-    value: "Unassigned",
-  },
-  {
-    _id: 3,
     label: "All Categories",
     value: "All Categories",
   },
@@ -44,7 +44,7 @@ export const MEMBER_CATEGORY_FILTER = [
 // Template Type - Templates Page
 export const TEMPLATE_CATEGORIES = [
   { id: 1, label: "All Templates", value: "all" },
-  { id: 2, label: "Drafted", value: "drafted" },
+  { id: 2, label: "Draft", value: "drafted" },
   { id: 3, label: "Completed", value: "completed" },
   { id: 4, label: "Default Template", value: "default" },
 ];
@@ -54,7 +54,7 @@ export const INSPECTIONS_CATEGORIES = [
   { _id: 1, value: "all", label: "All Inspections" },
   { _id: 2, value: "completed", label: "Completed" },
   { _id: 3, value: "notcompleted", label: "In Progress" },
-  { _id: 4, value: "draft", label: "Drafted" },
+  { _id: 4, value: "draft", label: "Draft" },
 ];
 
 export const INSPECTION_DATE_RANGE_FILTER = [

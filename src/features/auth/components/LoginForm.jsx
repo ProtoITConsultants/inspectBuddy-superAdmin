@@ -36,7 +36,7 @@ export const LoginForm = () => {
       setUser(data?.userData);
       toast.success("Authentication Successful!", {
         description: "Welcome Back!",
-        duration: 3000
+        duration: 3000,
       });
       navigate("/", {
         replace: true,
@@ -58,7 +58,13 @@ export const LoginForm = () => {
       <TextInput
         label="Email"
         placeholder="hi@example.com"
-        {...form.getInputProps("email")}
+        value={form.values.email}
+        onChange={(event) => {
+          const value = event.target.value;
+          // Always make the first character lowercase
+          form.setFieldValue("email", value.toLowerCase());
+        }}
+        error={form.errors.email}
         className="w-full font-medium"
       />
       <PasswordInput

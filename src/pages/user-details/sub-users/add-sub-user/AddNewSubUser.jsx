@@ -46,14 +46,14 @@ const AddNewSubUser = () => {
         userEmail: !values.userEmail.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
           ? "User Email is not Valid!"
           : null,
-        userAddress:
-          values.userAddress.length < 10
-            ? "User Address should be atleast 10 characters"
-            : null,
-        userPhoneNumber:
-          values.userPhoneNumber.replace(/[\s()-]/g, "").length < 11
-            ? "User Phone Number is not Valid!"
-            : null,
+        // userAddress:
+        //   values.userAddress.length < 10
+        //     ? "User Address should be atleast 10 characters"
+        //     : null,
+        // userPhoneNumber:
+        //   values.userPhoneNumber.replace(/[\s()-]/g, "").length < 11
+        //     ? "User Phone Number is not Valid!"
+        //     : null,
       };
     },
   });
@@ -123,12 +123,20 @@ const AddNewSubUser = () => {
           placeholder="Fullname"
           {...subUserDetailsForm.getInputProps("userName")}
           className="w-full font-medium"
+          withAsterisk
         />
         <TextInput
           label="Email"
           placeholder="Email"
-          {...subUserDetailsForm.getInputProps("userEmail")}
+          value={subUserDetailsForm.values.userEmail}
+          error={subUserDetailsForm.errors.userEmail}
+          onChange={(event) => {
+            const value = event.target.value;
+            subUserDetailsForm.setFieldValue("userEmail", value.toLowerCase());
+          }}
+          // {...subUserDetailsForm.getInputProps("userEmail")}
           className="w-full font-medium"
+          withAsterisk
         />
         <TextInput
           label="Address"
