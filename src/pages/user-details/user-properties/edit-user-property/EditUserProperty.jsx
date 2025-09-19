@@ -61,40 +61,35 @@ const EditUserProperty = () => {
     },
 
     validate: {
-      propertyImage: (value) => (!value ? "Image is required" : null),
+      // propertyImage: (value) => (!value ? "Image is required" : null),
 
-      propertyName: (value) =>
-        !value || value.length < 10
-          ? "Name should be at least 10 characters long"
-          : null,
+      propertyName: (value) => (!value ? "Street name is required" : null),
 
       propertyStreetAddress: (value) =>
-        !value || value.length < 5
-          ? "Street Address should be at least 5 characters long"
-          : null,
-
-      propertyCountry: (value) => (!value ? "Country is required" : null),
-
-      propertyUnitNumber: (value) =>
-        !value ? "Unit number is required" : null,
+        !value ? "Street Address is required" : null,
 
       // propertyCountry: (value) => (!value ? "Country is required" : null),
 
-      propertyCity: (value) =>
-        !value || value.length < 2
-          ? "City should be at least 2 characters long"
-          : null,
+      // propertyUnitNumber: (value) =>
+      //   !value ? "Unit number is required" : null,
 
-      propertyState: (value) => (!value ? "State is required" : null),
+      // propertyCountry: (value) => (!value ? "Country is required" : null),
 
-      propertyZipCode: (value) =>
-        !value || value.length < 5
-          ? "Zip code should be at least 5 characters long"
-          : null,
+      // propertyCity: (value) =>
+      //   !value || value.length < 2
+      //     ? "City should be at least 2 characters long"
+      //     : null,
+
+      // propertyState: (value) => (!value ? "State is required" : null),
+
+      // propertyZipCode: (value) =>
+      //   !value || value.length < 5
+      //     ? "Zip code should be at least 5 characters long"
+      //     : null,
 
       // propertyCategory: (value) => (!value ? "Category is required" : null),
-      propertyCategory: (value) =>
-        !value?.value ? "Category is required" : null,
+      // propertyCategory: (value) =>
+      //   !value?.value ? "Category is required" : null,
     },
   });
 
@@ -235,7 +230,6 @@ const EditUserProperty = () => {
                 placeholder="Unit number"
                 {...form.getInputProps("propertyUnitNumber")}
                 className="w-full font-medium"
-                withAsterisk
               />
               <TextInput
                 label="Street Name"
@@ -251,7 +245,6 @@ const EditUserProperty = () => {
                 placeholder="Enter City"
                 {...form.getInputProps("propertyCity")}
                 className="w-full font-medium"
-                withAsterisk
               />
 
               <TextInput
@@ -259,7 +252,6 @@ const EditUserProperty = () => {
                 placeholder="Enter State/Province"
                 {...form.getInputProps("propertyState")}
                 className="w-full font-medium"
-                withAsterisk
               />
 
               <TextInput
@@ -267,11 +259,10 @@ const EditUserProperty = () => {
                 placeholder="Zip/Postal Code"
                 {...form.getInputProps("propertyZipCode")}
                 className="w-full font-medium md:col-span-1 col-span-2"
-                withAsterisk
               />
 
               <CountryInput
-                isRequired={true}
+                isRequired={false}
                 selectedCountry={form.values.propertyCountry}
                 onCountrySelect={(value) =>
                   form.setFieldValue("propertyCountry", value)

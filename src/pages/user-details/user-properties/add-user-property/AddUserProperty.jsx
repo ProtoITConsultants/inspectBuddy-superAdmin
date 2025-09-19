@@ -43,23 +43,23 @@ const AddUserProperty = () => {
 
     validate: {
       //   propertyImage: (value) => (!value ? "Image is required" : null),
-      propertyName: (value) => (!value ? "Property name is required" : null),
+      propertyName: (value) => (!value ? "Street name is required" : null),
 
       propertyStreetAddress: (value) =>
         !value ? "Street address is required" : null,
 
-      propertyCountry: (value) => (!value ? "Country is required" : null),
+      // propertyCountry: (value) => (!value ? "Country is required" : null),
 
-      propertyUnitNumber: (value) =>
-        !value ? "Unit number is required" : null,
+      // propertyUnitNumber: (value) =>
+      //   !value ? "Unit number is required" : null,
 
       // propertyCountry: (value) => (!value ? "Country is required" : null),
 
-      propertyCity: (value) => (!value ? "City is required" : null),
+      // propertyCity: (value) => (!value ? "City is required" : null),
 
-      propertyState: (value) => (!value ? "State is required" : null),
+      // propertyState: (value) => (!value ? "State is required" : null),
 
-      propertyZipCode: (value) => (!value ? "Zip code is required" : null),
+      // propertyZipCode: (value) => (!value ? "Zip code is required" : null),
 
       // propertyCategory: (value) => (!value ? "Category is required" : null),
       //   propertyCategory: (value) =>
@@ -161,7 +161,6 @@ const AddUserProperty = () => {
                 placeholder="Enter Unit number"
                 {...propertyForm.getInputProps("propertyUnitNumber")}
                 className="w-full font-medium"
-                withAsterisk
               />
 
               <TextInput
@@ -178,7 +177,6 @@ const AddUserProperty = () => {
                 placeholder="Enter City"
                 {...propertyForm.getInputProps("propertyCity")}
                 className="w-full font-medium"
-                withAsterisk
               />
 
               <TextInput
@@ -186,7 +184,6 @@ const AddUserProperty = () => {
                 placeholder="State/Province"
                 {...propertyForm.getInputProps("propertyState")}
                 className="w-full font-medium"
-                withAsterisk
               />
 
               <TextInput
@@ -194,10 +191,9 @@ const AddUserProperty = () => {
                 placeholder="Zip/Postal Code"
                 {...propertyForm.getInputProps("propertyZipCode")}
                 className="w-full font-medium"
-                withAsterisk
               />
               <CountryInput
-                isRequired={true}
+                isRequired={false}
                 selectedCountry={propertyForm.values.propertyCountry}
                 onCountrySelect={(value) =>
                   propertyForm.setFieldValue("propertyCountry", value)
