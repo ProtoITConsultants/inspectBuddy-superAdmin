@@ -87,6 +87,28 @@ const DateRangeFilter = ({
           value={dateRange}
           onChange={(values) => updateFiltersDate(values)}
         />
+        {/* Reset Date Range - Button */}
+        {filtersData.startdate !== "" && filtersData.enddate !== "" && (
+          <div className="flex justify-end mt-3">
+            <button
+              type="button"
+              onClick={() => {
+                setDateRange([]);
+                setFiltersData((prev) => ({
+                  ...prev,
+                  startdate: "",
+                  enddate: "",
+                }));
+              }}
+              disabled={
+                filtersData.startdate === "" && filtersData.enddate === ""
+              }
+              className="text-[14px] text-[#FF613E] border-[1.5px] border-[#FF613E] hover:text-white hover:bg-[#FF613E] rounded-[8px] p-[6px_12px] w-full disabled:border-gray-300 disabled:text-gray-300 disabled:hover:bg-white disabled:cursor-not-allowed"
+            >
+              Reset Date Range
+            </button>
+          </div>
+        )}
       </Menu.Dropdown>
     </Menu>
   );
