@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import AssignedCategoriesCard from "./AssignedCategoriesCard";
 import { DELETE_ICON } from "../../../../assets/icons/DynamicIcons";
 
-const SubUserCard = ({ memberData, totalCategories }) => {
+const SubUserCard = ({ memberData, totalCategories, onDeleteSubUser }) => {
   return (
     <div className="flex flex-col justify-between md:pr-[20px] p-[12px] w-full rounded-[8px] bg-white gap-[12px] items-center shadow-custom">
       <div className="w-full flex justify-between">
@@ -17,7 +17,7 @@ const SubUserCard = ({ memberData, totalCategories }) => {
           >
             <span>View Details</span>
           </Link>
-          <button type="button" onClick={() => {}}>
+          <button type="button" onClick={() => onDeleteSubUser()}>
             <DELETE_ICON className="text-[#8885AA]" />
           </button>
         </div>

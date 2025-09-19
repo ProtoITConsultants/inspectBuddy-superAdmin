@@ -19,7 +19,7 @@ const DeleteUserPopup = ({
         Confirmation
       </h2>
       <p className="text-gray-700">
-        Are your sure you want to delete <b>{userToDelete?.fullname}</b>? All
+        Are your sure you want to delete <b>({userToDelete?.fullname})</b>? All
         the Inspections, Properties and Templates created by this user will also
         be deleted permanently.
       </p>
