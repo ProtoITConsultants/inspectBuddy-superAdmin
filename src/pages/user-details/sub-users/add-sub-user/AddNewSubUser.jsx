@@ -127,7 +127,13 @@ const AddNewSubUser = () => {
         <TextInput
           label="Email"
           placeholder="Email"
-          {...subUserDetailsForm.getInputProps("userEmail")}
+          value={subUserDetailsForm.values.userEmail}
+          error={subUserDetailsForm.errors.userEmail}
+          onChange={(event) => {
+            const value = event.target.value;
+            subUserDetailsForm.setFieldValue("userEmail", value.toLowerCase());
+          }}
+          // {...subUserDetailsForm.getInputProps("userEmail")}
           className="w-full font-medium"
         />
         <TextInput

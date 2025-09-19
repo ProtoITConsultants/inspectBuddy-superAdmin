@@ -94,7 +94,12 @@ const AddNewUser = () => {
             <TextInput
               label="Email"
               placeholder="Enter Email"
-              {...newUserForm.getInputProps("email")}
+              value={newUserForm.values.email}
+              error={newUserForm.errors.email}
+              onChange={(event) => {
+                const value = event.target.value;
+                newUserForm.setFieldValue("email", value.toLowerCase());
+              }}
               className="w-full font-medium"
             />
 

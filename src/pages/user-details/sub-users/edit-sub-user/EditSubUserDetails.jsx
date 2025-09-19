@@ -153,7 +153,13 @@ const EditSubUserDetails = () => {
         <TextInput
           label="Email"
           placeholder="Email"
-          {...form.getInputProps("userEmail")}
+          value={form.values.userEmail}
+          error={form.errors.userEmail}
+          onChange={(event) => {
+            const value = event.target.value;
+            form.setFieldValue("userEmail", value.toLowerCase());
+          }}
+          // {...form.getInputProps("userEmail")}
           className="w-full font-medium"
         />
         <TextInput
