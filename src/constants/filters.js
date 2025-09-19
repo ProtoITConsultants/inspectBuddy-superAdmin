@@ -24,18 +24,18 @@ export const USERS_SUBSCRIPTIONS_TYPE = [
 
 // Sub users Categories Type - Sub Users Page
 export const MEMBER_CATEGORY_FILTER = [
-  {
-    _id: 1,
-    label: "All Members",
-    value: "All Members",
-  },
+  // {
+  //   _id: 1,
+  //   label: "All Members",
+  //   value: "All Members",
+  // },
+  // {
+  //   _id: 1,
+  //   label: "Unassigned",
+  //   value: "Unassigned",
+  // },
   {
     _id: 2,
-    label: "Unassigned",
-    value: "Unassigned",
-  },
-  {
-    _id: 3,
     label: "All Categories",
     value: "All Categories",
   },

@@ -6,12 +6,20 @@ const FilterSelect = ({
   onChange,
   initialValue,
   placeholder,
-  isSubUserFilter,
+  isSubUserFilter = false,
 }) => {
   const [value, setValue] = useState(initialValue);
 
   const handleChange = (option) => {
+    // Pass "All Members" to parent - Subusers Page
+    if (!option && isSubUserFilter) {
+      setValue(null);
+      onChange("All Members");
+      return;
+    }
+    // If no option is selected return - Other than Subusers
     if (!option) return;
+    // Pass selected option to parent
     setValue(option);
     onChange(option.value);
   };
@@ -19,11 +27,11 @@ const FilterSelect = ({
   return (
     <Select
       id="select-filter"
-      value={value?.value}
+      value={value?.value || null}
       onChange={(_value, option) => handleChange(option)}
       placeholder={placeholder}
       data={options}
-      withCheckIcon={false}
+      withCheckIcon={isSubUserFilter}
       comboboxProps={{
         transitionProps: { transition: "pop", duration: 200 },
         dropdownPadding: 8,
@@ -31,15 +39,10 @@ const FilterSelect = ({
         offset: 2,
         position: "bottom-start",
       }}
-      renderOption={(item) => (
-        <div key={item.option._id}>
-          {isSubUserFilter &&
-            item.option.label !== "All Members" &&
-            item.option.label !== "Unassigned" &&
-            "Assigned to "}
-          {item.option.label}
-        </div>
-      )}
+      // renderOption={(item) => (
+      //   <div key={item.option._id}>{item.option.label}</div>
+      // )}
+      allowDeselect={isSubUserFilter}
     />
   );
 };
