@@ -196,7 +196,7 @@ const UserInspections = () => {
           <InspectionStatusCard
             status={
               inspection?.isDraft
-                ? "drafted"
+                ? "draft"
                 : inspection?.isInspectionCompleted
                 ? "completed"
                 : "in progress"

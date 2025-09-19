@@ -18,7 +18,7 @@ const TemplateCategoryCard = ({ templateType }) => {
   const label = isDefault
     ? "Default Template"
     : isDraft
-    ? "Drafted"
+    ? "Draft"
     : "Published";
 
   return (

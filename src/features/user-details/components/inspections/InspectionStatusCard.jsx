@@ -8,7 +8,7 @@ const InspectionStatusCard = ({ status }) => {
           ? "bg-[rgba(90,166,63,0.14)] text-[#5AA63F]"
           : lowerCaseStatus === "completed"
           ? "bg-[rgba(42,133,255,0.14)] text-primary"
-          : lowerCaseStatus === "drafted"
+          : lowerCaseStatus === "draft"
           ? "bg-[rgba(236,130,71,0.14)] text-[#EC8247]"
           : ""
       } w-fit capitalize`}
