@@ -71,7 +71,7 @@ const AddInspectionModal = ({
         })
         ?.sort((a, b) =>
           a.label.localeCompare(b.label, undefined, {
-            numeric: true,
+            // numeric: true,
             sensitivity: "base",
           })
         ),
@@ -136,8 +136,6 @@ const AddInspectionModal = ({
       });
     },
   });
-
-  console.log("newInspectionForm", newInspectionForm.values);
 
   return (
     <ModalRoot
