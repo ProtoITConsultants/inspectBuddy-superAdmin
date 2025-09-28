@@ -26,7 +26,7 @@ const AddInspectionModal = ({
   const newInspectionForm = useForm({
     initialValues: {
       inspectionCreationDate: new Date(),
-      linkedProperty: "",
+      linkedProperty: {},
       LinkedTemplate: "",
     },
 
@@ -58,7 +58,23 @@ const AddInspectionModal = ({
       },
     ],
     combine: (data) => ({
-      userProperties: data[0].data,
+      userProperties: (data[0].data || [])
+        ?.map((p) => {
+          return {
+            value: p._id,
+            label:
+              (p.address.unit ? p.address.unit + "-" : "") +
+              p?.address?.street +
+              " " +
+              p.name,
+          };
+        })
+        ?.sort((a, b) =>
+          a.label.localeCompare(b.label, undefined, {
+            numeric: true,
+            sensitivity: "base",
+          })
+        ),
       userInspectionTemplates: data[1].data,
     }),
   });
@@ -66,24 +82,15 @@ const AddInspectionModal = ({
   // Create New Inspection - Mutation
   const createNewInspection = useMutation({
     mutationFn: () => {
-      const { userProperties, userInspectionTemplates } =
-        userPropertiesAndInspectionsQuery;
-
-      const selectedProperty = userProperties.find(
-        (p) => p._id === newInspectionForm.values.linkedProperty
-      );
+      const { userInspectionTemplates } = userPropertiesAndInspectionsQuery;
 
       const selectedTemplate = userInspectionTemplates.find(
         (t) => t._id === newInspectionForm.values.LinkedTemplate
       );
 
       const API_DATA = {
-        propertyId: selectedProperty?._id,
-        name:
-          selectedProperty?.address?.unit +
-          ", " +
-          selectedProperty?.address?.street +
-          " - Inspection",
+        propertyId: newInspectionForm.values.linkedProperty?.value,
+        name: newInspectionForm.values.linkedProperty?.label + " - Inspection",
         creationDate: new Date(
           newInspectionForm?.values?.inspectionCreationDate
         ).toISOString(),
@@ -130,6 +137,8 @@ const AddInspectionModal = ({
     },
   });
 
+  console.log("newInspectionForm", newInspectionForm.values);
+
   return (
     <ModalRoot
       id="add-inspection-modal"
@@ -152,17 +161,14 @@ const AddInspectionModal = ({
             id="select-property-for-inspection"
             label="Select Property"
             placeholder="Select Property"
-            data={userPropertiesAndInspectionsQuery.userProperties?.map((p) => {
-              return {
-                value: p._id,
-                label:
-                  (p.address.unit ? p.address.unit + "-" : "") +
-                  p?.address?.street +
-                  " " +
-                  p.name,
-              };
-            })}
+            data={userPropertiesAndInspectionsQuery.userProperties}
+            disabled={userPropertiesAndInspectionsQuery.isPending}
             {...newInspectionForm.getInputProps("linkedProperty")}
+            value={newInspectionForm.values.linkedProperty?.value}
+            error={newInspectionForm.errors.linkedProperty}
+            onChange={(_, option) => {
+              newInspectionForm.setFieldValue("linkedProperty", option);
+            }}
             className={`w-full font-medium ${
               inspectionType === "template" && "col-span-2"
             }`}
